@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
-import 'package:pialuno/paginas/login/geral_bloc.dart';
+import 'package:pialuno/paginas/login/bemvindo_bloc.dart';
 
 
-class BemVindo extends StatefulWidget {
+class BemVindoPage extends StatefulWidget {
   final AuthBloc authBloc;
 
-  BemVindo(this.authBloc);
+  BemVindoPage(this.authBloc);
 
-  _BemVindoState createState() => _BemVindoState(this.authBloc);
+  _BemVindoPageState createState() => _BemVindoPageState(this.authBloc);
 }
 
-class _BemVindoState extends State<BemVindo> {
-  GeralBloc bloc;
-  _BemVindoState(AuthBloc authBloc) : bloc = GeralBloc(authBloc);
+class _BemVindoPageState extends State<BemVindoPage> {
+  BemvindoBloc bloc;
+  _BemVindoPageState(AuthBloc authBloc) : bloc = BemvindoBloc(authBloc);
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _BemVindoState extends State<BemVindo> {
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
-      title: StreamBuilder<GeralBlocState>(
+      title: StreamBuilder<BemvindoBlocState>(
         stream: bloc.stateStream,
         builder: (context, snap) {
           if (snap.hasError) {

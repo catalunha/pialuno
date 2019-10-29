@@ -1,36 +1,36 @@
 import 'package:pialuno/modelos/usuario_model.dart';
 import 'package:rxdart/rxdart.dart';
 
-class GeralBlocEvent {}
+class BemvindoBlocEvent {}
 
-class GetUsuarioIDEvent extends GeralBlocEvent {
+class GetUsuarioIDEvent extends BemvindoBlocEvent {
   final UsuarioModel usuarioID;
 
   GetUsuarioIDEvent(this.usuarioID);
 }
 
-class GeralBlocState {
+class BemvindoBlocState {
   bool isDataValid = false;
 
   UsuarioModel usuarioID;
 }
 
-class GeralBloc {
+class BemvindoBloc {
   final _authBloc;
 
   /// Eventos
-  final _eventController = BehaviorSubject<GeralBlocEvent>();
-  Stream<GeralBlocEvent> get eventStream => _eventController.stream;
+  final _eventController = BehaviorSubject<BemvindoBlocEvent>();
+  Stream<BemvindoBlocEvent> get eventStream => _eventController.stream;
   Function get eventSink => _eventController.sink.add;
 
   /// Estados
-  final GeralBlocState _state = GeralBlocState();
-  final _stateController = BehaviorSubject<GeralBlocState>();
-  Stream<GeralBlocState> get stateStream => _stateController.stream;
+  final BemvindoBlocState _state = BemvindoBlocState();
+  final _stateController = BehaviorSubject<BemvindoBlocState>();
+  Stream<BemvindoBlocState> get stateStream => _stateController.stream;
   Function get stateSink => _stateController.sink.add;
 
   /// Bloc
-  GeralBloc(
+  BemvindoBloc(
     this._authBloc
   ) {
     eventStream.listen(_mapEventToState);
@@ -53,13 +53,13 @@ class GeralBloc {
     }
   }
 
-  _mapEventToState(GeralBlocEvent event) async {
+  _mapEventToState(BemvindoBlocEvent event) async {
     if (event is GetUsuarioIDEvent) {
       _state.usuarioID = event.usuarioID;
     }
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em GeralBloc  = ${event.runtimeType}');
+    print('event.runtimeType em BemvindoBloc  = ${event.runtimeType}');
   }
 }
