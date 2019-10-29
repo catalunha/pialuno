@@ -258,8 +258,8 @@
     "fim": "dh: copia de questao",
     "tentativa": "numero: 3. de 1 a 5",
     "tentou": "numero. vezes em q o aluno enviou respostas. atualizar: _editou",
-    "tempo": "hora. tempo necessario para realizar a prova.",
-    "podeResolver": "true/false. true: tempo/tentativa ok  aluno pode acessar para resolver. false: tempo/tentativa acabaram aluno nao pode acessar para resolver",
+    "tempo": "numero. representa as horas em tempo necessario para realizar a prova.",
+    "aberta": "true/false. true: tempo/tentativa ok  aluno pode acessar para resolver. false: tempo/tentativa acabaram aluno nao pode acessar para resolver",
     "situacao": {
       "id": "",
       "nome": "",
@@ -307,20 +307,20 @@
         "nome": "d",
         "ordem": 0,
         "tipo": "imagem",
-        "urlGabarito": "valor",
-        "uploadID": "Upload/uploadID",
-        "path": "valor || null",
-        "urlResposta": "null || valor",
+        "gabaritoUploadID": "Upload/uploadID",
+        "gabarito": "url valor",
+        "respostaUploadID": "Upload/uploadID",
+        "resposta": "url null || valor",
         "nota": 0
       },
       "uid4": {
         "nome": "e",
         "ordem": 0,
         "tipo": "arquivo",
-        "urlGabarito": "valor",
-        "uploadID": "Upload/uploadID",
-        "path": "valor || null",
-        "urlResposta": "null || valor",
+        "gabaritoUploadID": "Upload/uploadID",
+        "gabarito": "url valor",
+        "respostaUploadID": "Upload/uploadID",
+        "resposta": "url null || valor",
         "nota": 0
       }
     }

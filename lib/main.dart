@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/bootstrap.dart';
+import 'package:pialuno/paginas/desenvolvimento/desenvolvimento_page.dart';
 import 'package:pialuno/paginas/login/home.dart';
 import 'package:pialuno/paginas/login/versao.dart';
+import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_page.dart';
 import 'package:pialuno/paginas/upload/uploader_page.dart';
 import 'package:pialuno/paginas/usuario/perfil_page.dart';
 import 'package:pialuno/plataforma/recursos.dart';
@@ -25,8 +27,15 @@ class MyApp extends StatelessWidget {
       routes: {
         //homePage
         "/": (context) => HomePage(authBloc),
+
         //upload
         "/upload": (context) => UploaderPage(authBloc),
+
+        //desenvolvimento
+        "/desenvolvimento": (context) => Desenvolvimento(),
+
+        //tarefa
+        "/tarefa/aberta": (context) => TarefaAbertaListPage(authBloc),
 
         //EndDrawer
         //perfil

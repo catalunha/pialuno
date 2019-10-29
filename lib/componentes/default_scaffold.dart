@@ -24,9 +24,9 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
       rotas["/"] = Rota("Home", Icons.home);
-      // rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
+      rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
       rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
-      // rotas["/questionario/home"] = Rota("Questionários", Icons.assignment);
+      rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
       // rotas["/aplicacao/home"] =
       //     Rota("Aplicar Questionário", Icons.directions_walk);
       // rotas["/resposta/home"] = Rota("Resposta", Icons.playlist_add_check);

@@ -1,3 +1,4 @@
+import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/base_model.dart';
 
 class UploadModel extends FirestoreModel {
@@ -60,18 +61,18 @@ class UploadModel extends FirestoreModel {
   }
 }
 
-class UploadID {
+class UploadFk {
   String uploadID;
   String url;
   // String path;
 
-  UploadID({
+  UploadFk({
     this.uploadID,
     this.url,
     // this.path,
   });
 
-  UploadID.fromMap(Map<dynamic, dynamic> map) {
+  UploadFk.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('uploadID')) uploadID = map['uploadID'];
     if (map.containsKey('url')) url = map['url'];
     // if (map.containsKey('path')) path = map['path'];
@@ -80,31 +81,26 @@ class UploadID {
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     if (uploadID != null) data['uploadID'] = this.uploadID;
-    data['url'] = this.url;
-    // if (path != null) data['path'] = this.path;
+    data['url'] = this.url ?? Bootstrap.instance.fieldValue.delete();
+    // data['url'] = this.url;
     return data;
   }
-
-  // Map<dynamic, dynamic> toMapFirestore() {
-  //   final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
-  //   data['uploadID'] = this.uploadID ?? Bootstrap.instance.fieldValue.delete();
-  //   data['url'] = this.url ?? Bootstrap.instance.fieldValue.delete();
-  //   data['path'] = this.path ?? Bootstrap.instance.fieldValue.delete();
-  //   return data;
-  // }
 }
 
 class UpdateCollection {
   String collection;
   String document;
   String field;
+  String description;
 
-  UpdateCollection({this.collection, this.document, this.field});
+  UpdateCollection(
+      {this.collection, this.document, this.field, this.description});
 
   UpdateCollection.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('collection')) collection = map['collection'];
     if (map.containsKey('document')) document = map['document'];
     if (map.containsKey('field')) field = map['field'];
+    if (map.containsKey('description')) description = map['description'];
   }
 
   Map<dynamic, dynamic> toMap() {
@@ -112,6 +108,7 @@ class UpdateCollection {
     if (collection != null) data['collection'] = this.collection;
     if (document != null) data['document'] = this.document;
     if (field != null) data['field'] = this.field;
+    if (description != null) data['description'] = this.description;
     return data;
   }
 }

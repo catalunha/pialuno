@@ -87,7 +87,7 @@ class PerfilBloc {
     }
 
     if (event is SaveEvent) {
-      UploadID foto;
+      UploadFk foto;
       UsuarioModel usuarioUpdate = UsuarioModel(
         id: _state.usuarioModel.id,
         cracha: _state.cracha,
@@ -118,7 +118,7 @@ class PerfilBloc {
         await docRef.setData(upLoadModel.toMap(), merge: true);
         _state.fotoUploadID = docRef.documentID;
         //--- Cria doc em UpLoadCollection
-        foto = UploadID(uploadID: _state.fotoUploadID,url:null);
+        foto = UploadFk(uploadID: _state.fotoUploadID,url:null);
         usuarioUpdate.foto=foto;
       }
 
