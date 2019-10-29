@@ -1,24 +1,24 @@
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
-import 'package:pialuno/paginas/upload/upload_page_bloc.dart';
+import 'package:pialuno/paginas/upload/uploader_bloc.dart';
 import 'package:universal_io/io.dart' as io;
 import 'package:flutter/material.dart';
 
 import '../../bootstrap.dart';
 
-class UploadPage extends StatefulWidget {
+class UploaderPage extends StatefulWidget {
   final AuthBloc authBloc;
 
-  UploadPage(this.authBloc);
+  UploaderPage(this.authBloc);
 
-  _UploadPageState createState() => _UploadPageState(this.authBloc);
+  _UploaderPageState createState() => _UploaderPageState(this.authBloc);
 }
 
-class _UploadPageState extends State<UploadPage> {
-  final UploadPageBloc bloc;
+class _UploaderPageState extends State<UploaderPage> {
+  final UploaderBloc bloc;
 
-  _UploadPageState(AuthBloc authBloc)
-      : bloc = UploadPageBloc(Bootstrap.instance.firestore, authBloc);
+  _UploaderPageState(AuthBloc authBloc)
+      : bloc = UploaderBloc(Bootstrap.instance.firestore, authBloc);
 
   @override
   void initState() {
@@ -42,9 +42,9 @@ class _UploadPageState extends State<UploadPage> {
   }
 
   _uploadBody() {
-    return StreamBuilder<PageState>(
+    return StreamBuilder<UploaderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context, AsyncSnapshot<PageState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<UploaderBlocState> snapshot) {
           if (snapshot.hasError)
             return Center(
               child: Text("Erro. Informe ao administrador do aplicativo"),

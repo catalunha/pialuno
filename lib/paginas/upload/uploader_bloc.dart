@@ -1,16 +1,16 @@
 import 'package:firestore_wrapper/firestore_wrapper.dart' as fw;
-import 'package:pialuno/bloc/upload_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/upload_model.dart';
+import 'package:pialuno/paginas/upload/upload_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-class PageEvent {}
+class UploaderBlocEvent {}
 
-class UpdateUsuarioIDEvent extends PageEvent {}
+class UpdateUsuarioIDEvent extends UploaderBlocEvent {}
 
-class StartUserEvent extends PageEvent {}
+class StartUserEvent extends UploaderBlocEvent {}
 
-class StartUploadEvent extends PageEvent {
+class StartUploadEvent extends UploaderBlocEvent {
   final String idUpload;
 
   StartUploadEvent(this.idUpload);
@@ -24,30 +24,30 @@ class Uploading {
   Uploading(this.upload, this.id);
 }
 
-class PageState {
+class UploaderBlocState {
   List<Uploading> uploadingList;
 
   Map<String, UploadBloc> uploading = Map<String, UploadBloc>();
 }
 
-class UploadPageBloc {
+class UploaderBloc {
   //Firestore
   final fw.Firestore _firestore;
   // Authenticacação
   final _authBloc;
   //Eventos
-  final _eventController = BehaviorSubject<PageEvent>();
+  final _eventController = BehaviorSubject<UploaderBlocEvent>();
 
-  Stream<PageEvent> get eventStream => _eventController.stream;
+  Stream<UploaderBlocEvent> get eventStream => _eventController.stream;
   Function get eventSink => _eventController.sink.add;
 
   //Estados
-  final PageState _state = PageState();
-  final _stateController = BehaviorSubject<PageState>();
-  Stream<PageState> get stateStream => _stateController.stream;
+  final UploaderBlocState _state = UploaderBlocState();
+  final _stateController = BehaviorSubject<UploaderBlocState>();
+  Stream<UploaderBlocState> get stateStream => _stateController.stream;
   Function get stateSink => _stateController.sink.add;
 
-  UploadPageBloc(this._firestore, this._authBloc) {
+  UploaderBloc(this._firestore, this._authBloc) {
     eventStream.listen(_mapEventToState);
   }
 
@@ -58,7 +58,7 @@ class UploadPageBloc {
     _eventController.close();
   }
 
-  _mapEventToState(PageEvent event) async {
+  _mapEventToState(UploaderBlocEvent event) async {
     if (event is UpdateUsuarioIDEvent) {
       _authBloc.userId.listen((userId) {
         _firestore
