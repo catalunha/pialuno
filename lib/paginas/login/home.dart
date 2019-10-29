@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/componentes/login_required.dart';
-import 'package:pialuno/paginas/login/bemvindo.dart';
+import 'package:pialuno/paginas/login/bemvindo_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultLoginRequired(
-      child: BemVindo(widget.authBloc),
+      child: BemVindoPage(widget.authBloc),
       // child: NoticiaLeituraPage(),
       authBloc: this.authBloc,
     );

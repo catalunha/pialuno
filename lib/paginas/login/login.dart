@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/naosuportato/permission_handler.dart'
     if (dart.library.io) 'package:permission_handler/permission_handler.dart';
 

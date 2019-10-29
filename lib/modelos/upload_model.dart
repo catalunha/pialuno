@@ -1,4 +1,3 @@
-import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/base_model.dart';
 
 class UploadModel extends FirestoreModel {

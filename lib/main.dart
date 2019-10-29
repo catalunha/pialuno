@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/login/home.dart';
-import 'package:pialuno/paginas/upload/upload_page.dart';
+import 'package:pialuno/paginas/login/versao.dart';
+import 'package:pialuno/paginas/upload/uploader_page.dart';
 import 'package:pialuno/paginas/usuario/perfil_page.dart';
 import 'package:pialuno/plataforma/recursos.dart';
 import 'package:pialuno/web.dart';
@@ -25,9 +26,13 @@ class MyApp extends StatelessWidget {
         //homePage
         "/": (context) => HomePage(authBloc),
         //upload
-        "/upload": (context) => UploadPage(authBloc),
+        "/upload": (context) => UploaderPage(authBloc),
+
+        //EndDrawer
         //perfil
         "/perfil": (context) => PerfilPage(authBloc),
+        //Versao
+        "/versao": (context) => Versao(),
       },
     );
   }

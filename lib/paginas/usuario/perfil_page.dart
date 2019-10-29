@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/usuario/perfil_bloc.dart';
 import 'package:pialuno/plataforma/recursos.dart';

@@ -8,8 +8,12 @@ class Versao extends StatelessWidget {
       appBar: AppBar(
         title: Text('Versão & Sobre'),
       ),
-      body: Center(
-        child: Recursos.instance.plataforma == 'android' ? Text("Versão 3.1.0"):Text("Build: 201910222020"),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Recursos.instance.plataforma == 'android' ? Text("Versão 1.0.0"):Text("Build: 20191128"),
+          ),
+        ],
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:firestore_wrapper_web/firestore_wrapper_web.dart'
 
 import 'package:firebaseauth_wrapper_web/firebaseauth_wrapper_web.dart'
     if (dart.library.io) 'package:firebaseauth_wrapper_flutter/firebaseauth_wrapper_flutter.dart';
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 
 class Bootstrap {
   static final Bootstrap instance =

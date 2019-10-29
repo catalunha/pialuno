@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:pialuno/bloc/auth_bloc.dart';
+import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/modelos/upload_model.dart';
 import 'package:pialuno/modelos/usuario_model.dart';
 import 'package:rxdart/rxdart.dart';
