@@ -63,22 +63,58 @@ class TarefaAbertaListBloc {
     if (event is UpdateTarefaAbertaListEvent) {
       _state.tarefaList.clear();
 
-      final streamDocsRemetente =
-          _firestore.collection(TarefaModel.collection)
+      final streamDocsRemetente = _firestore
+          .collection(TarefaModel.collection)
           .where("aluno.id", isEqualTo: _state.usuarioAuth.id)
           .where("ativo", isEqualTo: true)
           .where("aberta", isEqualTo: true)
-          .where("inicio", isGreaterThan: DateTime.now())
-          .where("fim", isLessThan: DateTime.now())
+          .where("inicio", isLessThan: DateTime.now())
+          // .where("fim", isGreaterThan: DateTime.now())
+          // .orderBy('fim', descending: true)
           .snapshots();
+/*
+                    Vnow
+    ^inicio                     ^fim
+        ^iniciou             ^iniciou+tempo
 
+
+*/
       final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs
           .documents
           .map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data))
           .toList());
 
       snapListRemetente.listen((List<TarefaModel> tarefaList) {
-        _state.tarefaList=tarefaList;
+        for (var tarefa in tarefaList) {
+          print('=== +++ Tarefa +++ ===');
+          print('TarefaOriginal  ::> ${tarefa.id}');
+
+          print('aberta  ::> ${tarefa.aberta}');
+          print('now ::> ${DateTime.now()}');
+          print('inicio  ::> ${tarefa.inicio}');
+          print('iniciou  ::> ${tarefa.iniciou}');
+          print('fim ::> ${tarefa.fim}');
+          print('tempo  ::> ${tarefa.tempo}h ou até ${tarefa.responderAte}');
+          print('responderAte ::> ${tarefa.responderAte}');
+          print('tempoPResponder ::> ${tarefa.tempoPResponder}');
+          print('=== --- Tarefa --- ===');
+
+          // print('inicio < fim ::> ${tarefa.inicio.isBefore(tarefa.fim)}');
+          // print('inicio < now ::> ${tarefa.inicio.isBefore(DateTime.now())}');
+          // print('fim < now ::> ${tarefa.fim.isBefore(DateTime.now())}');
+          if (tarefa.isAberta()) {
+            print('Analisando  ::> ${tarefa.id}');
+            final docRef = _firestore
+                .collection(TarefaModel.collection)
+                .document(tarefa.id);
+            docRef.setData(
+              {'aberta': false},
+              merge: true,
+            );
+          }
+          // inicio.isBefore(fim)
+        }
+        _state.tarefaList = tarefaList;
         if (!_stateController.isClosed) _stateController.add(_state);
       });
     }

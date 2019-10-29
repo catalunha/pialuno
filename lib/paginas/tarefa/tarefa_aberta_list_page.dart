@@ -51,7 +51,7 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
 
                 List<Widget> listaWidget = List<Widget>();
                 for (var tarefa in snapshot.data.tarefaList) {
-                  print('tarefa.id: ${tarefa.id}');
+                  // print('tarefa.id: ${tarefa.id}');
                   listaWidget.add(
                     Card(
                       child: ListTile(
