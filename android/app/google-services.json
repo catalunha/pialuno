@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "595772462023",
+    "firebase_url": "https://pi-brintec.firebaseio.com",
+    "project_id": "pi-brintec",
+    "storage_bucket": "pi-brintec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595772462023:android:d701665f921c90a410ffe2",
+        "android_client_info": {
+          "package_name": "education.brintec.pialuno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595772462023-0q0b7spodrh12roj7stcrdpmolbgfc1v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaWJAQQc1OTvaMgLbH-DZq4m5juLFYOsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595772462023-0q0b7spodrh12roj7stcrdpmolbgfc1v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
