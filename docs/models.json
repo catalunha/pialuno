@@ -1,0 +1,413 @@
+{
+  "Upload": {
+    "comment": "",
+    "#onCreate": "",
+    "#onRead": "",
+    "#onUpdate": "",
+    "#onDelete": "",
+    "contentType": "definido pelo metadata text/plain | text/markdown | text/csv | text/html | image/png | image/jpeg | image/svg+xml  | application/pdf | application/msword | application/zip | video/x-msvideo | video/mpeg | audio/aac",
+    "hash": "gerado pelo dart na leitura local do arquivo",
+    "path": "path local do arquivo no celular do usuario.",
+    "storagePath": "obtida do storage após upload",
+    "updateCollection": {
+      "collection": "collectionX",
+      "document": "documentIDID. Id do documento nesta coleção",
+      "field": "campo nesta coleção",
+      "observacao": "para atualizacao deste campo"
+    },
+    "upload": "true: function já pode iniciar upload e atualiza os dados de updateCollection no destino. false: functions nao fez upload aguardando pedido do usuario",
+    "url": "obtida do storage após upload",
+    "usuario": "ID do Usuario"
+  },
+  "Usuario": {
+    "comment": "O ID é o mesmo do userId do authentication(email/senha)",
+    "#onCreate": "",
+    "#onRead": "",
+    "#onUpdate": "",
+    "#onDelete": "Atualizar Turma.aluno",
+    "ativo": "true: aparece na listagens. false: !true ",
+    "nome": "nome",
+    "matricula": "",
+    "email": "email",
+    "apelido": "nome",
+    "celular": "celular",
+    "aluno": "true: usuario é um aluno. false: é um professor.",
+    "rotas": [
+      "/rota/"
+    ],
+    "foto": {
+      "uploadID": "ID da foto na Upload/documentID",
+      "path": "url da foto na coleção upload",
+      "url": "url da foto na coleção upload"
+    },
+    "turma": [
+      "Turma/turmaID"
+    ],
+    "grupoNumeroAdicionado": "numero. Quando criar uma questao de qq avalicao acrescenta este numero.",
+    "turmaNumeroAdicionado": "numero. Quando criar uma turma acrescenta este numero."
+  },
+  "Turma": {
+    "comment": "",
+    "#onCreate": "numero=Usuario.turmaNumeroAdicionado+1. Usuario.turmaNumeroAdicionado++",
+    "#onRead": "",
+    "#onUpdate": "Turma.alunoPCadastro se atualizada FBFunction cria user e Usuario atualizando Turma.aluno",
+    "#onDelete": "Atualizar Usuario.turma mas nao apaga usuario. Apagar tarefas com esta turma",
+    "ativo": "true: aparece na listagens. false: !true ",
+    "numero": "numero. da turma q pode ser usado para ordenar",
+    "instituicao": "",
+    "componente": "",
+    "nome": "",
+    "descricao": "",
+    "professor": {
+      "id": "Usuario/documentID",
+      "nome": ""
+    },
+    "aluno": [
+      "alunoID"
+    ],
+    "alunoPCadastro": "uma lista de matricula - nome - email separado por linha",
+    "questaoNumeroAdicionado": "numero. inicia com 0. Quando criar uma questao de qq avalicao acrescenta este numero.",
+    "questaoNumeroExcluido": "numero. inicia com 0. Quando excluir uma questao de qq avalicao acrescenta este numero."
+  },
+  "Grupo": {
+    "comment": "Os situacaos de um professor estao agrupados neste grupo",
+    "#onCreate": "",
+    "#onRead": "",
+    "#onUpdate": "",
+    "#onDelete": "So deleta grupo sem situacoes. ",
+    "ativo": "true: aparece na listagens disponiveis. false: !true ",
+    "numero": 0,
+    "nome": "",
+    "descricao": "",
+    "professor": {
+      "id": "Usuario/usuarioID",
+      "nome": ""
+    },
+    "situacaoNumeroAdicionado": "numero. Quando criar uma questao de qq avalicao acrescenta este numero."
+  },
+  "Situacao": {
+    "comment": "",
+    "#onCreate": "numero=Grupo.situacaoNumeroAdicionado+1. Grupo.situacaoNumeroAdicionado++",
+    "#onRead": "Se ativo=false desativar todas as tarefas ja criadas. nao aparece na listagem de situacoes para serem alocadas a questao. Se ativo=true reativa as tarefas que foram ativadas.",
+    "#onUpdate": "",
+    "#onDelete": "Apagar as tarefas das turmas ativas que contem esta situação.",
+    "ativo": "true: aparece na listagens de situacaos disponiveis. false: !true ",
+    "numero": "",
+    "nome": "",
+    "descricao": "",
+    "professor": {
+      "id": "Usuario/usuarioID",
+      "nome": "Usuario/usuarioID.nome"
+    },
+    "grupo": {
+      "id": "Grupo/grupoID",
+      "nome": "Grupo/grupoID.nome"
+    },
+    "precisaAlgoritmoSimulacao": "true/false",
+    "urlPDFSituacaoSemAlgoritmo": "se precisaAlgoritmoSimulacao=false : pdf com proposta da situacao e professor gera as simulações. precisaAlgoritmoSimulacao=true este campo nulo",
+    "urlGDocsPAlgoritmo": "anexa gdocs com proposta e compartilhar no email do suporte.",
+    "urlCodigoFonteAlgoritmo": "detalhes do atendimento e desenvolvimento do codigo",
+    "urlPDFSituacaoComAlgoritmo": "pdf com estrutura para usar proposta com simulação",
+    "uso": {
+      "turmaID": 0
+    }
+  },
+  "Simulacao": {
+    "comment": "",
+    "#onCreate": "Nao pode criar simulação via widget se Situacao.precisaAlgoritmoSimulacao=true",
+    "#onRead": "",
+    "#onUpdate": "",
+    "#onDelete": "",
+    "nome": "",
+    "descricao": "",
+    "modificado": "data da modificação deste documento",
+    "situacao": "Situacao/situacaoID",
+    "ordemAdicionada": 0,
+    "variavel": {
+      "uid0": {
+        "ordem": 0,
+        "nome": "pressao",
+        "valor": "numero/texto"
+      },
+      "uid1": {
+        "ordem": 0,
+        "nome": "temperatura",
+        "valor": "numero/texto"
+      }
+    },
+    "pedese": {
+      "uid0": {
+        "ordem": 0,
+        "nome": "a",
+        "tipo": "numero",
+        "gabarito": "valor"
+      },
+      "uid1": {
+        "ordem": 0,
+        "nome": "b",
+        "tipo": "palavra",
+        "gabarito": "valor"
+      },
+      "uid2": {
+        "ordem": 0,
+        "nome": "c",
+        "tipo": "texto",
+        "gabarito": "valor"
+      },
+      "uid3": {
+        "ordem": 0,
+        "nome": "d",
+        "tipo": "imagem",
+        "urlGabarito": "null || informado do google docs"
+      },
+      "uid4": {
+        "ordem": 0,
+        "nome": "e",
+        "tipo": "arquivo",
+        "urlGabarito": "null || informado do google docs"
+      }
+    }
+  },
+  "Avaliacao": {
+    "comment": "",
+    "#onCreate": "",
+    "#onRead": "",
+    "#onUpdate": "Se atualizar inicio/fim e Aplicada=true atualizar em todas as questoes e tarefas correspondentes a esta avaliacao. Se atualizar inicio/fim e Aplicada=false atualiza todas questoes desta avaliacao",
+    "#onDelete": "Se Aplicada=true apagar tarefas com esta avaliacao. ",
+    "professor": {
+      "id": "Usuario/usuarioID",
+      "nome": ""
+    },
+    "turma": {
+      "id": "Turma/turmaID",
+      "nome": ""
+    },
+    "nome": "",
+    "descricao": "",
+    "inicio": "",
+    "fim": "",
+    "nota": 0,
+    "aplicar": true,
+    "AplicadaPAluno": [
+      "Usuario/usuarioID"
+    ]
+  },
+  "Questao": {
+    "comment": "",
+    "#onCreate": "numero=Turma.questaoNumeroAdicionado + 1. Turma.questaoNumeroAdicionado++",
+    "#onRead": "",
+    "#onUpdate": "Se Avaliacao.aplicada=true nao pode alterar Questao.numero. Se Avaliacao.aplicada=true nao alterar Avaliacao.situacao atual. Se Avaliacao.aplicada=true e editar inicio/fim/tentativas/tempo alterar em todas as tarefas relacionadas.",
+    "#onDelete": "Turma.questaoNumeroExcluido++. Situacao/situacaoID.uso.turmaID--. Se Avaliacao.aplicada=true apagar tarefas com esta questão. ",
+    "numero": "numero. usado para referenciar a questao e ordenar.",
+    "professor": {
+      "id": "Usuario/usuarioID",
+      "nome": ""
+    },
+    "turma": {
+      "id": "Turma/turmaID",
+      "nome": ""
+    },
+    "avaliacao": {
+      "id": "Avaliacao/avaliacaoID",
+      "nome": ""
+    },
+    "inicio": "",
+    "fim": "",
+    "tentativa": 3,
+    "tempo": "",
+    "nota": 0,
+    "situacao": {
+      "id": "Situacao/situacaoID",
+      "nome": "Situacao/situacaoID.nome",
+      "url": "Situacao/situacaoID"
+    }
+  },
+  "Tarefa": {
+    "comment": "",
+    "#onCreate": "",
+    "#onRead": "",
+    "#onUpdate": "",
+    "#onDelete": "",
+    "@tempoRestanteDeDesenvolvimento": "",
+    "@update_podeResolver": " . Para aberta se (tentou > tentativa) = false. se (inicio - agora > tempo) = false. se (iniciou > inicio) = false",
+    "ativo": "true: aparece na listagens de tarefas disponiveis. false: !true ",
+    "professor": {
+      "id": "Usuario/usuarioID",
+      "nome": "Usuario/usuarioID.nome"
+    },
+    "turma": {
+      "id": "Turma/turmaID",
+      "nome": "Turma/turmaID.nome"
+    },
+    "avaliacao": {
+      "id": "Avaliacao/avaliacaoID",
+      "nome": "Avaliacao/avaliacaoID.nome"
+    },
+    "questao": {
+      "id": "Questao/questaoID",
+      "numero": 1
+    },
+    "aluno": {
+      "id": "Usuario/usuarioID",
+      "nome": "Usuario/usuarioID.nome"
+    },
+    "modificado": "dh em q foi aplicada ou criado a tarefa. se modificar questão ou avaliacao atualiza esta data",
+    "inicio": "dh copia de questao",
+    "iniciou": "dh q o aluno iniciou a tarefa",
+    "editou": "dh em q o alunos enviou a ultima resposta após abrir tarefa. sempre maior q _inicio",
+    "fim": "dh: copia de questao",
+    "tentativa": "numero: 3. de 1 a 5",
+    "tentou": "numero. vezes em q o aluno enviou respostas. atualizar: _editou",
+    "tempo": "hora. tempo necessario para realizar a prova.",
+    "podeResolver": "true/false. true: tempo/tentativa ok  aluno pode acessar para resolver. false: tempo/tentativa acabaram aluno nao pode acessar para resolver",
+    "situacao": {
+      "id": "",
+      "nome": "",
+      "url": "url igual a Situacao/urlPropostaSimulada"
+    },
+    "simulacao": "Simulacao/simulacaoID",
+    "variavel": {
+      "uid0": {
+        "ordem": 0,
+        "nome": "pressao",
+        "valor": "numero/texto"
+      },
+      "uid1": {
+        "ordem": 0,
+        "nome": "temperatura",
+        "valor": "numero/texto"
+      }
+    },
+    "pedese": {
+      "uid0": {
+        "nome": "a",
+        "ordem": 0,
+        "tipo": "numero",
+        "gabarito": "valor",
+        "resposta": "valor",
+        "nota": 0
+      },
+      "uid1": {
+        "nome": "b",
+        "ordem": 0,
+        "tipo": "palavra",
+        "gabarito": "valor",
+        "resposta": "valor",
+        "nota": 0
+      },
+      "uid2": {
+        "nome": "c",
+        "ordem": 0,
+        "tipo": "texto",
+        "gabarito": "valor",
+        "resposta": "valor",
+        "nota": 0
+      },
+      "uid3": {
+        "nome": "d",
+        "ordem": 0,
+        "tipo": "imagem",
+        "urlGabarito": "valor",
+        "uploadID": "Upload/uploadID",
+        "path": "valor || null",
+        "urlResposta": "null || valor",
+        "nota": 0
+      },
+      "uid4": {
+        "nome": "e",
+        "ordem": 0,
+        "tipo": "arquivo",
+        "urlGabarito": "valor",
+        "uploadID": "Upload/uploadID",
+        "path": "valor || null",
+        "urlResposta": "null || valor",
+        "nota": 0
+      }
+    }
+  },
+  "Encontro": {
+    "comment": "",
+    "#onCreate": "",
+    "#onRead": "",
+    "#onUpdate": "",
+    "#onDelete": "",
+    "professor": {
+      "id": "Usuario/usuarioID",
+      "nome": "Usuario/usuarioID.nome"
+    },
+    "turma": {
+      "id": "Turma/turmaID",
+      "nome": "Turma/turmaID.nome"
+    },
+    "data": "",
+    "nome": "",
+    "descricao": "",
+    "presente": [
+      "Usuario/usuarioID"
+    ]
+  },
+  "Programa": {
+    "ativo": true,
+    "professor": {
+      "id": "",
+      "nome": ""
+    },
+    "referencia": "",
+    "nome": "",
+    "url": "https://docs.google.com/document/d/1dSHADZBVpRroEcCrpZfmoEdD-ccqlI_e21yV3lDdIIQ/edit?usp=sharing",
+    "codigoDart": {
+      "interface": "",
+      "classe": "",
+      "entrada": "",
+      "saida": ""
+    }
+  },
+  "Teste": {
+    "programa": "Programa/programaID",
+    "teste": [
+      {
+        "entrada": "",
+        "saida": ""
+      }
+    ]
+  },
+  "Algoritmo": {
+    "ativo": true,
+    "turma": {
+      "id": "",
+      "nome": ""
+    },
+    "professor": {
+      "id": "",
+      "nome": ""
+    },
+    "avaliacao": {
+      "id": "",
+      "nome": ""
+    },
+    "inicio": "",
+    "fim": "",
+    "tempo": "",
+    "iniciou": "",
+    "privada": false,
+    "nota": 1,
+    "programa": {
+      "id": "",
+      "nome": "",
+      "pdf": {
+        "uploadID": "Upload/uploadID",
+        "url": ""
+      }
+    },
+    "aluno": {
+      "id": "",
+      "nome": ""
+    },
+    "codigoDart": {
+      "interface": "",
+      "classe": "",
+      "entrada": "",
+      "saida": ""
+    }
+  }
+}
