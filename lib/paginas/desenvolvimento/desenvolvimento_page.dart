@@ -13,6 +13,7 @@ import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/modelos/turma_model.dart';
 import 'package:pialuno/modelos/upload_model.dart';
 import 'package:pialuno/modelos/usuario_model.dart';
+import 'package:pialuno/paginas/desenvolvimento/clock.dart';
 
 class Desenvolvimento extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class Desenvolvimento extends StatefulWidget {
 
 class _DesenvolvimentoState extends State<Desenvolvimento> {
   final fw.Firestore _firestore = Bootstrap.instance.firestore;
+  bool hasTimerStopped = false;
 
   @override
   void initState() {
@@ -77,6 +79,30 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
                 },
               ),
             ),
+            ListTile(
+              title: Text('Testar cronometro => $hasTimerStopped'),
+              trailing: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () async {
+                  hasTimerStopped = true;
+                },
+              ),
+            ),
+            Container(
+              width: 60.0,
+              padding: EdgeInsets.only(top: 3.0, right: 4.0),
+              child: CountDownTimer(
+                secondsRemaining: 7200,
+                whenTimeExpires: () {
+                  setState(() {
+                    hasTimerStopped = true;
+                  });
+                  print('terminou clock');
+                },
+                countDownTimerStyle: TextStyle(
+                    color: Color(0XFFf5a623), fontSize: 17.0, height: 1.2),
+              ),
+            )
           ],
         ));
   }
@@ -196,43 +222,59 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
   Future cadastrarTarefa(String tarefaId) async {
     final docRef =
         _firestore.collection(TarefaModel.collection).document(tarefaId);
-
+    docRef.delete();
     TarefaModel tarefaModel = TarefaModel(
-      id: tarefaId,
-      ativo: true,
-      professor: UsuarioFk(id: 'prof01', nome: 'prof01'),
-      turma: TurmaFk(id: 'turma01', nome: 'turma01'),
-      avaliacao: AvaliacaoFk(id: 'avaliacao01', nome: 'avaliacao01'),
-      questao: QuestaoFk(id: 'questao01', numero: 1),
-      aluno: UsuarioFk(id: 'PMAxu4zKfmaOlYAmF3lgFGmCR1w2', nome: 'Cata'),
-      modificado: DateTime.now(),
-      inicio: DateTime.parse('2019-10-29T08:00:00.000Z'),
-      // iniciou: DateTime.parse('2019-10-29T09:00:00.000Z'),
-      // editou: DateTime.parse('2019-10-29T09:30:00.000Z'),
-      fim: DateTime.parse('2019-10-29T12:00:00.000Z'),
-      tentativa: 3,
-      // tentou: 0,
-      tempo: 2,
-      aberta: true,
-      situacao: SituacaoFk(
-        id: 'situacao01',
-        nome: 'situacao01',
-        url:
-            'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
-      ),
-      simulacao: 'simulacao01',
-      variavel: {
-        'var01': Variavel(
-          nome: 'N1',
-          ordem: 0,
-          valor: '1',
-        )
-      },
-      pedese: {
-        'pedese01':Pedese(nome: 'a',ordem: 0,tipo: 'numero',gabarito: '2'),
-      }
-    );
+        id: tarefaId,
+        ativo: true,
+        professor: UsuarioFk(id: 'prof01', nome: 'prof01'),
+        turma: TurmaFk(id: 'turma01', nome: 'turma01'),
+        avaliacao: AvaliacaoFk(id: 'avaliacao01', nome: 'avaliacao01'),
+        questao: QuestaoFk(id: 'questao01', numero: 1),
+        aluno: UsuarioFk(id: 'PMAxu4zKfmaOlYAmF3lgFGmCR1w2', nome: 'Cata'),
+        modificado: DateTime.now(),
+        inicio: DateTime.parse('2019-10-30T12:00:00-0300'),
+        // iniciou: DateTime.parse('2019-10-29T09:00:00.000Z'),
+        // editou: DateTime.parse('2019-10-29T09:30:00.000Z'),
+        fim: DateTime.parse('2019-10-30T18:00:00-0300'),
+        tentativa: 3,
+        // tentou: 0,
+        tempo: 2,
+        aberta: true,
+        situacao: SituacaoFk(
+          id: 'situacao01',
+          nome: 'situacao01',
+          url:
+              'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
+        ),
+        simulacao: 'simulacao01',
+        variavel: {
+          'var01': Variavel(
+            nome: 'N1',
+            ordem: 0,
+            valor: '1',
+          ),
+          'var02': Variavel(
+            nome: 'N2',
+            ordem: 1,
+            valor: '2',
+          )
+        },
+        pedese: {
+          'pedese01':
+              Pedese(nome: 'a', ordem: 0, tipo: 'numero', gabarito: '2'),
+          'pedese02':
+              Pedese(nome: 'b', ordem: 1, tipo: 'palavra', gabarito: 'sim'),
+          'pedese03':
+              Pedese(nome: 'c', ordem: 2, tipo: 'texto', gabarito: 'sim'),
+          'pedese04':
+              Pedese(nome: 'd', ordem: 3, tipo: 'arquivo', gabarito: 'sim'),
+          'pedese05':
+              Pedese(nome: 'e', ordem: 4, tipo: 'imagem', gabarito: 'sim'),
+        });
+
+    print('=>>>>>>>> ${tarefaModel.aberta}');
     await docRef.setData(tarefaModel.toMap(), merge: true);
+    // await docRef.setData(tarefaModel.toMap());
   }
 
   Future testarFirebaseCmds() async {

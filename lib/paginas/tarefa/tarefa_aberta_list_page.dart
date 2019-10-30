@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
+import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_bloc.dart';
+import 'package:queries/collections.dart';
 
 class TarefaAbertaListPage extends StatefulWidget {
   final AuthBloc authBloc;
@@ -50,12 +52,47 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                 print('dados validos...');
 
                 List<Widget> listaWidget = List<Widget>();
+                String nota = '';
+                Map<String, Pedese> pedeseMap;
+
                 for (var tarefa in snapshot.data.tarefaList) {
                   // print('tarefa.id: ${tarefa.id}');
+                  var dicPedese = Dictionary.fromMap(tarefa.pedese);
+                  var pedeseOrderBy = dicPedese
+                      .orderBy((kv) => kv.value.ordem)
+                      .toDictionary$1((kv) => kv.key, (kv) => kv.value);
+                  pedeseMap = pedeseOrderBy.toMap();
+
+                  for (var pedese in pedeseMap.entries) {
+                    nota += '${pedese.value.nome}=${pedese.value.nota} ';
+                  }
                   listaWidget.add(
                     Card(
                       child: ListTile(
-                        title: Text('id: ${tarefa.id}'),
+                        trailing: Text('${tarefa.questao.numero}'),
+                        selected: tarefa.iniciou != null,
+                        title: Text('''
+id: ${tarefa.id}
+Aberta: ${tarefa.aberta}
+Turma: ${tarefa.turma.nome}
+Prof.: ${tarefa.professor.nome}
+Aval.: ${tarefa.avaliacao.nome}
+Ques.: ${tarefa.situacao.nome}
+Inicio: ${tarefa.inicio}
+Iniciou: ${tarefa.iniciou}
+Editou: ${tarefa.editou}
+fim: ${tarefa.fim}
+Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
+Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
+Notas: $nota
+                        '''),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            "/tarefa/responder",
+                            arguments: tarefa.id,
+                          );
+                        },
                       ),
                     ),
                   );

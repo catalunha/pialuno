@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/bootstrap.dart';
+import 'package:pialuno/paginas/desenvolvimento/clock.dart';
 import 'package:pialuno/paginas/desenvolvimento/desenvolvimento_page.dart';
 import 'package:pialuno/paginas/login/home.dart';
 import 'package:pialuno/paginas/login/versao.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_page.dart';
+import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_page.dart';
 import 'package:pialuno/paginas/upload/uploader_page.dart';
 import 'package:pialuno/paginas/usuario/perfil_page.dart';
 import 'package:pialuno/plataforma/recursos.dart';
@@ -33,10 +35,14 @@ class MyApp extends StatelessWidget {
 
         //desenvolvimento
         "/desenvolvimento": (context) => Desenvolvimento(),
+        "/clock": (context) => CountDownTimer(),
 
         //tarefa
         "/tarefa/aberta": (context) => TarefaAbertaListPage(authBloc),
-
+        "/tarefa/responder": (context) {
+          final settings = ModalRoute.of(context).settings;
+          return TarefaAbertaResponderPage(settings.arguments);
+        },
         //EndDrawer
         //perfil
         "/perfil": (context) => PerfilPage(authBloc),

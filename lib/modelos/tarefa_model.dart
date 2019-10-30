@@ -1,4 +1,3 @@
-import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/avaliacao_model.dart';
 import 'package:pialuno/modelos/base_model.dart';
 import 'package:pialuno/modelos/questao_model.dart';
@@ -28,8 +27,9 @@ class TarefaModel extends FirestoreModel {
   Map<String, Variavel> variavel;
   Map<String, Pedese> pedese;
 
-  dynamic responderAte;
-  dynamic tempoPResponder;
+  // dynamic responderAte;
+  // dynamic _tempoPResponder;
+
   TarefaModel({
     String id,
     this.ativo,
@@ -114,16 +114,14 @@ class TarefaModel extends FirestoreModel {
         pedese[item.key] = Pedese.fromMap(item.value);
       }
     }
-    _responderAte();
-    _tempoPResponder();
-    isAberta();
+    // _updateAll();
     return this;
   }
 
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    isAberta();
+    // _updateAll();
     if (ativo != null) data['ativo'] = this.ativo;
     if (this.professor != null) {
       data['professor'] = this.professor.toMap();
@@ -148,7 +146,7 @@ class TarefaModel extends FirestoreModel {
     if (tentativa != null) data['tentativa'] = this.tentativa;
     if (tentou != null) data['tentou'] = this.tentou;
     if (tempo != null) data['tempo'] = this.tempo;
-    if (aberta != null) data['aberta'] = this.aberta;
+    if (aberta != null) data['aberta'] = aberta;
 
     if (this.situacao != null) {
       data['situacao'] = this.situacao.toMap();
@@ -171,10 +169,10 @@ class TarefaModel extends FirestoreModel {
     return data;
   }
 
-  bool isAberta() {
+  bool get isAberta {
     if (this.aberta && this.fim.isBefore(DateTime.now())) {
       this.aberta = false;
-      print('==> Tarefa ${this.id} Fechada pois fim < now');
+      print('==> Tarefa ${this.id}. aberta=${this.aberta} pois fim < now');
     }
     if (this.aberta &&
         this.iniciou != null &&
@@ -190,26 +188,29 @@ class TarefaModel extends FirestoreModel {
     return this.aberta;
   }
 
-  void _responderAte() {
+  // void set isAberta(bool aberta) {
+  //   this.aberta = aberta;
+  // }
+
+  DateTime get responderAte {
     if (this.iniciou != null) {
-      this.responderAte = this.iniciou.add(Duration(hours: this.tempo));
+      return this.iniciou.add(Duration(hours: this.tempo));
     } else {
-      this.responderAte = null;
+      return null;
     }
   }
 
-  dynamic _tempoPResponder() {
+  dynamic get tempoPResponder {
     if (this.iniciou == null) {
-      this.tempoPResponder = Duration(hours: this.tempo);
+      return Duration(hours: this.tempo);
     } else {
       if (this.responderAte != null && this.fim.isBefore(this.responderAte)) {
-        this.tempoPResponder = this.fim.difference(DateTime.now());
+        return this.fim.difference(DateTime.now());
       }
       if (this.responderAte != null) {
-        this.tempoPResponder = this.responderAte.difference(DateTime.now());
+        return this.responderAte.difference(DateTime.now());
       }
     }
-    return this.tempoPResponder;
   }
 }
 

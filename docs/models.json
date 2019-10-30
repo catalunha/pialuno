@@ -307,21 +307,21 @@
         "nome": "d",
         "ordem": 0,
         "tipo": "imagem",
-        "gabaritoUploadID": "Upload/uploadID",
         "gabarito": "url valor",
-        "respostaUploadID": "Upload/uploadID",
         "resposta": "url null || valor",
-        "nota": 0
+        "nota": 0,
+        "gabaritoUploadID": "Upload/uploadID",
+        "respostaUploadID": "Upload/uploadID"
       },
       "uid4": {
         "nome": "e",
         "ordem": 0,
         "tipo": "arquivo",
-        "gabaritoUploadID": "Upload/uploadID",
         "gabarito": "url valor",
-        "respostaUploadID": "Upload/uploadID",
         "resposta": "url null || valor",
-        "nota": 0
+        "nota": 0,
+        "gabaritoUploadID": "Upload/uploadID",
+        "respostaUploadID": "Upload/uploadID"
       }
     }
   },

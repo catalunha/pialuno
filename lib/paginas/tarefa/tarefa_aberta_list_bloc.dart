@@ -88,7 +88,6 @@ class TarefaAbertaListBloc {
         for (var tarefa in tarefaList) {
           print('=== +++ Tarefa +++ ===');
           print('TarefaOriginal  ::> ${tarefa.id}');
-
           print('aberta  ::> ${tarefa.aberta}');
           print('now ::> ${DateTime.now()}');
           print('inicio  ::> ${tarefa.inicio}');
@@ -98,12 +97,11 @@ class TarefaAbertaListBloc {
           print('responderAte ::> ${tarefa.responderAte}');
           print('tempoPResponder ::> ${tarefa.tempoPResponder}');
           print('=== --- Tarefa --- ===');
-
           // print('inicio < fim ::> ${tarefa.inicio.isBefore(tarefa.fim)}');
           // print('inicio < now ::> ${tarefa.inicio.isBefore(DateTime.now())}');
           // print('fim < now ::> ${tarefa.fim.isBefore(DateTime.now())}');
-          if (tarefa.isAberta()) {
             print('Analisando  ::> ${tarefa.id}');
+          if (!tarefa.isAberta) {
             final docRef = _firestore
                 .collection(TarefaModel.collection)
                 .document(tarefa.id);
@@ -112,7 +110,6 @@ class TarefaAbertaListBloc {
               merge: true,
             );
           }
-          // inicio.isBefore(fim)
         }
         _state.tarefaList = tarefaList;
         if (!_stateController.isClosed) _stateController.add(_state);
