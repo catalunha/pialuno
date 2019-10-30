@@ -322,6 +322,14 @@
         "nota": 0,
         "gabaritoUploadID": "Upload/uploadID",
         "respostaUploadID": "Upload/uploadID"
+      },
+      "uid5": {
+        "nome": "f",
+        "ordem": 0,
+        "tipo": "url",
+        "gabarito": "url valor",
+        "resposta": "url null || valor",
+        "nota": 0
       }
     }
   },

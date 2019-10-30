@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/bootstrap.dart';
-import 'package:pialuno/componentes/default_scaffold.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/paginas/desenvolvimento/clock.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_bloc.dart';
+import 'package:pialuno/plataforma/recursos.dart';
 import 'package:queries/collections.dart';
+import 'package:pialuno/naosuportato/naosuportado.dart'
+    show FilePicker, FileType;
+import 'package:pialuno/naosuportato/url_launcher.dart'
+    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
 
 class TarefaAbertaResponderPage extends StatefulWidget {
   final String tarefaID;
@@ -53,6 +57,8 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.cloud_upload),
           onPressed: () {
+            bloc.eventSink(SaveEvent());
+
             // Navigator.pushNamed(context, '/painel/crud', arguments: null);
           },
         ),
@@ -207,10 +213,11 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
           }
           if (snapshot.data.isDataValid) {
             var tarefa = snapshot.data.tarefaModel;
+            var pedese = snapshot.data.pedese;
 
             List<Widget> listaWidget = List<Widget>();
             Map<String, Pedese> pedeseMap;
-            var dicPedese = Dictionary.fromMap(tarefa.pedese);
+            var dicPedese = Dictionary.fromMap(pedese);
             var pedeseOrderBy = dicPedese
                 .orderBy((kv) => kv.value.ordem)
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
@@ -219,20 +226,67 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               // nota += '${pedese.value.nome}=${pedese.value.nota} ';
               print('${pedese.value.nome}');
               if (pedese.value.tipo == 'numero' ||
-                  pedese.value.tipo == 'palavra'||
+                  pedese.value.tipo == 'palavra' ||
+                  pedese.value.tipo == 'url' ||
                   pedese.value.tipo == 'texto') {
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
                     child: Text(
-                      '${pedese.value.nome}',
-                      style: TextStyle(fontSize: 15, color: Colors.blue),
+                      '${pedese.value.nome}.${pedese.value.tipo}',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.blue,
+                      ),
                     )));
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
-                    child: PedeseNumeroTexto(bloc, pedese.key, pedese.value)));
+                    child: PedeseNumeroTexto(
+                      bloc,
+                      pedese.key,
+                      pedese.value,
+                    )));
+              }
+              if (pedese.value.tipo == 'imagem') {
+                listaWidget.add(Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      '${pedese.value.nome}',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.blue,
+                      ),
+                    )));
+                listaWidget.add(Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ImagemSelect(
+                      bloc,
+                      pedese.key,
+                      pedese.value,
+                    )));
+              }
+              if (pedese.value.tipo == 'arquivo') {
+                listaWidget.add(Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      '${pedese.value.nome}',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.blue,
+                      ),
+                    )));
+                listaWidget.add(Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ArquivoSelect(
+                      bloc,
+                      pedese.key,
+                      pedese.value,
+                    )));
               }
             }
-            return Column(children: listaWidget);
+            // return Column(children: listaWidget);
+            return ListView(
+              children: listaWidget,
+            );
           }
         });
   }
@@ -298,7 +352,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               ],
             );
           } else {
-            return Text('Dados inválidos...');
+            return Text('Tarefa já fechou...');
           }
         });
   }
@@ -308,10 +362,18 @@ class PedeseNumeroTexto extends StatefulWidget {
   final TarefaAbertaResponderBloc bloc;
   final String pedeseKey;
   final Pedese pedeseValue;
-  PedeseNumeroTexto(this.bloc, this.pedeseKey, this.pedeseValue);
+  PedeseNumeroTexto(
+    this.bloc,
+    this.pedeseKey,
+    this.pedeseValue,
+  );
   @override
   PedeseNumeroTextoState createState() {
-    return PedeseNumeroTextoState(bloc, pedeseKey, pedeseValue);
+    return PedeseNumeroTextoState(
+      bloc,
+      pedeseKey,
+      pedeseValue,
+    );
   }
 }
 
@@ -343,5 +405,219 @@ class PedeseNumeroTextoState extends State<PedeseNumeroTexto> {
         );
       },
     );
+  }
+}
+
+class ImagemSelect extends StatelessWidget {
+  // String resposta;
+  // String _localPath;
+
+  final TarefaAbertaResponderBloc bloc;
+  final String pedeseKey;
+  final Pedese pedeseValue;
+  ImagemSelect(
+    this.bloc,
+    this.pedeseKey,
+    this.pedeseValue,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<TarefaAbertaResponderBlocState>(
+      stream: bloc.stateStream,
+      builder: (BuildContext context,
+          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        if (snapshot.hasError) {
+          return Container(
+            child: Center(child: Text('Erro.')),
+          );
+        }
+        return Column(
+          children: <Widget>[
+            Recursos.instance.disponivel("file_picking")
+                ? ListTile(
+                    title: Text('Selecione uma imagem conforme solicitado.'),
+                    trailing: Icon(Icons.file_download),
+                    onTap: () async {
+                      await _selecionarNovoArquivo().then((localPath) {
+                        // _localPath = arq;
+                        bloc.eventSink(UpdatePedeseEvent(pedeseKey, localPath));
+                      });
+                    },
+                    onLongPress: () {
+                      bloc.eventSink(UpdatePedeseEvent(pedeseKey, null));
+                    },
+                  )
+                : Text('Recurso não suporte nesta plataforma.'),
+            _MostrarImagemUnica(
+              uploadID: pedeseValue?.respostaUploadID,
+              url: pedeseValue?.resposta,
+              path: pedeseValue?.respostaPath,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String> _selecionarNovoArquivo() async {
+    try {
+      var arquivoPath = await FilePicker.getFilePath(type: FileType.ANY);
+      if (arquivoPath != null) {
+        return arquivoPath;
+      }
+    } catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    return null;
+  }
+}
+
+class _MostrarImagemUnica extends StatelessWidget {
+  final String uploadID;
+  final String url;
+  final String path;
+
+  const _MostrarImagemUnica({this.uploadID, this.url, this.path});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget imagem;
+    if (uploadID != null && url == null) {
+      imagem = Center(
+          child: Text(
+              'Você não enviou a última imagem selecionada. Vá para o menu Upload de Arquivos.'));
+    } else if (url == null && path == null) {
+      imagem = Center(child: Text('Sem imagem selecionada.'));
+    } else if (url != null) {
+      imagem = Container(
+          child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Image.network(url),
+      ));
+    } else {
+      imagem = Container(
+          // color: Colors.yellow,
+          child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Image.asset(path),
+      ));
+    }
+    return Row(
+      children: <Widget>[
+        Spacer(
+          flex: 2,
+        ),
+        Expanded(
+          flex: 2,
+          child: imagem,
+        ),
+        Spacer(
+          flex: 2,
+        ),
+      ],
+    );
+  }
+}
+
+class ArquivoSelect extends StatelessWidget {
+  // String resposta;
+  // String _localPath;
+
+  final TarefaAbertaResponderBloc bloc;
+  final String pedeseKey;
+  final Pedese pedeseValue;
+  ArquivoSelect(
+    this.bloc,
+    this.pedeseKey,
+    this.pedeseValue,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<TarefaAbertaResponderBlocState>(
+      stream: bloc.stateStream,
+      builder: (BuildContext context,
+          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        if (snapshot.hasError) {
+          return Container(
+            child: Center(child: Text('Erro.')),
+          );
+        }
+        return Column(
+          children: <Widget>[
+            Recursos.instance.disponivel("file_picking")
+                ? ListTile(
+                    title: Text('Selecione um arquivo conforme solicitado.'),
+                    trailing: Icon(Icons.file_download),
+                    onTap: () async {
+                      await _selecionarNovoArquivo().then((localPath) {
+                        // _localPath = arq;
+                        bloc.eventSink(UpdatePedeseEvent(pedeseKey, localPath));
+                      });
+                    },
+                    onLongPress: () {
+                      bloc.eventSink(UpdatePedeseEvent(pedeseKey, null));
+                    },
+                  )
+                : Text('Recurso não suporte nesta plataforma.'),
+            _MostraArquivo(
+              uploadID: pedeseValue?.respostaUploadID,
+              url: pedeseValue?.resposta,
+              path: pedeseValue?.respostaPath,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String> _selecionarNovoArquivo() async {
+    try {
+      var arquivoPath = await FilePicker.getFilePath(type: FileType.ANY);
+      if (arquivoPath != null) {
+        return arquivoPath;
+      }
+    } catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    return null;
+  }
+}
+
+class _MostraArquivo extends StatelessWidget {
+  final String uploadID;
+  final String url;
+  final String path;
+
+  const _MostraArquivo({this.uploadID, this.url, this.path});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget imagem;
+    if (uploadID != null && url == null) {
+      imagem = Center(
+          child: Text(
+              'Você não enviou o último arquivo selecionada. Vá para o menu Upload de Arquivos.'));
+    } else if (url == null && path == null) {
+      imagem = Center(child: Text('Sem arquivo selecionado.'));
+    } else if (url != null) {
+      imagem = ListTile(
+        title: Text('$url'),
+        trailing: Icon(Icons.link),
+        onTap: () {
+          launch(url);
+        },
+      );
+    } else {
+      imagem = ListTile(
+        title: Text('$path'),
+        // onTap: () {
+        //   launch(url);
+        // },
+      );
+    }
+
+    return imagem;
   }
 }

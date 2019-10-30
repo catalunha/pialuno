@@ -267,9 +267,11 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
           'pedese03':
               Pedese(nome: 'c', ordem: 2, tipo: 'texto', gabarito: 'sim'),
           'pedese04':
-              Pedese(nome: 'd', ordem: 3, tipo: 'arquivo', gabarito: 'sim'),
+              Pedese(nome: 'd', ordem: 3, tipo: 'url', gabarito: 'sim'),
           'pedese05':
-              Pedese(nome: 'e', ordem: 4, tipo: 'imagem', gabarito: 'sim'),
+              Pedese(nome: 'e', ordem: 4, tipo: 'arquivo', gabarito: 'sim'),
+          'pedese06':
+              Pedese(nome: 'f', ordem: 5, tipo: 'imagem', gabarito: 'sim'),
         });
 
     print('=>>>>>>>> ${tarefaModel.aberta}');

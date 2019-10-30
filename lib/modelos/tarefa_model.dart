@@ -100,8 +100,7 @@ class TarefaModel extends FirestoreModel {
         ? SituacaoFk.fromMap(map['situacao'])
         : null;
     if (map.containsKey('simulacao')) simulacao = map['simulacao'];
-    // if (map.containsKey('variavel')) variavel = map['variavel'];
-    // if (map.containsKey('pedese')) pedese = map['pedese'];
+
     if (map["variavel"] is Map) {
       variavel = Map<String, Variavel>();
       for (var item in map["variavel"].entries) {
@@ -181,16 +180,13 @@ class TarefaModel extends FirestoreModel {
       this.aberta = false;
       print('==> Tarefa ${this.id} Fechada pois responderAte < now');
     }
-    if (this.aberta && this.tentou != null && this.tentou <= this.tentativa) {
+    if (this.aberta && this.tentou != null && this.tentou >= this.tentativa) {
       this.aberta = false;
       print('==> Tarefa ${this.id} Fechada pois tentou < tentativa');
     }
     return this.aberta;
   }
 
-  // void set isAberta(bool aberta) {
-  //   this.aberta = aberta;
-  // }
 
   DateTime get responderAte {
     if (this.iniciou != null) {
@@ -201,8 +197,10 @@ class TarefaModel extends FirestoreModel {
   }
 
   dynamic get tempoPResponder {
+    responderAte;
     if (this.iniciou == null) {
-      return Duration(hours: this.tempo);
+      // return Duration(hours: this.tempo);
+      return null;
     } else {
       if (this.responderAte != null && this.fim.isBefore(this.responderAte)) {
         return this.fim.difference(DateTime.now());
@@ -211,6 +209,12 @@ class TarefaModel extends FirestoreModel {
         return this.responderAte.difference(DateTime.now());
       }
     }
+  }
+
+  void updateAll(){
+    responderAte;
+    tempoPResponder;
+    isAberta;
   }
 }
 
@@ -244,6 +248,7 @@ class Pedese {
   String resposta;
   int nota;
   String gabaritoUploadID;
+  String respostaPath;
   String respostaUploadID;
 
   Pedese({
@@ -254,6 +259,7 @@ class Pedese {
     this.resposta,
     this.nota,
     this.gabaritoUploadID,
+    this.respostaPath,
     this.respostaUploadID,
   });
 
@@ -266,6 +272,7 @@ class Pedese {
     if (map.containsKey('nota')) nota = map['nota'];
     if (map.containsKey('gabaritoUploadID'))
       gabaritoUploadID = map['gabaritoUploadID'];
+    if (map.containsKey('respostaPath')) respostaPath = map['respostaPath'];
     if (map.containsKey('respostaUploadID'))
       respostaUploadID = map['respostaUploadID'];
   }
@@ -280,6 +287,7 @@ class Pedese {
     if (nota != null) data['nota'] = this.nota;
     if (gabaritoUploadID != null)
       data['gabaritoUploadID'] = this.gabaritoUploadID;
+    if (respostaPath != null) data['respostaPath'] = this.respostaPath;
     if (respostaUploadID != null)
       data['respostaUploadID'] = this.respostaUploadID;
     return data;
