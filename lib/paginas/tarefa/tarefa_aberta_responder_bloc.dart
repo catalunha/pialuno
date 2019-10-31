@@ -1,7 +1,6 @@
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/modelos/upload_model.dart';
-import 'package:pialuno/modelos/usuario_model.dart';
 import 'package:firestore_wrapper/firestore_wrapper.dart' as fsw;
 import 'package:rxdart/rxdart.dart';
 
@@ -63,47 +62,47 @@ class TarefaAbertaResponderBloc {
 
   _validateData() {
     _state.isDataValid = true;
-    if (_state.tarefaModel.aberta != null && _state.tarefaModel.aberta) {
-      _state.isDataValid = true;
-    }
-    if(_state.tarefaModel?.tempoPResponder?.inSeconds ==null){
+    if (_state.tarefaModel.aberta != null && !_state.tarefaModel.aberta) {
       _state.isDataValid = false;
-
+    }
+    if (_state.tarefaModel?.tempoPResponder?.inSeconds == null) {
+      _state.isDataValid = false;
     }
   }
 
   _mapEventToState(TarefaAbertaResponderBlocEvent event) async {
     if (event is GetTarefaEvent) {
-      final streamDocsSnap = _firestore
+      final docRef = _firestore
           .collection(TarefaModel.collection)
-          .document(event.tarefaID)
-          .snapshots();
+          .document(event.tarefaID);
+      var docSnap = await docRef.get();
 
-      final snapTarefa = streamDocsSnap
-          .map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data));
-      snapTarefa.listen((TarefaModel tarefa) async {
-          // tarefa.iniciou = DateTime.now();
-        // if (tarefa.iniciou == null) {
-        //   print('Tarefa sendo iniciada...');
-        //   tarefa.modificado = DateTime.now();
-        //   tarefa.updateAll();
-        //   final docRef =
-        //       _firestore.collection(TarefaModel.collection).document(tarefa.id);
-        //   await docRef.setData(
-        //     tarefa.toMap(),
-        //     merge: true,
-        //   );
-        // } else {
-        //   print('Tarefa JA iniciada...');
-        // }
+      _state.tarefaModel =
+          TarefaModel(id: docSnap.documentID).fromMap(docSnap.data);
 
-        _state.tarefaModel = tarefa;
-        _state.updateStateFromTarefaModel();
-        if (!_stateController.isClosed) _stateController.add(_state);
-      });
+      // final snapTarefa = streamDocsSnap
+      //     .map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data));
+      // snapTarefa.listen((TarefaModel tarefa) async {
+      _state.tarefaModel.modificado = DateTime.now();
+      _state.tarefaModel.updateAll();
+      if (_state.tarefaModel.iniciou == null) {
+        _state.tarefaModel.iniciou = DateTime.now();
+        // print('Tarefa sendo iniciada...');
+        final docRef = _firestore
+            .collection(TarefaModel.collection)
+            .document(_state.tarefaModel.id);
+        await docRef.setData(
+          _state.tarefaModel.toMap(),
+          merge: true,
+        );
+      } else {
+        // print('Tarefa JA iniciada...');
+      }
+      _state.updateStateFromTarefaModel();
+      if (!_stateController.isClosed) _stateController.add(_state);
     }
     if (event is UpdatePedeseEvent) {
-      print('UpdatePedeseEvent: ${event.pedeseKey} = ${event.valor}');
+      // print('UpdatePedeseEvent: ${event.pedeseKey} = ${event.valor}');
       var pedese = _state.pedese[event.pedeseKey];
       if (pedese.tipo == 'numero' ||
           pedese.tipo == 'palavra' ||
@@ -113,10 +112,33 @@ class TarefaAbertaResponderBloc {
       } else if (pedese.tipo == 'imagem' || pedese.tipo == 'arquivo') {
         pedese.respostaPath = event.valor;
       }
-      print(pedese.toMap());
+      // print(pedese.toMap());
     }
     if (event is SaveEvent) {
       for (var pedese in _state.pedese.entries) {
+        //Corrigir textos e numeros.
+        if (pedese.value.tipo == 'palavra') {
+          if (pedese.value.resposta == pedese.value.gabarito) {
+            _state.pedese[pedese.key].nota = 1;
+          } else {
+            _state.pedese[pedese.key].nota = null;
+          }
+        }
+        if (pedese.value.tipo == 'numero' && pedese.value.resposta != null) {
+          double resposta = double.parse(pedese.value.resposta);
+          double gabarito = double.parse(pedese.value.gabarito);
+          double erroRelativoCalculado =
+              (resposta - gabarito).abs() / gabarito.abs() * 100;
+          double erroRelativoPermitido =
+              double.parse(_state.tarefaModel.situacao.erroRelativo);
+
+          if (erroRelativoCalculado <= erroRelativoPermitido) {
+            _state.pedese[pedese.key].nota = 1;
+          } else {
+            _state.pedese[pedese.key].nota = null;
+          }
+        }
+        // Criar uploadID de imagem e arquivo
         if ((pedese.value.tipo == 'imagem' || pedese.value.tipo == 'arquivo') &&
             pedese.value.respostaPath != null) {
           // Deletar uploadID anterior se existir
@@ -160,6 +182,12 @@ class TarefaAbertaResponderBloc {
         tarefaUpdate.toMap(),
         merge: true,
       );
+      _state.tarefaModel.tentou = _state.tarefaModel.tentou != null
+          ? _state.tarefaModel.tentou = _state.tarefaModel.tentou + 1
+          : 1;
+      _state.tarefaModel.modificado = DateTime.now();
+      _state.tarefaModel.updateAll();
+      print('fim SaveEvent. tentou ${_state.tarefaModel.tentou}');
     }
 
     _validateData();

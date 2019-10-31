@@ -58,6 +58,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
           child: Icon(Icons.cloud_upload),
           onPressed: () {
             bloc.eventSink(SaveEvent());
+            // Navigator.pop(context);
 
             // Navigator.pushNamed(context, '/painel/crud', arguments: null);
           },
@@ -85,7 +86,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return Text("ERROR");
           }
           if (!snapshot.hasData) {
-            return Text("SEM DADOS");
+            return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
             List<Widget> listaWidget = List<Widget>();
@@ -93,21 +94,21 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             String nota = '';
             var tarefa = snapshot.data.tarefaModel;
 
-            Widget contador = Container(
-              width: 100.0,
-              // padding: EdgeInsets.only(top: 3.0, right: 4.0),
-              child: CountDownTimer(
-                secondsRemaining: tarefa.tempoPResponder.inSeconds,
-                whenTimeExpires: () {
-                  setState(() {
-                    hasTimerStopped = true;
-                  });
-                  print('terminou clock');
-                },
-                countDownTimerStyle: TextStyle(
-                    color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
-              ),
-            );
+            // Widget contador = Container(
+            //   width: 100.0,
+            //   // padding: EdgeInsets.only(top: 3.0, right: 4.0),
+            //   child: CountDownTimer(
+            //     secondsRemaining: tarefa.tempoPResponder.inSeconds,
+            //     whenTimeExpires: () {
+            //       setState(() {
+            //         hasTimerStopped = true;
+            //       });
+            //       print('terminou clock');
+            //     },
+            //     countDownTimerStyle: TextStyle(
+            //         color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
+            //   ),
+            // );
             // print('tarefa.id: ${tarefa.id}');
             var dicPedese = Dictionary.fromMap(tarefa.pedese);
             var pedeseOrderBy = dicPedese
@@ -122,22 +123,21 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               Card(
                 child: ListTile(
                   trailing: Text('${tarefa.questao.numero}'),
-                  selected: tarefa.iniciou != null,
                   title: Text('''
-        id: ${tarefa.id}
-        Aberta: ${tarefa.aberta}
-        Turma: ${tarefa.turma.nome}
-        Prof.: ${tarefa.professor.nome}
-        Aval.: ${tarefa.avaliacao.nome}
-        Ques.: ${tarefa.situacao.nome}
-        Inicio: ${tarefa.inicio}
-        Iniciou: ${tarefa.iniciou}
-        Editou: ${tarefa.editou}
-        fim: ${tarefa.fim}
-        Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
-        Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
-        Notas: $nota
+id: ${tarefa.id}
+Aberta: ${tarefa.aberta}
+Turma: ${tarefa.turma.nome}
+Prof.: ${tarefa.professor.nome}
+Aval.: ${tarefa.avaliacao.nome}
+Ques.: ${tarefa.situacao.nome}
+Inicio: ${tarefa.inicio}
+Iniciou: ${tarefa.iniciou}
+Editou: ${tarefa.editou}
+fim: ${tarefa.fim}
+Notas: $nota
                                 '''),
+// Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
+// Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -149,9 +149,17 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               ),
             );
 
-            return Column(children: <Widget>[contador, _bodyAba(listaWidget)]);
+            return Column(children: <Widget>[
+              // contador,
+              _bodyAba(listaWidget),
+            ]);
           } else {
-            return Text('Dados inválidos...');
+            return Center(
+                child: Text('Tarefa fechou por limite de tentativas ou tempo.',
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: Colors.blue,
+                    )));
           }
         });
   }
@@ -165,7 +173,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return Text("ERROR");
           }
           if (!snapshot.hasData) {
-            return Text("SEM DADOS");
+            return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
             List<Widget> listaWidget = List<Widget>();
@@ -195,7 +203,12 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               _bodyAba(listaWidget)
             ]);
           } else {
-            return Text('Dados inválidos...');
+            return Center(
+                child: Text('Tarefa fechou por limite de tentativas ou tempo.',
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: Colors.blue,
+                    )));
           }
         });
   }
@@ -209,7 +222,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return Text("ERROR");
           }
           if (!snapshot.hasData) {
-            return Text("SEM DADOS");
+            return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
             var tarefa = snapshot.data.tarefaModel;
@@ -224,20 +237,36 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             pedeseMap = pedeseOrderBy.toMap();
             for (var pedese in pedeseMap.entries) {
               // nota += '${pedese.value.nome}=${pedese.value.nota} ';
-              print('${pedese.value.nome}');
+              // print('${pedese.value.nome}');
               if (pedese.value.tipo == 'numero' ||
                   pedese.value.tipo == 'palavra' ||
                   pedese.value.tipo == 'url' ||
                   pedese.value.tipo == 'texto') {
-                listaWidget.add(Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text(
+                // listaWidget.add(Padding(
+                //     padding: EdgeInsets.all(5.0),
+                //     child: Text(
+                //       '${pedese.value.nome}.${pedese.value.tipo}',
+                //       style: TextStyle(
+                //         fontSize: 15,
+                //         color: Colors.blue,
+                //       ),
+                //     )));
+                listaWidget.add(
+                  ListTile(
+                    title: Text(
                       '${pedese.value.nome}.${pedese.value.tipo}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.blue,
-                      ),
-                    )));
+                    ),
+                    selected: pedese.value.nota != null,
+                    trailing: pedese.value.nota != null
+                        ? Icon(Icons.check)
+                        : Text(''),
+                  ),
+                );
+                // listaWidget.add(PedeseNumeroTexto(
+                //   bloc,
+                //   pedese.key,
+                //   pedese.value,
+                // ));
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
                     child: PedeseNumeroTexto(
@@ -287,6 +316,13 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return ListView(
               children: listaWidget,
             );
+          } else {
+            return Center(
+                child: Text('Tarefa fechou por limite de tentativas ou tempo.',
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: Colors.blue,
+                    )));
           }
         });
   }
@@ -319,7 +355,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return Text("ERROR");
           }
           if (!snapshot.hasData) {
-            return Text("SEM DADOS");
+            return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
             var tarefa = snapshot.data.tarefaModel;
@@ -329,18 +365,16 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               // padding: EdgeInsets.only(top: 3.0, right: 4.0),
               child: CountDownTimer(
                 secondsRemaining: tarefa.tempoPResponder.inSeconds,
-                // whenTimeExpires: () {
-                //   setState(() {
-                //     hasTimerStopped = true;
-                //   });
-                //   print('terminou clock');
-                // },
+                whenTimeExpires: () {
+                  Navigator.pop(context);
+                  print('terminou clock');
+                },
                 countDownTimerStyle: TextStyle(
                     color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
               ),
             );
             Widget tentativas = Text(
-              '${tarefa.tentou} / ${tarefa.tentativa}',
+              '${tarefa.tentou ?? 0} / ${tarefa.tentativa}',
               style: TextStyle(
                   color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
             );
@@ -467,7 +501,7 @@ class ImagemSelect extends StatelessWidget {
         return arquivoPath;
       }
     } catch (e) {
-      print("Unsupported operation" + e.toString());
+      print("_selecionarNovoArquivo: Unsupported operation" + e.toString());
     }
     return null;
   }
@@ -579,7 +613,7 @@ class ArquivoSelect extends StatelessWidget {
         return arquivoPath;
       }
     } catch (e) {
-      print("Unsupported operation" + e.toString());
+      print("_selecionarNovoArquivo: Unsupported operation" + e.toString());
     }
     return null;
   }

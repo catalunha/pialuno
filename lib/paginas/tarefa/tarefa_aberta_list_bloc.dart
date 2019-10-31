@@ -86,21 +86,21 @@ class TarefaAbertaListBloc {
 
       snapListRemetente.listen((List<TarefaModel> tarefaList) {
         for (var tarefa in tarefaList) {
-          print('=== +++ Tarefa +++ ===');
-          print('TarefaOriginal  ::> ${tarefa.id}');
-          print('aberta  ::> ${tarefa.aberta}');
-          print('now ::> ${DateTime.now()}');
-          print('inicio  ::> ${tarefa.inicio}');
-          print('iniciou  ::> ${tarefa.iniciou}');
-          print('fim ::> ${tarefa.fim}');
-          print('tempo  ::> ${tarefa.tempo}h ou até ${tarefa.responderAte}');
-          print('responderAte ::> ${tarefa.responderAte}');
-          print('tempoPResponder ::> ${tarefa.tempoPResponder}');
-          print('=== --- Tarefa --- ===');
+          // print('=== +++ Tarefa +++ ===');
+          // print('TarefaOriginal  ::> ${tarefa.id}');
+          // print('aberta  ::> ${tarefa.aberta}');
+          // print('now ::> ${DateTime.now()}');
+          // print('inicio  ::> ${tarefa.inicio}');
+          // print('iniciou  ::> ${tarefa.iniciou}');
+          // print('fim ::> ${tarefa.fim}');
+          // print('tempo  ::> ${tarefa.tempo}h ou até ${tarefa.responderAte}');
+          // print('responderAte ::> ${tarefa.responderAte}');
+          // print('tempoPResponder ::> ${tarefa.tempoPResponder}');
+          // print('=== --- Tarefa --- ===');
           // print('inicio < fim ::> ${tarefa.inicio.isBefore(tarefa.fim)}');
           // print('inicio < now ::> ${tarefa.inicio.isBefore(DateTime.now())}');
           // print('fim < now ::> ${tarefa.fim.isBefore(DateTime.now())}');
-            print('Analisando  ::> ${tarefa.id}');
+            // print('Analisando  ::> ${tarefa.id}');
           if (!tarefa.isAberta) {
             final docRef = _firestore
                 .collection(TarefaModel.collection)

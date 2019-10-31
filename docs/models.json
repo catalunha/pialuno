@@ -103,6 +103,7 @@
       "id": "Grupo/grupoID",
       "nome": "Grupo/grupoID.nome"
     },
+    "erroRelativo": "numero. de 1% a 10%. |x_real - x_aproximado|/|x_real|*100<erroRelativo",
     "precisaAlgoritmoSimulacao": "true/false",
     "urlPDFSituacaoSemAlgoritmo": "se precisaAlgoritmoSimulacao=false : pdf com proposta da situacao e professor gera as simulações. precisaAlgoritmoSimulacao=true este campo nulo",
     "urlGDocsPAlgoritmo": "anexa gdocs com proposta e compartilhar no email do suporte.",
@@ -263,6 +264,7 @@
     "situacao": {
       "id": "",
       "nome": "",
+      "erroRelativo":"",
       "url": "url igual a Situacao/urlPropostaSimulada"
     },
     "simulacao": "Simulacao/simulacaoID",

@@ -41,9 +41,9 @@ class _CountDownTimerState extends State<CountDownTimer>
     String minutesStr = (minutes).toString().padLeft(2, '0');
     String secondsStr = (seconds % 60).toString().padLeft(2, '0');
 
-    if (hours == 0) {
-      return "$minutesStr:$secondsStr";
-    }
+    // if (hours == 0) {
+    //   return "$minutesStr:$secondsStr";
+    // }
 
     return "$hoursStr:$minutesStr:$secondsStr";
   }
@@ -80,7 +80,7 @@ class _CountDownTimerState extends State<CountDownTimer>
           if (status == AnimationStatus.completed) {
             widget.whenTimeExpires();
           } else if (status == AnimationStatus.dismissed) {
-            print("Animation Complete");
+            // print("Animation Complete");
           }
         });
       });

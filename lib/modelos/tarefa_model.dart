@@ -1,3 +1,4 @@
+import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/avaliacao_model.dart';
 import 'package:pialuno/modelos/base_model.dart';
 import 'package:pialuno/modelos/questao_model.dart';
@@ -187,7 +188,6 @@ class TarefaModel extends FirestoreModel {
     return this.aberta;
   }
 
-
   DateTime get responderAte {
     if (this.iniciou != null) {
       return this.iniciou.add(Duration(hours: this.tempo));
@@ -211,7 +211,7 @@ class TarefaModel extends FirestoreModel {
     }
   }
 
-  void updateAll(){
+  void updateAll() {
     responderAte;
     tempoPResponder;
     isAberta;
@@ -284,7 +284,7 @@ class Pedese {
     if (tipo != null) data['tipo'] = this.tipo;
     if (gabarito != null) data['gabarito'] = this.gabarito;
     if (resposta != null) data['resposta'] = this.resposta;
-    if (nota != null) data['nota'] = this.nota;
+    data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
     if (gabaritoUploadID != null)
       data['gabaritoUploadID'] = this.gabaritoUploadID;
     if (respostaPath != null) data['respostaPath'] = this.respostaPath;

@@ -67,6 +67,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
                 icon: Icon(Icons.menu),
                 onPressed: () async {
                   await cadastrarTarefa('0Teste1');
+                  await cadastrarTarefa('0Teste2');
                 },
               ),
             ),
@@ -79,30 +80,30 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
                 },
               ),
             ),
-            ListTile(
-              title: Text('Testar cronometro => $hasTimerStopped'),
-              trailing: IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () async {
-                  hasTimerStopped = true;
-                },
-              ),
-            ),
-            Container(
-              width: 60.0,
-              padding: EdgeInsets.only(top: 3.0, right: 4.0),
-              child: CountDownTimer(
-                secondsRemaining: 7200,
-                whenTimeExpires: () {
-                  setState(() {
-                    hasTimerStopped = true;
-                  });
-                  print('terminou clock');
-                },
-                countDownTimerStyle: TextStyle(
-                    color: Color(0XFFf5a623), fontSize: 17.0, height: 1.2),
-              ),
-            )
+            // ListTile(
+            //   title: Text('Testar cronometro => $hasTimerStopped'),
+            //   trailing: IconButton(
+            //     icon: Icon(Icons.menu),
+            //     onPressed: () async {
+            //       hasTimerStopped = true;
+            //     },
+            //   ),
+            // ),
+            // Container(
+            //   width: 60.0,
+            //   padding: EdgeInsets.only(top: 3.0, right: 4.0),
+            //   child: CountDownTimer(
+            //     secondsRemaining: 7200,
+            //     whenTimeExpires: () {
+            //       setState(() {
+            //         hasTimerStopped = true;
+            //       });
+            //       print('terminou clock');
+            //     },
+            //     countDownTimerStyle: TextStyle(
+            //         color: Color(0XFFf5a623), fontSize: 17.0, height: 1.2),
+            //   ),
+            // )
           ],
         ));
   }
@@ -116,7 +117,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         List<dynamic> routes = List<dynamic>();
 
         routes.addAll(documentSnapshot.data['routes']);
-        print(routes.runtimeType);
+        // print(routes.runtimeType);
         routes.addAll([
           // Drawer
           // '/',
@@ -141,7 +142,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         await documentSnapshot.reference
             .setData({"routes": routes}, merge: true);
       } else {
-        print('Sem routes ${documentSnapshot.documentID}');
+        // print('Sem routes ${documentSnapshot.documentID}');
       }
     }
   }
@@ -152,7 +153,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     var snap = await docRef.get();
     List<dynamic> routes = List<dynamic>();
     routes.addAll(snap.data['routes']);
-    print(routes.runtimeType);
+    // print(routes.runtimeType);
     routes.addAll([
       //Drawer
       // '/',
@@ -232,17 +233,18 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         questao: QuestaoFk(id: 'questao01', numero: 1),
         aluno: UsuarioFk(id: 'PMAxu4zKfmaOlYAmF3lgFGmCR1w2', nome: 'Cata'),
         modificado: DateTime.now(),
-        inicio: DateTime.parse('2019-10-30T12:00:00-0300'),
+        inicio: DateTime.parse('2019-10-30T18:00:00-0300'),
         // iniciou: DateTime.parse('2019-10-29T09:00:00.000Z'),
         // editou: DateTime.parse('2019-10-29T09:30:00.000Z'),
-        fim: DateTime.parse('2019-10-30T18:00:00-0300'),
-        tentativa: 3,
+        fim: DateTime.parse('2019-10-30T23:00:00-0300'),
+        tentativa: 5,
         // tentou: 0,
-        tempo: 2,
+        tempo: 1,
         aberta: true,
         situacao: SituacaoFk(
           id: 'situacao01',
           nome: 'situacao01',
+          erroRelativo:'10',
           url:
               'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
         ),
@@ -261,7 +263,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         },
         pedese: {
           'pedese01':
-              Pedese(nome: 'a', ordem: 0, tipo: 'numero', gabarito: '2'),
+              Pedese(nome: 'a', ordem: 0, tipo: 'numero', gabarito: '20'),
           'pedese02':
               Pedese(nome: 'b', ordem: 1, tipo: 'palavra', gabarito: 'sim'),
           'pedese03':
@@ -274,13 +276,13 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
               Pedese(nome: 'f', ordem: 5, tipo: 'imagem', gabarito: 'sim'),
         });
 
-    print('=>>>>>>>> ${tarefaModel.aberta}');
+    // print('=>>>>>>>> ${tarefaModel.aberta}');
     await docRef.setData(tarefaModel.toMap(), merge: true);
     // await docRef.setData(tarefaModel.toMap());
   }
 
   Future testarFirebaseCmds() async {
-    print('+++ testarFirebaseCmds');
+    // print('+++ testarFirebaseCmds');
     UsuarioModel usuarioModel = UsuarioModel(
       id: 'PMAxu4zKfmaOlYAmF3lgFGmCR1w2',
       foto: UploadFk(uploadID: 'NFnVSDPpbOwQejMu1jXh', url: null),
@@ -297,6 +299,6 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     // for (var item in docRef.documents) {
     //   print('Doc encontrados: ${item.documentID}');
     // }
-    print('--- testarFirebaseCmds');
+    // print('--- testarFirebaseCmds');
   }
 }
