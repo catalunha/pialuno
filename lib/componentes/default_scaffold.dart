@@ -27,9 +27,9 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
       rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
       rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
       rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
-      // rotas["/aplicacao/home"] =
-      //     Rota("Aplicar Questionário", Icons.directions_walk);
-      // rotas["/resposta/home"] = Rota("Resposta", Icons.playlist_add_check);
+      rotas["/turma/list"] =
+          Rota("Suas turmas", Icons.book);
+      // rotas["/avaliacao/list"] = Rota("Resposta", Icons.playlist_add_check);
       // rotas["/sintese/home"] = Rota("Síntese", Icons.equalizer);
       // rotas["/produto/home"] = Rota("Produto", Icons.chrome_reader_mode);
       // rotas["/controle/home"] = Rota("Controle", Icons.control_point);

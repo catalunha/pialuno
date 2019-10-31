@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
+import 'package:pialuno/componentes/clock.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
-import 'package:pialuno/paginas/desenvolvimento/clock.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_bloc.dart';
 import 'package:queries/collections.dart';
 
@@ -53,7 +53,7 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                 // print('dados validos...');
 
                 List<Widget> listaWidget = List<Widget>();
-                String nota = '';
+                String notas = '';
                 Map<String, Pedese> pedeseMap = Map<String, Pedese>();
 
                 for (var tarefa in snapshot.data.tarefaList) {
@@ -64,9 +64,9 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                       .orderBy((kv) => kv.value.ordem)
                       .toDictionary$1((kv) => kv.key, (kv) => kv.value);
                   pedeseMap = pedeseOrderBy.toMap();
-                  nota = '';
+                  notas = '';
                   for (var pedese in pedeseMap.entries) {
-                    nota += '${pedese.value.nome}=${pedese.value.nota} ';
+                    notas += '${pedese.value.nome}=${pedese.value.nota} ';
                   }
                   Widget contador;
                   if (tarefa.tempoPResponder == null) {
@@ -101,10 +101,10 @@ Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
 Inicio: ${tarefa.inicio}
 Iniciou: ${tarefa.iniciou}
-Editou: ${tarefa.editou}
+Editou: ${tarefa.enviou}
 fim: ${tarefa.fim}
 Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
-Notas: $nota
+Notas: $notas
                         '''),
 //                         subtitle: Text('''
 // id: ${tarefa.id}

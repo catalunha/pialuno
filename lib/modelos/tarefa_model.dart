@@ -17,7 +17,7 @@ class TarefaModel extends FirestoreModel {
   dynamic modificado;
   dynamic inicio;
   dynamic iniciou;
-  dynamic editou;
+  dynamic enviou;
   dynamic fim;
   int tentativa;
   dynamic tentou = 0;
@@ -42,7 +42,7 @@ class TarefaModel extends FirestoreModel {
     this.modificado,
     this.inicio,
     this.iniciou,
-    this.editou,
+    this.enviou,
     this.fim,
     this.tentativa,
     this.tentou,
@@ -85,9 +85,9 @@ class TarefaModel extends FirestoreModel {
         ? DateTime.fromMillisecondsSinceEpoch(
             map['iniciou'].millisecondsSinceEpoch)
         : null;
-    editou = map.containsKey('editou') && map['editou'] != null
+    enviou = map.containsKey('enviou') && map['enviou'] != null
         ? DateTime.fromMillisecondsSinceEpoch(
-            map['editou'].millisecondsSinceEpoch)
+            map['enviou'].millisecondsSinceEpoch)
         : null;
     fim = map.containsKey('fim') && map['fim'] != null
         ? DateTime.fromMillisecondsSinceEpoch(map['fim'].millisecondsSinceEpoch)
@@ -141,7 +141,7 @@ class TarefaModel extends FirestoreModel {
     if (modificado != null) data['modificado'] = this.modificado;
     if (inicio != null) data['inicio'] = this.inicio;
     if (iniciou != null) data['iniciou'] = this.iniciou;
-    if (editou != null) data['editou'] = this.editou;
+    if (enviou != null) data['enviou'] = this.enviou;
     if (fim != null) data['fim'] = this.fim;
     if (tentativa != null) data['tentativa'] = this.tentativa;
     if (tentou != null) data['tentou'] = this.tentou;

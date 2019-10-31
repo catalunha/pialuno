@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/bootstrap.dart';
+import 'package:pialuno/componentes/clock.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
-import 'package:pialuno/paginas/desenvolvimento/clock.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_bloc.dart';
 import 'package:pialuno/plataforma/recursos.dart';
 import 'package:queries/collections.dart';
@@ -132,7 +132,7 @@ Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
 Inicio: ${tarefa.inicio}
 Iniciou: ${tarefa.iniciou}
-Editou: ${tarefa.editou}
+Editou: ${tarefa.enviou}
 fim: ${tarefa.fim}
 Notas: $nota
                                 '''),
@@ -225,7 +225,6 @@ Notas: $nota
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
-            var tarefa = snapshot.data.tarefaModel;
             var pedese = snapshot.data.pedese;
 
             List<Widget> listaWidget = List<Widget>();

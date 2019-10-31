@@ -173,7 +173,7 @@ class TarefaAbertaResponderBloc {
       TarefaModel tarefaUpdate = TarefaModel(
           iniciou: _state.tarefaModel.iniciou,
           tentou: Bootstrap.instance.fieldValue.increment(1),
-          editou: Bootstrap.instance.fieldValue.serverTimestamp(),
+          enviou: Bootstrap.instance.fieldValue.serverTimestamp(),
           modificado: Bootstrap.instance.fieldValue.serverTimestamp(),
           pedese: _state.pedese,
           aberta: _state.tarefaModel.isAberta);

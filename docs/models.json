@@ -175,6 +175,7 @@
     "#onRead": "",
     "#onUpdate": "Se atualizar inicio/fim e Aplicada=true atualizar em todas as questoes e tarefas correspondentes a esta avaliacao. Se atualizar inicio/fim e Aplicada=false atualiza todas questoes desta avaliacao",
     "#onDelete": "Se Aplicada=true apagar tarefas com esta avaliacao. ",
+    "ativo": "true: aparece na listagens. false: !true ",
     "professor": {
       "id": "Usuario/usuarioID",
       "nome": ""
@@ -188,8 +189,8 @@
     "inicio": "",
     "fim": "",
     "nota": 0,
-    "aplicar": true,
-    "AplicadaPAluno": [
+    "aplicada": true,
+    "aplicadaPAluno": [
       "Usuario/usuarioID"
     ]
   },
@@ -199,6 +200,7 @@
     "#onRead": "",
     "#onUpdate": "Se Avaliacao.aplicada=true nao pode alterar Questao.numero. Se Avaliacao.aplicada=true nao alterar Avaliacao.situacao atual. Se Avaliacao.aplicada=true e editar inicio/fim/tentativas/tempo alterar em todas as tarefas relacionadas.",
     "#onDelete": "Turma.questaoNumeroExcluido++. Situacao/situacaoID.uso.turmaID--. Se Avaliacao.aplicada=true apagar tarefas com esta questão. ",
+    "ativo": "true: aparece na listagens. false: !true ",
     "numero": "numero. usado para referenciar a questao e ordenar.",
     "professor": {
       "id": "Usuario/usuarioID",
@@ -212,16 +214,17 @@
       "id": "Avaliacao/avaliacaoID",
       "nome": ""
     },
-    "inicio": "",
-    "fim": "",
-    "tentativa": 3,
-    "tempo": "",
-    "nota": 0,
     "situacao": {
       "id": "Situacao/situacaoID",
       "nome": "Situacao/situacaoID.nome",
       "url": "Situacao/situacaoID"
-    }
+    },
+    "inicio": "",
+    "fim": "",
+    "tentativa": 3,
+    "tempo": "",
+    "nota": 0
+
   },
   "Tarefa": {
     "comment": "",
@@ -255,7 +258,7 @@
     "modificado": "dh em q foi aplicada ou criado a tarefa. se modificar questão ou avaliacao atualiza esta data",
     "inicio": "dh copia de questao",
     "iniciou": "dh q o aluno iniciou a tarefa",
-    "editou": "dh em q o alunos enviou a ultima resposta após abrir tarefa. sempre maior q _inicio",
+    "enviou": "dh em q o aluno enviou a ultima resposta após abrir tarefa. sempre maior q _inicio",
     "fim": "dh: copia de questao",
     "tentativa": "numero: 3. de 1 a 5",
     "tentou": "numero. vezes em q o aluno enviou respostas. atualizar: _editou",

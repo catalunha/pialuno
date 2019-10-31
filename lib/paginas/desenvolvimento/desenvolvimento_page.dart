@@ -13,7 +13,6 @@ import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/modelos/turma_model.dart';
 import 'package:pialuno/modelos/upload_model.dart';
 import 'package:pialuno/modelos/usuario_model.dart';
-import 'package:pialuno/paginas/desenvolvimento/clock.dart';
 
 class Desenvolvimento extends StatefulWidget {
   @override
@@ -68,6 +67,33 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
                 onPressed: () async {
                   await cadastrarTarefa('0Teste1');
                   await cadastrarTarefa('0Teste2');
+                },
+              ),
+            ),
+            ListTile(
+              title: Text('Cadastrar Turma.'),
+              trailing: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () async {
+                  await cadastrarTurma('0Turma01');
+                },
+              ),
+            ),
+            ListTile(
+              title: Text('Cadastrar Avaliacao.'),
+              trailing: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () async {
+                  await cadastrarAvaliacao('0Avaliacao01');
+                },
+              ),
+            ),
+                        ListTile(
+              title: Text('Cadastrar Questao.'),
+              trailing: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () async {
+                  await cadastrarQuestao('0Questao01');
                 },
               ),
             ),
@@ -227,10 +253,10 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     TarefaModel tarefaModel = TarefaModel(
         id: tarefaId,
         ativo: true,
-        professor: UsuarioFk(id: 'prof01', nome: 'prof01'),
-        turma: TurmaFk(id: 'turma01', nome: 'turma01'),
-        avaliacao: AvaliacaoFk(id: 'avaliacao01', nome: 'avaliacao01'),
-        questao: QuestaoFk(id: 'questao01', numero: 1),
+        professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
+        turma: TurmaFk(id: '0Turma01', nome: 'turma01'),
+        avaliacao: AvaliacaoFk(id: '0Avaliacao01', nome: 'avaliacao01'),
+        questao: QuestaoFk(id: '0Questao01', numero: 1),
         aluno: UsuarioFk(id: 'PMAxu4zKfmaOlYAmF3lgFGmCR1w2', nome: 'Cata'),
         modificado: DateTime.now(),
         inicio: DateTime.parse('2019-10-30T18:00:00-0300'),
@@ -242,9 +268,9 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         tempo: 1,
         aberta: true,
         situacao: SituacaoFk(
-          id: 'situacao01',
+          id: '0situacao01',
           nome: 'situacao01',
-          erroRelativo:'10',
+          erroRelativo: '10',
           url:
               'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
         ),
@@ -268,8 +294,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
               Pedese(nome: 'b', ordem: 1, tipo: 'palavra', gabarito: 'sim'),
           'pedese03':
               Pedese(nome: 'c', ordem: 2, tipo: 'texto', gabarito: 'sim'),
-          'pedese04':
-              Pedese(nome: 'd', ordem: 3, tipo: 'url', gabarito: 'sim'),
+          'pedese04': Pedese(nome: 'd', ordem: 3, tipo: 'url', gabarito: 'sim'),
           'pedese05':
               Pedese(nome: 'e', ordem: 4, tipo: 'arquivo', gabarito: 'sim'),
           'pedese06':
@@ -279,6 +304,73 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     // print('=>>>>>>>> ${tarefaModel.aberta}');
     await docRef.setData(tarefaModel.toMap(), merge: true);
     // await docRef.setData(tarefaModel.toMap());
+  }
+
+  Future cadastrarTurma(String turmaId) async {
+    final docRef =
+        _firestore.collection(TurmaModel.collection).document(turmaId);
+    docRef.delete();
+    TurmaModel turmaModel = TurmaModel(
+      id: turmaId,
+      ativo: true,
+      numero: 1,
+      instituicao: 'UFT',
+      componente: 'CN',
+      nome: 'cn2020.1',
+      descricao: 'turma legal',
+      professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
+      aluno: ['PMAxu4zKfmaOlYAmF3lgFGmCR1w2'],
+    );
+
+    await docRef.setData(turmaModel.toMap(), merge: true);
+  }
+
+  Future cadastrarAvaliacao(String avaliacaoId) async {
+    final docRef =
+        _firestore.collection(AvaliacaoModel.collection).document(avaliacaoId);
+    docRef.delete();
+    AvaliacaoModel avaliacaoModel = AvaliacaoModel(
+      id: avaliacaoId,
+      ativo: true,
+      professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
+      turma: TurmaFk(id: '0Turma01', nome: '0Turma01'),
+      nome: 'P01',
+      descricao: 'boa prova',
+      inicio: DateTime.parse('2019-10-30T18:00:00-0300'),
+      fim: DateTime.parse('2019-10-30T23:00:00-0300'),
+      nota: '1',
+      aplicada: true,
+      aplicadaPAluno: ['PMAxu4zKfmaOlYAmF3lgFGmCR1w2'],
+    );
+
+    await docRef.setData(avaliacaoModel.toMap(), merge: true);
+  }
+
+  Future cadastrarQuestao(String questaoId) async {
+    final docRef =
+        _firestore.collection(QuestaoModel.collection).document(questaoId);
+    docRef.delete();
+    QuestaoModel questaoModel = QuestaoModel(
+      id: questaoId,
+      ativo: true,
+      numero: 1,
+      professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
+      turma: TurmaFk(id: '0Turma01', nome: 'turma01'),
+      avaliacao: AvaliacaoFk(id: '0Avaliacao01', nome: 'avaliacao01'),
+      situacao: SituacaoFk(
+        id: '0situacao01',
+        nome: 'situacao01',
+        erroRelativo: '10',
+        url:
+            'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
+      ),
+      inicio: DateTime.parse('2019-10-30T18:00:00-0300'),
+      fim: DateTime.parse('2019-10-30T23:00:00-0300'),
+      tentativa: 5,
+      tempo: 1,
+      nota: '1',
+    );
+    await docRef.setData(questaoModel.toMap(), merge: true);
   }
 
   Future testarFirebaseCmds() async {
