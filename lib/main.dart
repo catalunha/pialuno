@@ -7,6 +7,7 @@ import 'package:pialuno/paginas/login/versao.dart';
 import 'package:pialuno/paginas/questao/questao_list_page.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_page.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_page.dart';
+import 'package:pialuno/paginas/tarefa/tarefa_list_page.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_page.dart';
 import 'package:pialuno/paginas/turma/turma_list_page.dart';
 import 'package:pialuno/paginas/upload/uploader_page.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PI - ALUNO',
       theme: ThemeData.dark(),
-      initialRoute: "/",
+      initialRoute: "/tarefa/aberta",
       routes: {
         //homePage
         "/": (context) => HomePage(authBloc),
@@ -45,10 +46,14 @@ class MyApp extends StatelessWidget {
           final settings = ModalRoute.of(context).settings;
           return TarefaAbertaResponderPage(settings.arguments);
         },
-        "/tarefa": (context) {
+        "/tarefa/list": (context) {
           final settings = ModalRoute.of(context).settings;
-          return TarefaPage(authBloc, settings.arguments);
+          return TarefaListPage(authBloc, settings.arguments);
         },
+        // "/tarefa": (context) {
+        //   final settings = ModalRoute.of(context).settings;
+        //   return TarefaPage(authBloc, settings.arguments);
+        // },
 
         //turma
         "/turma/list": (context) => TurmaListPage(authBloc),

@@ -44,14 +44,12 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
             builder: (BuildContext context,
                 AsyncSnapshot<TarefaAbertaListBlocState> snapshot) {
               if (snapshot.hasError) {
-                return Text("Existe algo errado. Informe o suporte");
+                return Text("Existe algo errado! Informe o suporte.");
               }
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
               }
               if (snapshot.data.isDataValid) {
-                // print('dados validos...');
-
                 List<Widget> listaWidget = List<Widget>();
                 String notas = '';
                 Map<String, Pedese> pedeseMap = Map<String, Pedese>();
@@ -101,7 +99,7 @@ Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
 Inicio: ${tarefa.inicio}
 Iniciou: ${tarefa.iniciou}
-Editou: ${tarefa.enviou}
+Enviou: ${tarefa.enviou}
 fim: ${tarefa.fim}
 Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
 Notas: $notas
@@ -122,12 +120,34 @@ Notas: $notas
                     ),
                   );
                 }
-                return ListView(
-                  children: listaWidget,
-                );
+                if (listaWidget.length == 0) {
+                  return _semTarefas(context);
+                } else {
+                  return ListView(
+                    children: listaWidget,
+                  );
+                }
               } else {
                 return Text('Existem dados inválidos. Informe o suporte.');
               }
             }));
+  }
+
+  Center _semTarefas(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Text(
+              'Ufa!!!.\nNão tem nenhuma tarefa aberta pra eu resolver agora.\nMas preciso me preparar.',
+              style: Theme.of(context).textTheme.headline,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Icon(Icons.hourglass_empty),
+        ],
+      ),
+    );
   }
 }

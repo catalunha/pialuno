@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return DefaultLoginRequired(
       child: BemVindoPage(widget.authBloc),
-      // child: NoticiaLeituraPage(),
+      // child: TarefaAbertaListPage(widget.authBloc),
       authBloc: this.authBloc,
     );
   }

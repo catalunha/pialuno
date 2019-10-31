@@ -23,10 +23,9 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
   _DefaultDrawerState() : authBloc = Bootstrap.instance.authBloc {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
-      rotas["/"] = Rota("Home", Icons.home);
-      rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
-      rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
+      // rotas["/"] = Rota("Home", Icons.home);
       rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
+      rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
       rotas["/turma/list"] =
           Rota("Suas turmas", Icons.book);
       // rotas["/avaliacao/list"] = Rota("Resposta", Icons.playlist_add_check);
@@ -37,6 +36,7 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
       // // rotas["/comunicacao/home"] = Rota("Comunicação", Icons.contact_mail);
       // rotas["/administracao/home"] =
       //     Rota("Administração", Icons.business_center);
+      rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     } else if (Recursos.instance.plataforma == 'web') {
       rotas["/"] = Rota("Home", Icons.home);
       // rotas["/questionario/home"] = Rota("Questionários", Icons.assignment);

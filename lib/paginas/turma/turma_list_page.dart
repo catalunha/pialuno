@@ -39,7 +39,7 @@ class _TurmaListPageState extends State<TurmaListPage> {
             builder: (BuildContext context,
                 AsyncSnapshot<TurmaListBlocState> snapshot) {
               if (snapshot.hasError) {
-                return Text("Existe algo errado. Informe o suporte");
+                return Text("Existe algo errado! Informe o suporte.");
               }
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());

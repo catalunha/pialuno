@@ -39,7 +39,7 @@ class _QuestaoListPageState extends State<QuestaoListPage> {
             builder: (BuildContext context,
                 AsyncSnapshot<QuestaoListBlocState> snapshot) {
               if (snapshot.hasError) {
-                return Text("Existe algo errado. Informe o suporte");
+                return Text("Existe algo errado! Informe o suporte.");
               }
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());

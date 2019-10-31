@@ -132,7 +132,7 @@ Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
 Inicio: ${tarefa.inicio}
 Iniciou: ${tarefa.iniciou}
-Editou: ${tarefa.enviou}
+Enviou: ${tarefa.enviou}
 fim: ${tarefa.fim}
 Notas: $nota
                                 '''),

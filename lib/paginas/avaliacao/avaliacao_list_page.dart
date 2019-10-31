@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
-import 'package:pialuno/componentes/default_scaffold.dart';
 import 'package:pialuno/paginas/avaliacao/avaliacao_list_bloc.dart';
 
 class AvaliacaoListPage extends StatefulWidget {
@@ -36,14 +35,14 @@ class _AvaliacaoListPageState extends State<AvaliacaoListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Suas Avaliações'),
+          title: Text('Suas Avaliações nesta turma'),
         ),
         body: StreamBuilder<AvaliacaoListBlocState>(
             stream: bloc.stateStream,
             builder: (BuildContext context,
                 AsyncSnapshot<AvaliacaoListBlocState> snapshot) {
               if (snapshot.hasError) {
-                return Text("Existe algo errado. Informe o suporte");
+                return Text("Existe algo errado! Informe o suporte.");
               }
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
@@ -67,7 +66,7 @@ Nota da avaliação: ${avaliacao.nota}
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            "/questao/list",
+                            "/tarefa/list",
                             arguments: avaliacao.id,
                           );
                         },

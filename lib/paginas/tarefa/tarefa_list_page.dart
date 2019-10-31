@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
-import 'package:pialuno/paginas/tarefa/tarefa_bloc.dart';
+import 'package:pialuno/paginas/tarefa/tarefa_list_bloc.dart';
 import 'package:queries/collections.dart';
 
-class TarefaPage extends StatefulWidget {
+class TarefaListPage extends StatefulWidget {
   final AuthBloc authBloc;
-  final String questao;
+  final String avaliacao;
 
-  const TarefaPage(this.authBloc, this.questao);
+  const TarefaListPage(this.authBloc, this.avaliacao);
 
   @override
-  _TarefaPageState createState() => _TarefaPageState();
+  _TarefaListPageState createState() => _TarefaListPageState();
 }
 
-class _TarefaPageState extends State<TarefaPage> {
-  TarefaBloc bloc;
+class _TarefaListPageState extends State<TarefaListPage> {
+  TarefaListBloc bloc;
   @override
   void initState() {
     super.initState();
-    bloc = TarefaBloc(
+    bloc = TarefaListBloc(
       Bootstrap.instance.firestore,
       widget.authBloc,
     );
-    bloc.eventSink(GetQuestaoIDEvent(widget.questao));
+    bloc.eventSink(GetAvaliacaoIDEvent(widget.avaliacao));
   }
 
   @override
@@ -37,12 +37,12 @@ class _TarefaPageState extends State<TarefaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Sua Tarefa'),
+          title: Text('Suas Tarefas nesta avaliação'),
         ),
-        body: StreamBuilder<TarefaBlocState>(
+        body: StreamBuilder<TarefaListBlocState>(
             stream: bloc.stateStream,
             builder: (BuildContext context,
-                AsyncSnapshot<TarefaBlocState> snapshot) {
+                AsyncSnapshot<TarefaListBlocState> snapshot) {
               if (snapshot.hasError) {
                 return Text("Existe algo errado! Informe o suporte.");
               }
@@ -50,22 +50,25 @@ class _TarefaPageState extends State<TarefaPage> {
                 return Center(child: CircularProgressIndicator());
               }
               if (snapshot.data.isDataValid) {
+
+                List<Widget> listaWidget = List<Widget>();
                 String notas = '';
                 Map<String, Pedese> pedeseMap = Map<String, Pedese>();
-                TarefaModel tarefa = snapshot.data.tarefaModel;
 
-                pedeseMap.clear();
-                var dicPedese = Dictionary.fromMap(tarefa.pedese);
-                var pedeseOrderBy = dicPedese
-                    .orderBy((kv) => kv.value.ordem)
-                    .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-                pedeseMap = pedeseOrderBy.toMap();
-                notas = '';
-                for (var pedese in pedeseMap.entries) {
-                  notas += '${pedese.value.nome}=${pedese.value.nota} ';
-                }
-
-Widget card = Card(
+                for (var tarefa in snapshot.data.tarefaList) {
+                  // print('tarefa.id: ${tarefa.id}');
+                  pedeseMap.clear();
+                  var dicPedese = Dictionary.fromMap(tarefa.pedese);
+                  var pedeseOrderBy = dicPedese
+                      .orderBy((kv) => kv.value.ordem)
+                      .toDictionary$1((kv) => kv.key, (kv) => kv.value);
+                  pedeseMap = pedeseOrderBy.toMap();
+                  notas = '';
+                  for (var pedese in pedeseMap.entries) {
+                    notas += '${pedese.value.nome}=${pedese.value.nota} ';
+                  }
+                  listaWidget.add(
+                    Card(
                       child: ListTile(
                         // trailing: Text('${tarefa.questao.numero}'),
                         trailing: Text('${tarefa.questao.numero}'),
@@ -80,18 +83,22 @@ Iniciou: ${tarefa.iniciou}
 Enviou: ${tarefa.enviou}
 fim: ${tarefa.fim}
 Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
-Tempo:  ${tarefa.tempo} h
+Tempo:  ${tarefa.tempo}
 Notas: $notas
                         '''),
 //                         subtitle: Text('''
 // id: ${tarefa.id}
 // Aberta: ${tarefa.aberta}
 //                         '''),
-                        
-                      ),
-                    );
 
-                return card;
+                      ),
+                    ),
+                  );
+                }
+                return ListView(
+                  children: listaWidget,
+                );
+
               } else {
                 return Text('Existem dados inválidos. Informe o suporte.');
               }
