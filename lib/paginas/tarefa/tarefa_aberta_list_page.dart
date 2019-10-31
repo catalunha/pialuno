@@ -99,8 +99,8 @@ Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
-Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
-Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
+Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
+Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
 Notas: $notas
                         '''),
@@ -145,11 +145,18 @@ Notas: $notas
           Center(
             child: Text(
               'Ufa!!!.\nNão tem nenhuma tarefa aberta pra eu resolver agora.\nMas preciso me preparar.',
-              style: Theme.of(context).textTheme.headline,
+              // style: Theme.of(context).textTheme.headline,
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 32.0,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
-          Icon(Icons.hourglass_empty),
+          Icon(
+            Icons.hourglass_empty,
+            size: 50,
+          ),
         ],
       ),
     );
