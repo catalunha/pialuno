@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
@@ -65,7 +66,7 @@ class _TarefaListPageState extends State<TarefaListPage> {
                   pedeseMap = pedeseOrderBy.toMap();
                   notas = '';
                   for (var pedese in pedeseMap.entries) {
-                    notas += '${pedese.value.nome}=${pedese.value.nota} ';
+                    notas += '${pedese.value.nome}=${pedese.value.nota ?? ""} ';
                   }
                   listaWidget.add(
                     Card(
@@ -78,15 +79,16 @@ Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
-Inicio: ${tarefa.inicio}
-Iniciou: ${tarefa.iniciou}
-Enviou: ${tarefa.enviou}
-fim: ${tarefa.fim}
-Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
-Tempo:  ${tarefa.tempo}
+Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
+Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
+Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
+Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
+Tempo:  ${tarefa.tempo}h
 Notas: $notas
                         '''),
 //                         subtitle: Text('''
+// Inicio: ${tarefa.inicio}
+// fim: ${tarefa.fim}
 // id: ${tarefa.id}
 // Aberta: ${tarefa.aberta}
 //                         '''),

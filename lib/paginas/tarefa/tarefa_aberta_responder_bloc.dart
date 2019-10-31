@@ -186,6 +186,7 @@ class TarefaAbertaResponderBloc {
           ? _state.tarefaModel.tentou = _state.tarefaModel.tentou + 1
           : 1;
       _state.tarefaModel.modificado = DateTime.now();
+      _state.tarefaModel.enviou = DateTime.now();
       _state.tarefaModel.updateAll();
       print('fim SaveEvent. tentou ${_state.tarefaModel.tentou}');
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
@@ -64,7 +65,7 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                   pedeseMap = pedeseOrderBy.toMap();
                   notas = '';
                   for (var pedese in pedeseMap.entries) {
-                    notas += '${pedese.value.nome}=${pedese.value.nota} ';
+                    notas += '${pedese.value.nome}=${pedese.value.nota ?? ""} ';
                   }
                   Widget contador;
                   if (tarefa.tempoPResponder == null) {
@@ -97,15 +98,18 @@ Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
-Inicio: ${tarefa.inicio}
-Iniciou: ${tarefa.iniciou}
-Enviou: ${tarefa.enviou}
-fim: ${tarefa.fim}
-Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
+Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
+Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
+Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
+Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
 Notas: $notas
                         '''),
 //                         subtitle: Text('''
 // id: ${tarefa.id}
+// Inicio: ${tarefa.inicio}
+// Iniciou: ${tarefa.iniciou}
+// Enviou: ${tarefa.enviou}
+// fim: ${tarefa.fim}
 // Aberta: ${tarefa.aberta}
 // Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
 //                         '''),

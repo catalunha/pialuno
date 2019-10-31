@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/avaliacao/avaliacao_list_bloc.dart';
@@ -58,11 +59,12 @@ class _AvaliacaoListPageState extends State<AvaliacaoListPage> {
 Turma: ${avaliacao.turma.nome}
 Prof.: ${avaliacao.professor.nome}
 Avaliacao: ${avaliacao.nome}
-Prof.: ${avaliacao.professor.nome}
-Inicio: ${avaliacao.inicio}
-fim: ${avaliacao.fim}
+Aberta: ${DateFormat('dd-MM HH:mm').format(avaliacao.inicio)} até ${DateFormat('dd-MM HH:mm').format(avaliacao.fim)}
 Nota da avaliação: ${avaliacao.nota}
                         '''),
+// Inicio: ${DateFormat('dd-MM HH:mm').format(avaliacao.inicio)}
+// Inicio: ${avaliacao.inicio}
+// fim: ${avaliacao.fim}
                         onTap: () {
                           Navigator.pushNamed(
                             context,

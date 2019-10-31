@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/avaliacao/avaliacao_list_page.dart';
 import 'package:pialuno/paginas/desenvolvimento/desenvolvimento_page.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = Bootstrap.instance.authBloc;
     Recursos.initialize(Theme.of(context).platform);
+  // Intl.defaultLocale = 'pt_br';
 
     return MaterialApp(
       title: 'PI - ALUNO',

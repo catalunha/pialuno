@@ -63,7 +63,8 @@ dependencies:
   flutter_local_notifications: 0.7.1
   fixnum: ^0.10.9
   universal_io: ^0.8.4
-
+  intl: ^0.16.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

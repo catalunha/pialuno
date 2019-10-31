@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
@@ -93,6 +94,13 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             Map<String, Pedese> pedeseMap;
             String nota = '';
             var tarefa = snapshot.data.tarefaModel;
+            Widget pdf = ListTile(
+              title: Text('Click aqui para ver a proposta da questão.'),
+              trailing: Icon(Icons.picture_as_pdf),
+              onTap: () {
+                launch(tarefa.situacao.url);
+              },
+            );
 
             // Widget contador = Container(
             //   width: 100.0,
@@ -117,41 +125,32 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             pedeseMap = pedeseOrderBy.toMap();
 
             for (var pedese in pedeseMap.entries) {
-              nota += '${pedese.value.nome}=${pedese.value.nota} ';
+              nota += '${pedese.value.nome}=${pedese.value.nota ?? ""} ';
             }
-            listaWidget.add(
-              Card(
-                child: ListTile(
-                  trailing: Text('${tarefa.questao.numero}'),
-                  title: Text('''
-id: ${tarefa.id}
-Aberta: ${tarefa.aberta}
+            // listaWidget.add(
+            Widget proposta = Card(
+              child: ListTile(
+                trailing: Text('${tarefa.questao.numero}'),
+                title: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Ques.: ${tarefa.situacao.nome}
-Inicio: ${tarefa.inicio}
-Iniciou: ${tarefa.iniciou}
-Enviou: ${tarefa.enviou}
-fim: ${tarefa.fim}
+Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
+Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
+Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Notas: $nota
                                 '''),
 // Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
+// id: ${tarefa.id}
+// Aberta: ${tarefa.aberta}
 // Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/tarefa/responder",
-                      arguments: tarefa.id,
-                    );
-                  },
-                ),
               ),
             );
 
             return Column(children: <Widget>[
-              // contador,
-              _bodyAba(listaWidget),
+              proposta,
+              pdf,
             ]);
           } else {
             return Center(
@@ -197,7 +196,6 @@ Notas: $nota
                 ),
               );
             }
-
             return Column(children: <Widget>[
               _descricaoAba('Na proposta considere os seguintes valores:'),
               _bodyAba(listaWidget)
@@ -235,37 +233,20 @@ Notas: $nota
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
             pedeseMap = pedeseOrderBy.toMap();
             for (var pedese in pedeseMap.entries) {
-              // nota += '${pedese.value.nome}=${pedese.value.nota} ';
-              // print('${pedese.value.nome}');
+              listaWidget.add(
+                ListTile(
+                  title: Text(
+                    '${pedese.value.nome}',
+                  ),
+                  selected: pedese.value.nota != null,
+                  trailing:
+                      pedese.value.nota != null ? Icon(Icons.check) : Text(''),
+                ),
+              );
               if (pedese.value.tipo == 'numero' ||
                   pedese.value.tipo == 'palavra' ||
                   pedese.value.tipo == 'url' ||
                   pedese.value.tipo == 'texto') {
-                // listaWidget.add(Padding(
-                //     padding: EdgeInsets.all(5.0),
-                //     child: Text(
-                //       '${pedese.value.nome}.${pedese.value.tipo}',
-                //       style: TextStyle(
-                //         fontSize: 15,
-                //         color: Colors.blue,
-                //       ),
-                //     )));
-                listaWidget.add(
-                  ListTile(
-                    title: Text(
-                      '${pedese.value.nome}.${pedese.value.tipo}',
-                    ),
-                    selected: pedese.value.nota != null,
-                    trailing: pedese.value.nota != null
-                        ? Icon(Icons.check)
-                        : Text(''),
-                  ),
-                );
-                // listaWidget.add(PedeseNumeroTexto(
-                //   bloc,
-                //   pedese.key,
-                //   pedese.value,
-                // ));
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
                     child: PedeseNumeroTexto(
@@ -277,15 +258,6 @@ Notas: $nota
               if (pedese.value.tipo == 'imagem') {
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
-                    child: Text(
-                      '${pedese.value.nome}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.blue,
-                      ),
-                    )));
-                listaWidget.add(Padding(
-                    padding: EdgeInsets.all(5.0),
                     child: ImagemSelect(
                       bloc,
                       pedese.key,
@@ -293,15 +265,6 @@ Notas: $nota
                     )));
               }
               if (pedese.value.tipo == 'arquivo') {
-                listaWidget.add(Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text(
-                      '${pedese.value.nome}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.blue,
-                      ),
-                    )));
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
                     child: ArquivoSelect(
@@ -631,7 +594,7 @@ class _MostraArquivo extends StatelessWidget {
     if (uploadID != null && url == null) {
       imagem = Center(
           child: Text(
-              'Você não enviou o último arquivo selecionada. Vá para o menu Upload de Arquivos.'));
+              'Você não enviou o último arquivo selecionado. Vá para o menu Upload de Arquivos.'));
     } else if (url == null && path == null) {
       imagem = Center(child: Text('Sem arquivo selecionado.'));
     } else if (url != null) {
