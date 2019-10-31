@@ -61,7 +61,7 @@ class ConfiguracaoState extends State<PerfilPage> {
           bloc.eventSink(SaveEvent());
           Navigator.pop(context);
         },
-        child: Icon(Icons.check),
+        child: Icon(Icons.cloud_upload),
       ),
     );
   }
