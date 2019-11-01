@@ -23,30 +23,19 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
   _DefaultDrawerState() : authBloc = Bootstrap.instance.authBloc {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
-      // rotas["/"] = Rota("Home", Icons.home);
-      rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
+      rotas["/"] = Rota("Home", Icons.home);
+      // rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
       rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
       rotas["/turma/list"] =
           Rota("Suas turmas", Icons.book);
-      // rotas["/avaliacao/list"] = Rota("Resposta", Icons.playlist_add_check);
-      // rotas["/sintese/home"] = Rota("Síntese", Icons.equalizer);
-      // rotas["/produto/home"] = Rota("Produto", Icons.chrome_reader_mode);
-      // rotas["/controle/home"] = Rota("Controle", Icons.control_point);
-      // rotas["/setor_painel/home"] = Rota("Painel", Icons.compare);
-      // // rotas["/comunicacao/home"] = Rota("Comunicação", Icons.contact_mail);
-      // rotas["/administracao/home"] =
-      //     Rota("Administração", Icons.business_center);
       rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     } else if (Recursos.instance.plataforma == 'web') {
       rotas["/"] = Rota("Home", Icons.home);
-      // rotas["/questionario/home"] = Rota("Questionários", Icons.assignment);
-      // rotas["/resposta/home"] = Rota("Resposta", Icons.playlist_add_check);
-      // rotas["/sintese/home"] = Rota("Síntese", Icons.equalizer);
-      // rotas["/produto/home"] = Rota("Produto", Icons.chrome_reader_mode);
-      // rotas["/controle/home"] = Rota("Controle", Icons.control_point);
-      // rotas["/setor_painel/home"] = Rota("Painel", Icons.compare);
-      // rotas["/administracao/home"] =
-      //     Rota("Administração", Icons.business_center);
+      // rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
+      rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
+      rotas["/turma/list"] =
+          Rota("Suas turmas", Icons.book);
+      rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     }
   }
 
@@ -221,14 +210,10 @@ class _DefaultEndDrawerState extends State<DefaultEndDrawer> {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
       rotas["/perfil"] = Rota("Perfil", Icons.settings);
-      // rotas["/perfil"] = Rota("Itens do Perfil", Icons.person);
-      // rotas["/painel/home"] = Rota("Itens do Painel", Icons.table_chart);
       rotas["/versao"] = Rota("Versão & Sobre", Icons.device_unknown);
-      // rotas["/noticias/noticias_visualizadas"] = Rota("Noticias lidas", Icons.event_available);
-      rotas["/modooffline"] = Rota("Habilitar modo offline", Icons.save);
+      // rotas["/modooffline"] = Rota("Habilitar modo offline", Icons.save);
     } else if (Recursos.instance.plataforma == 'web') {
       rotas["/perfil"] = Rota("Perfil", Icons.settings);
-      // rotas["/painel/home"] = Rota("Itens do Painel", Icons.table_chart);
       rotas["/versao"] = Rota("Versão & Sobre", Icons.device_unknown);
     }
   }

@@ -101,23 +101,6 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
                 launch(tarefa.situacao.url);
               },
             );
-
-            // Widget contador = Container(
-            //   width: 100.0,
-            //   // padding: EdgeInsets.only(top: 3.0, right: 4.0),
-            //   child: CountDownTimer(
-            //     secondsRemaining: tarefa.tempoPResponder.inSeconds,
-            //     whenTimeExpires: () {
-            //       setState(() {
-            //         hasTimerStopped = true;
-            //       });
-            //       print('terminou clock');
-            //     },
-            //     countDownTimerStyle: TextStyle(
-            //         color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
-            //   ),
-            // );
-            // print('tarefa.id: ${tarefa.id}');
             var dicPedese = Dictionary.fromMap(tarefa.pedese);
             var pedeseOrderBy = dicPedese
                 .orderBy((kv) => kv.value.ordem)
@@ -141,8 +124,8 @@ Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Notas: $nota
                                 '''),
-// Tentativas: ${tarefa.tentou} / ${tarefa.tentativa}
 // id: ${tarefa.id}
+// Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
 // Aberta: ${tarefa.aberta}
 // Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
               ),
@@ -255,23 +238,27 @@ Notas: $nota
                       pedese.value,
                     )));
               }
-              if (pedese.value.tipo == 'imagem') {
-                listaWidget.add(Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: ImagemSelect(
-                      bloc,
-                      pedese.key,
-                      pedese.value,
-                    )));
+              if (Recursos.instance.disponivel("file_picking")) {
+                if (pedese.value.tipo == 'imagem') {
+                  listaWidget.add(Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: ImagemSelect(
+                        bloc,
+                        pedese.key,
+                        pedese.value,
+                      )));
+                }
               }
-              if (pedese.value.tipo == 'arquivo') {
-                listaWidget.add(Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: ArquivoSelect(
-                      bloc,
-                      pedese.key,
-                      pedese.value,
-                    )));
+              if (Recursos.instance.disponivel("file_picking")) {
+                if (pedese.value.tipo == 'arquivo') {
+                  listaWidget.add(Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: ArquivoSelect(
+                        bloc,
+                        pedese.key,
+                        pedese.value,
+                      )));
+                }
               }
             }
             // return Column(children: listaWidget);

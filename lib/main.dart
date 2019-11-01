@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/avaliacao/avaliacao_list_page.dart';
 import 'package:pialuno/paginas/desenvolvimento/desenvolvimento_page.dart';
@@ -9,7 +9,6 @@ import 'package:pialuno/paginas/questao/questao_list_page.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_page.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_page.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_list_page.dart';
-import 'package:pialuno/paginas/tarefa/tarefa_page.dart';
 import 'package:pialuno/paginas/turma/turma_list_page.dart';
 import 'package:pialuno/paginas/upload/uploader_page.dart';
 import 'package:pialuno/paginas/usuario/perfil_page.dart';
@@ -31,7 +30,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PI - ALUNO',
       theme: ThemeData.dark(),
-      initialRoute: "/tarefa/aberta",
+      // initialRoute: "/tarefa/aberta",
+      initialRoute: "/",
       routes: {
         //homePage
         "/": (context) => HomePage(authBloc),

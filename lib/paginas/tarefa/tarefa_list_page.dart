@@ -73,7 +73,7 @@ class _TarefaListPageState extends State<TarefaListPage> {
                       child: ListTile(
                         // trailing: Text('${tarefa.questao.numero}'),
                         trailing: Text('${tarefa.questao.numero}'),
-                        selected: tarefa.iniciou != null,
+                        // selected: tarefa.iniciou != null,
                         title: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
