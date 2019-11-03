@@ -3,15 +3,18 @@ import 'package:pialuno/modelos/upload_model.dart';
 
 class UsuarioModel extends FirestoreModel {
   static final String collection = "Usuario";
+  bool aluno;
   bool ativo;
-  String nome;
-  String cracha;
-  String matricula;
   String celular;
+  String cracha;
   String email;
-  String tokenFCM;
   UploadFk foto;
+  dynamic grupoNumeroAdicionado;
+  String matricula;
+  String nome;
   List<dynamic> rota;
+  dynamic turmaNumeroAdicionado;
+  String tokenFCM;
 
   UsuarioModel({
     String id,
@@ -22,7 +25,10 @@ class UsuarioModel extends FirestoreModel {
     this.email,
     this.tokenFCM,
     this.ativo,
+    this.aluno,
     this.foto,
+    this.grupoNumeroAdicionado,
+    this.turmaNumeroAdicionado,
     this.rota,
   }) : super(id);
 
@@ -35,6 +41,9 @@ class UsuarioModel extends FirestoreModel {
     if (map.containsKey('tokenFCM')) tokenFCM = map['tokenFCM'];
     if (map.containsKey('email')) email = map['email'];
     if (map.containsKey('ativo')) ativo = map['ativo'];
+    if (map.containsKey('aluno')) aluno = map['aluno'];
+    if (map.containsKey('grupoNumeroAdicionado')) grupoNumeroAdicionado = map['grupoNumeroAdicionado'];
+    if (map.containsKey('turmaNumeroAdicionado')) turmaNumeroAdicionado = map['turmaNumeroAdicionado'];
     if (map.containsKey('foto')) {
       foto = map['foto'] != null ? new UploadFk.fromMap(map['foto']) : null;
     }
@@ -53,6 +62,9 @@ class UsuarioModel extends FirestoreModel {
     if (tokenFCM != null) data['tokenFCM'] = this.tokenFCM;
     if (email != null) data['email'] = this.email;
     if (ativo != null) data['ativo'] = this.ativo;
+    if (aluno != null) data['aluno'] = this.aluno;
+    if (grupoNumeroAdicionado != null) data['grupoNumeroAdicionado'] = this.grupoNumeroAdicionado;
+    if (turmaNumeroAdicionado != null) data['turmaNumeroAdicionado'] = this.turmaNumeroAdicionado;
     if (this.foto != null) {
       data['foto'] = this.foto.toMap();
     }

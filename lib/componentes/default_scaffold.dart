@@ -179,6 +179,8 @@ class _ImagemUnica extends StatelessWidget {
         maxRadius: 50,
         backgroundImage: NetworkImage(fotoUrl),
       );
+    }else{
+            foto = Center(child: Text('Falta foto.'));
     }
 
     return Row(
