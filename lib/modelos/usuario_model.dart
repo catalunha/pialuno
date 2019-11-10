@@ -9,12 +9,14 @@ class UsuarioModel extends FirestoreModel {
   String cracha;
   String email;
   UploadFk foto;
-  dynamic grupoNumeroAdicionado;
   String matricula;
   String nome;
   List<dynamic> rota;
-  dynamic turmaNumeroAdicionado;
+  int turmaNumeroAdicionado;
+  int pastaNumeroAdicionado;
+  int situacaoNumeroAdicionado;
   String tokenFCM;
+  List<dynamic> turma;
 
   UsuarioModel({
     String id,
@@ -27,9 +29,11 @@ class UsuarioModel extends FirestoreModel {
     this.ativo,
     this.aluno,
     this.foto,
-    this.grupoNumeroAdicionado,
     this.turmaNumeroAdicionado,
+    this.pastaNumeroAdicionado,
+    this.situacaoNumeroAdicionado,
     this.rota,
+    this.turma
   }) : super(id);
 
   @override
@@ -42,13 +46,16 @@ class UsuarioModel extends FirestoreModel {
     if (map.containsKey('email')) email = map['email'];
     if (map.containsKey('ativo')) ativo = map['ativo'];
     if (map.containsKey('aluno')) aluno = map['aluno'];
-    if (map.containsKey('grupoNumeroAdicionado')) grupoNumeroAdicionado = map['grupoNumeroAdicionado'];
+    if (map.containsKey('pastaNumeroAdicionado')) pastaNumeroAdicionado = map['pastaNumeroAdicionado'];
+    if (map.containsKey('situacaoNumeroAdicionado')) situacaoNumeroAdicionado = map['situacaoNumeroAdicionado'];
     if (map.containsKey('turmaNumeroAdicionado')) turmaNumeroAdicionado = map['turmaNumeroAdicionado'];
     if (map.containsKey('foto')) {
       foto = map['foto'] != null ? new UploadFk.fromMap(map['foto']) : null;
     }
 
     if (map.containsKey('rota')) rota = map['rota'];
+        if (map.containsKey('turma')) turma = map['turma'];
+
     return this;
   }
 
@@ -63,11 +70,14 @@ class UsuarioModel extends FirestoreModel {
     if (email != null) data['email'] = this.email;
     if (ativo != null) data['ativo'] = this.ativo;
     if (aluno != null) data['aluno'] = this.aluno;
-    if (grupoNumeroAdicionado != null) data['grupoNumeroAdicionado'] = this.grupoNumeroAdicionado;
+    if (pastaNumeroAdicionado != null) data['pastaNumeroAdicionado'] = this.pastaNumeroAdicionado;
+    if (situacaoNumeroAdicionado != null) data['situacaoNumeroAdicionado'] = this.situacaoNumeroAdicionado;
     if (turmaNumeroAdicionado != null) data['turmaNumeroAdicionado'] = this.turmaNumeroAdicionado;
     if (this.foto != null) {
       data['foto'] = this.foto.toMap();
     }
+        if (turma != null) data['turma'] = this.turma;
+
 
     if (rota != null) data['rota'] = this.rota;
 
@@ -79,18 +89,21 @@ class UsuarioModel extends FirestoreModel {
 class UsuarioFk {
   String id;
   String nome;
+  String foto;
 
-  UsuarioFk({this.id, this.nome});
+  UsuarioFk({this.id, this.nome,this.foto});
 
   UsuarioFk.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('id')) id = map['id'];
     if (map.containsKey('nome')) nome = map['nome'];
+    if (map.containsKey('foto')) foto = map['foto'];
   }
 
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     if (id != null) data['id'] = this.id;
     if (nome != null) data['nome'] = this.nome;
+    if (foto != null) data['foto'] = this.foto;
     return data;
   }
 }

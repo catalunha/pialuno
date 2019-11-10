@@ -11,7 +11,9 @@ class AvaliacaoModel extends FirestoreModel {
   String descricao;
   dynamic inicio;
   dynamic fim;
+  dynamic modificado;
   String nota;
+  bool aplicar;
   bool aplicada;
   List<dynamic> aplicadaPAluno;
 
@@ -24,7 +26,9 @@ class AvaliacaoModel extends FirestoreModel {
     this.descricao,
     this.inicio,
     this.fim,
+    this.modificado,
     this.nota,
+    this.aplicar,
     this.aplicada,
     this.aplicadaPAluno,
   }) : super(id);
@@ -47,7 +51,12 @@ class AvaliacaoModel extends FirestoreModel {
     fim = map.containsKey('fim') && map['fim'] != null
         ? DateTime.fromMillisecondsSinceEpoch(map['fim'].millisecondsSinceEpoch)
         : null;
+    modificado = map.containsKey('modificado') && map['modificado'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+            map['modificado'].millisecondsSinceEpoch)
+        : null;
     if (map.containsKey('nota')) nota = map['nota'];
+    if (map.containsKey('aplicar')) aplicar = map['aplicar'];
     if (map.containsKey('aplicada')) aplicada = map['aplicada'];
     if (map.containsKey('aplicadaPAluno'))
       aplicadaPAluno = map['aplicadaPAluno'];
@@ -68,7 +77,9 @@ class AvaliacaoModel extends FirestoreModel {
     if (descricao != null) data['descricao'] = this.descricao;
     if (inicio != null) data['inicio'] = this.inicio;
     if (fim != null) data['fim'] = this.fim;
+    if (modificado != null) data['modificado'] = this.modificado;
     if (nota != null) data['nota'] = this.nota;
+    if (aplicar != null) data['aplicar'] = this.aplicar;
     if (aplicada != null) data['aplicada'] = this.aplicada;
     if (aplicadaPAluno != null) data['aplicadaPAluno'] = this.aplicadaPAluno;
     return data;

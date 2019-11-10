@@ -65,7 +65,7 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                   pedeseMap = pedeseOrderBy.toMap();
                   notas = '';
                   for (var pedese in pedeseMap.entries) {
-                    notas += '${pedese.value.nome}=${pedese.value.nota ?? ""} ';
+                    notas += '${pedese.value.nome}=${pedese.value.nota ?? "?"} ';
                   }
                   Widget contador;
                   if (tarefa.tempoPResponder == null) {
@@ -93,7 +93,8 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                         // trailing: Text('${tarefa.questao.numero}'),
                         trailing: contador,
                         selected: tarefa.iniciou != null,
-                        title: Text('''
+                        title: Text('Tarefa número: ${tarefa.questao.numero}'),
+                        subtitle: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
@@ -102,7 +103,7 @@ Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
-Notas: $notas
+Sit.: $notas
                         '''),
 //                         subtitle: Text('''
 // id: ${tarefa.id}

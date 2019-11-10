@@ -74,10 +74,10 @@ class AvaliacaoListBloc {
 
       final streamDocsRemetente = _firestore
           .collection(AvaliacaoModel.collection)
+          .where("aplicadaPAluno", arrayContains: _state.usuarioAuth.id)
           .where("ativo", isEqualTo: true)
           .where("aplicada", isEqualTo: true)
           .where("turma.id", isEqualTo: _state.turmaID)
-          .where("aplicadaPAluno", arrayContains: _state.usuarioAuth.id)
           .snapshots();
 
       final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs

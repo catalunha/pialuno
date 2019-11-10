@@ -64,21 +64,31 @@ class TurmaListBloc {
     if (event is UpdateTurmaListEvent) {
       _state.turmaList.clear();
 
-      final streamDocsRemetente = _firestore
-          .collection(TurmaModel.collection)
-          .where("ativo", isEqualTo: true)
-          .where("aluno", arrayContains: _state.usuarioAuth.id)
-          .snapshots();
+      final colRef = _firestore.collection(TurmaModel.collection);
+      for (var turma in _state.usuarioAuth.turma) {
+        final docRef = colRef.document(turma);
+        final snap = await docRef.get();
+        if (snap.exists) {
+          _state.turmaList
+              .add(TurmaModel(id: snap.documentID).fromMap(snap.data));
+        }
+      }
 
-      final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs
-          .documents
-          .map((doc) => TurmaModel(id: doc.documentID).fromMap(doc.data))
-          .toList());
+      // final streamDocsRemetente = _firestore
+      //     .collection(TurmaModel.collection)
+      //     .where("alunoList", arrayContains: _state.usuarioAuth.id)
+      //     .where("ativo", isEqualTo: true)
+      //     .snapshots();
 
-      snapListRemetente.listen((List<TurmaModel> turmaList) {
-        _state.turmaList = turmaList;
-        if (!_stateController.isClosed) _stateController.add(_state);
-      });
+      // final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs
+      //     .documents
+      //     .map((doc) => TurmaModel(id: doc.documentID).fromMap(doc.data))
+      //     .toList());
+
+      // snapListRemetente.listen((List<TurmaModel> turmaList) {
+      //   _state.turmaList = turmaList;
+      //   if (!_stateController.isClosed) _stateController.add(_state);
+      // });
     }
 
     _validateData();

@@ -24,11 +24,11 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
       rotas["/"] = Rota("Home", Icons.home);
-      // rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
       rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
+      rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
       rotas["/turma/list"] =
           Rota("Suas turmas", Icons.book);
-      rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
+      // rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     } else if (Recursos.instance.plataforma == 'web') {
       rotas["/"] = Rota("Home", Icons.home);
       // rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);

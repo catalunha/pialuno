@@ -20,8 +20,11 @@ class TarefaModel extends FirestoreModel {
   dynamic enviou;
   dynamic fim;
   int tentativa;
-  dynamic tentou = 0;
-  dynamic tempo;
+  dynamic tentou;
+  int tempo;
+  String erroRelativo;
+  String avaliacaoNota;
+  String questaoNota;
   bool aberta;
   SituacaoFk situacao;
   String simulacao;
@@ -47,6 +50,9 @@ class TarefaModel extends FirestoreModel {
     this.tentativa,
     this.tentou,
     this.tempo,
+    this.erroRelativo,
+    this.avaliacaoNota,
+    this.questaoNota,
     this.aberta,
     this.situacao,
     this.simulacao,
@@ -95,6 +101,9 @@ class TarefaModel extends FirestoreModel {
     if (map.containsKey('tentativa')) tentativa = map['tentativa'];
     if (map.containsKey('tentou')) tentou = map['tentou'];
     if (map.containsKey('tempo')) tempo = map['tempo'];
+    if (map.containsKey('erroRelativo')) erroRelativo = map['erroRelativo'];
+    if (map.containsKey('avaliacaoNota')) avaliacaoNota = map['avaliacaoNota'];
+    if (map.containsKey('questaoNota')) questaoNota = map['questaoNota'];
 
     if (map.containsKey('aberta')) aberta = map['aberta'];
     situacao = map.containsKey('situacao') && map['situacao'] != null
@@ -146,6 +155,9 @@ class TarefaModel extends FirestoreModel {
     if (tentativa != null) data['tentativa'] = this.tentativa;
     if (tentou != null) data['tentou'] = this.tentou;
     if (tempo != null) data['tempo'] = this.tempo;
+    if (erroRelativo != null) data['erroRelativo'] = this.erroRelativo;
+    if (avaliacaoNota != null) data['avaliacaoNota'] = this.avaliacaoNota;
+    if (questaoNota != null) data['questaoNota'] = this.questaoNota;
     if (aberta != null) data['aberta'] = aberta;
 
     if (this.situacao != null) {
@@ -221,13 +233,20 @@ class TarefaModel extends FirestoreModel {
 class Variavel {
   String nome;
   int ordem;
+  String tipo;
   String valor;
 
-  Variavel({this.nome, this.ordem, this.valor});
+  Variavel({
+    this.nome,
+    this.ordem,
+    this.tipo,
+    this.valor,
+  });
 
   Variavel.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('ordem')) ordem = map['ordem'];
     if (map.containsKey('nome')) nome = map['nome'];
+    if (map.containsKey('tipo')) tipo = map['tipo'];
     if (map.containsKey('valor')) valor = map['valor'];
   }
 
@@ -235,6 +254,7 @@ class Variavel {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     if (ordem != null) data['ordem'] = this.ordem;
     if (nome != null) data['nome'] = this.nome;
+    if (tipo != null) data['tipo'] = this.tipo;
     if (valor != null) data['valor'] = this.valor;
     return data;
   }
@@ -248,8 +268,8 @@ class Pedese {
   String resposta;
   int nota;
   String gabaritoUploadID;
-  String respostaPath;
   String respostaUploadID;
+  String respostaPath;
 
   Pedese({
     this.nome,

@@ -14,8 +14,10 @@ class QuestaoModel extends FirestoreModel {
   SituacaoFk situacao;
   dynamic inicio;
   dynamic fim;
+  dynamic modificado;
   int tentativa;
   int tempo;
+  int erroRelativo;
   String nota;
 
   QuestaoModel({
@@ -28,8 +30,10 @@ class QuestaoModel extends FirestoreModel {
     this.situacao,
     this.inicio,
     this.fim,
+    this.modificado,
     this.tentativa,
     this.tempo,
+    this.erroRelativo,
     this.nota,
   }) : super(id);
 
@@ -56,8 +60,13 @@ class QuestaoModel extends FirestoreModel {
     fim = map.containsKey('fim') && map['fim'] != null
         ? DateTime.fromMillisecondsSinceEpoch(map['fim'].millisecondsSinceEpoch)
         : null;
+    modificado = map.containsKey('modificado') && map['modificado'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+            map['modificado'].millisecondsSinceEpoch)
+        : null;
     if (map.containsKey('tentativa')) tentativa = map['tentativa'];
     if (map.containsKey('tempo')) tempo = map['tempo'];
+    if (map.containsKey('erroRelativo')) erroRelativo = map['erroRelativo'];
     if (map.containsKey('nota')) nota = map['nota'];
     return this;
   }
@@ -81,8 +90,10 @@ class QuestaoModel extends FirestoreModel {
     }
     if (inicio != null) data['inicio'] = this.inicio;
     if (fim != null) data['fim'] = this.fim;
+    if (modificado != null) data['modificado'] = this.modificado;
     if (tentativa != null) data['tentativa'] = this.tentativa;
     if (tempo != null) data['tempo'] = this.tempo;
+    if (erroRelativo != null) data['erroRelativo'] = this.erroRelativo;
     if (nota != null) data['nota'] = this.nota;
     return data;
   }

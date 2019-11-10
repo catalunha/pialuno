@@ -116,26 +116,31 @@ class TarefaAbertaResponderBloc {
     }
     if (event is SaveEvent) {
       for (var pedese in _state.pedese.entries) {
+        print('salvando: ${pedese.value.nome}');
         //Corrigir textos e numeros.
-        if (pedese.value.tipo == 'palavra') {
+        if (pedese.value.tipo == 'palavra' &&
+            pedese.value.resposta != null &&
+            pedese.value.resposta.isNotEmpty) {
           if (pedese.value.resposta == pedese.value.gabarito) {
             _state.pedese[pedese.key].nota = 1;
           } else {
-            _state.pedese[pedese.key].nota = null;
+            _state.pedese[pedese.key].nota = 0;
           }
         }
-        if (pedese.value.tipo == 'numero' && pedese.value.resposta != null) {
+        if (pedese.value.tipo == 'numero' &&
+            pedese.value.resposta != null &&
+            pedese.value.resposta.isNotEmpty) {
           double resposta = double.parse(pedese.value.resposta);
           double gabarito = double.parse(pedese.value.gabarito);
           double erroRelativoCalculado =
               (resposta - gabarito).abs() / gabarito.abs() * 100;
           double erroRelativoPermitido =
-              double.parse(_state.tarefaModel.situacao.erroRelativo);
+              double.parse(_state.tarefaModel.erroRelativo);
 
           if (erroRelativoCalculado <= erroRelativoPermitido) {
             _state.pedese[pedese.key].nota = 1;
           } else {
-            _state.pedese[pedese.key].nota = null;
+            _state.pedese[pedese.key].nota = 0;
           }
         }
         // Criar uploadID de imagem e arquivo

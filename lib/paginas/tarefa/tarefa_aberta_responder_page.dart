@@ -108,7 +108,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             pedeseMap = pedeseOrderBy.toMap();
 
             for (var pedese in pedeseMap.entries) {
-              nota += '${pedese.value.nome}=${pedese.value.nota ?? ""} ';
+              nota += '${pedese.value.nome}=${pedese.value.nota ?? "?"} ';
             }
             // listaWidget.add(
             Widget proposta = Card(
@@ -122,8 +122,7 @@ Ques.: ${tarefa.situacao.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
-Notas: $nota
-                                '''),
+Sit.: $nota'''),
 // id: ${tarefa.id}
 // Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
 // Aberta: ${tarefa.aberta}
@@ -168,13 +167,39 @@ Notas: $nota
                 .orderBy((kv) => kv.value.ordem)
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
             variavelMap = pedeseOrderBy.toMap();
+            Widget icone;
 
             for (var variavel in variavelMap.entries) {
+              if (variavel.value.tipo == 'numero') {
+                icone = Icon(Icons.looks_one);
+              } else if (variavel.value.tipo == 'palavra') {
+                icone = Icon(Icons.text_format);
+              } else if (variavel.value.tipo == 'texto') {
+                icone = Icon(Icons.text_fields);
+              } else if (variavel.value.tipo == 'url') {
+                icone = IconButton(
+                  tooltip: 'Um link ao um site ou arquivo',
+                  icon: Icon(Icons.link),
+                  onPressed: () {
+                    launch(variavel.value.valor);
+                  },
+                );
+              } else if (variavel.value.tipo == 'urlimagem') {
+                icone = IconButton(
+                  tooltip: 'Link para uma imagem',
+                  icon: Icon(Icons.image),
+                  onPressed: () {
+                    launch(variavel.value.valor);
+                  },
+                );
+              }
+
               listaWidget.add(
                 Card(
                   child: ListTile(
                     title: Text('${variavel.value.nome}'),
-                    subtitle: Text('${variavel.value.valor}'),
+                    subtitle: Text('${variavel?.value?.valor}'),
+                    trailing: icone,
                   ),
                 ),
               );
@@ -223,13 +248,15 @@ Notas: $nota
                   ),
                   selected: pedese.value.nota != null,
                   trailing:
-                      pedese.value.nota != null ? Icon(Icons.check) : Text(''),
+                      pedese.value.nota == null ? Text('') : Text('Sit.: ${pedese.value.nota}'),
                 ),
               );
+
               if (pedese.value.tipo == 'numero' ||
                   pedese.value.tipo == 'palavra' ||
+                  pedese.value.tipo == 'texto' ||
                   pedese.value.tipo == 'url' ||
-                  pedese.value.tipo == 'texto') {
+                  pedese.value.tipo == 'urlimagem') {
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
                     child: PedeseNumeroTexto(

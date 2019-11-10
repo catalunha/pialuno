@@ -84,7 +84,7 @@ Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.in
 Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
 Tempo:  ${tarefa.tempo}h
-Notas: $notas
+Sit.: $notas
                         '''),
 //                         subtitle: Text('''
 // Inicio: ${tarefa.inicio}

@@ -270,7 +270,6 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         situacao: SituacaoFk(
           id: '0situacao01',
           nome: 'situacao01',
-          erroRelativo: '10',
           url:
               'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
         ),
@@ -319,7 +318,6 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
       nome: 'cn2020.1',
       descricao: 'turma legal',
       professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
-      aluno: ['PMAxu4zKfmaOlYAmF3lgFGmCR1w2'],
     );
 
     await docRef.setData(turmaModel.toMap(), merge: true);
@@ -360,7 +358,6 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
       situacao: SituacaoFk(
         id: '0situacao01',
         nome: 'situacao01',
-        erroRelativo: '10',
         url:
             'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
       ),
