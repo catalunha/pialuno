@@ -67,10 +67,10 @@ class MyApp extends StatelessWidget {
         },
 
         //questao
-        "/questao/list": (context) {
-          final settings = ModalRoute.of(context).settings;
-          return QuestaoListPage(settings.arguments);
-        },
+        // "/questao/list": (context) {
+        //   final settings = ModalRoute.of(context).settings;
+        //   return QuestaoListPage(settings.arguments);
+        // },
 
         //EndDrawer
         //perfil
