@@ -79,7 +79,7 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         child: Center(
                           child: Text(
-                          'PI - ALUNO',
+                          'PI - Aluno',
                           style: TextStyle(fontSize: 30, color: Colors.blue),
                         ),
                         ),
@@ -122,11 +122,37 @@ class LoginPageState extends State<LoginPage> {
                           vertical: 4,
                         ),
                         child: RaisedButton(
-                          child: Text("Acessar com email e senha"),
+                          color: Colors.blue,
+                          child: Text("Acessar",style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
                           onPressed: () {
                             _formKey.currentState.save();
                             authBloc.dispatch(LoginAuthBlocEvent());
                           },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
+                        child: ListTile(
+                          title: Text(
+                              'Eita. Esqueci a senha!\nInforme seu email e click...',
+                              style: TextStyle(color: Colors.blue[600])),
+                              
+                          trailing: IconButton(
+                            tooltip:
+                                'Um pedido de nova senha será enviado a seu email.',
+                            icon: Icon(Icons.vpn_key, color: Colors.blue[600]),
+                            onPressed: () {
+                              authBloc.dispatch(ResetPassword());
+                            },
+                          ),
                         ),
                       ),
                     ],
