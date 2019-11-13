@@ -24,10 +24,10 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
       rotas["/"] = Rota("Home", Icons.home);
-      rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
-      rotas["/tarefa/aberta"] = Rota("Tarefas abertas", Icons.assignment);
+      rotas["/tarefa/aberta"] = Rota("Tarefas", Icons.assignment);
       rotas["/turma/list"] =
-          Rota("Suas turmas", Icons.book);
+          Rota("Turmas", Icons.book);
+      rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
       // rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     } else if (Recursos.instance.plataforma == 'web') {
       rotas["/"] = Rota("Home", Icons.home);
@@ -88,11 +88,7 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
                                   children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.only(top: 4),
-                                      child: Text("${snap.data.cracha}"),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 4),
-                                      child: Text("${snap.data.celular}"),
+                                      child: Text("${snap.data.nome}"),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 4),
@@ -100,7 +96,11 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 4),
-                                      child: Text("${snap.data.nome}"),
+                                      child: Text("${snap.data.cracha}"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text("${snap.data.celular}"),
                                     ),
                                   ],
                                 ),

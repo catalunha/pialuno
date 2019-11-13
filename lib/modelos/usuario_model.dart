@@ -3,7 +3,7 @@ import 'package:pialuno/modelos/upload_model.dart';
 
 class UsuarioModel extends FirestoreModel {
   static final String collection = "Usuario";
-  bool aluno;
+  bool professor;
   bool ativo;
   String celular;
   String cracha;
@@ -15,7 +15,7 @@ class UsuarioModel extends FirestoreModel {
   int turmaNumeroAdicionado;
   int pastaNumeroAdicionado;
   int situacaoNumeroAdicionado;
-  String tokenFCM;
+  // String tokenFCM;
   List<dynamic> turma;
 
   UsuarioModel({
@@ -25,9 +25,9 @@ class UsuarioModel extends FirestoreModel {
     this.matricula,
     this.celular,
     this.email,
-    this.tokenFCM,
+    // this.tokenFCM,
     this.ativo,
-    this.aluno,
+    this.professor,
     this.foto,
     this.turmaNumeroAdicionado,
     this.pastaNumeroAdicionado,
@@ -38,14 +38,17 @@ class UsuarioModel extends FirestoreModel {
 
   @override
   UsuarioModel fromMap(Map<String, dynamic> map) {
+    // for (var item in map.entries) {
+    //   print('${item.key} = ${item.value}');
+    // }
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('cracha')) cracha = map['cracha'];
     if (map.containsKey('matricula')) matricula = map['matricula'];
     if (map.containsKey('celular')) celular = map['celular'];
-    if (map.containsKey('tokenFCM')) tokenFCM = map['tokenFCM'];
+    // if (map.containsKey('tokenFCM')) tokenFCM = map['tokenFCM'];
     if (map.containsKey('email')) email = map['email'];
     if (map.containsKey('ativo')) ativo = map['ativo'];
-    if (map.containsKey('aluno')) aluno = map['aluno'];
+    if (map.containsKey('professor')) professor = map['professor'];
     if (map.containsKey('pastaNumeroAdicionado')) pastaNumeroAdicionado = map['pastaNumeroAdicionado'];
     if (map.containsKey('situacaoNumeroAdicionado')) situacaoNumeroAdicionado = map['situacaoNumeroAdicionado'];
     if (map.containsKey('turmaNumeroAdicionado')) turmaNumeroAdicionado = map['turmaNumeroAdicionado'];
@@ -66,10 +69,10 @@ class UsuarioModel extends FirestoreModel {
     if (cracha != null) data['cracha'] = this.cracha;
     if (matricula != null) data['matricula'] = this.matricula;
     if (celular != null) data['celular'] = this.celular;
-    if (tokenFCM != null) data['tokenFCM'] = this.tokenFCM;
+    // if (tokenFCM != null) data['tokenFCM'] = this.tokenFCM;
     if (email != null) data['email'] = this.email;
     if (ativo != null) data['ativo'] = this.ativo;
-    if (aluno != null) data['aluno'] = this.aluno;
+    if (professor != null) data['professor'] = this.professor;
     if (pastaNumeroAdicionado != null) data['pastaNumeroAdicionado'] = this.pastaNumeroAdicionado;
     if (situacaoNumeroAdicionado != null) data['situacaoNumeroAdicionado'] = this.situacaoNumeroAdicionado;
     if (turmaNumeroAdicionado != null) data['turmaNumeroAdicionado'] = this.turmaNumeroAdicionado;
