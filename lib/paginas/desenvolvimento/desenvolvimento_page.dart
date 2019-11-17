@@ -9,6 +9,7 @@ import 'package:pialuno/componentes/default_scaffold.dart';
 import 'package:pialuno/modelos/avaliacao_model.dart';
 import 'package:pialuno/modelos/questao_model.dart';
 import 'package:pialuno/modelos/problema_model.dart';
+import 'package:pialuno/modelos/simulacao_model.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/modelos/turma_model.dart';
 import 'package:pialuno/modelos/upload_model.dart';
@@ -252,7 +253,6 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     docRef.delete();
     TarefaModel tarefaModel = TarefaModel(
         id: tarefaId,
-        ativo: true,
         professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
         turma: TurmaFk(id: '0Turma01', nome: 'turma01'),
         avaliacao: AvaliacaoFk(id: '0Avaliacao01', nome: 'avaliacao01'),
@@ -273,7 +273,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
           url:
               'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
         ),
-        simulacao: 'simulacao01',
+        // simulacao: 'simulacao01',
         variavel: {
           'var01': Variavel(
             nome: 'N1',

@@ -1,4 +1,5 @@
 import 'package:pialuno/bootstrap.dart';
+import 'package:pialuno/modelos/simulacao_model.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/modelos/upload_model.dart';
 import 'package:firestore_wrapper/firestore_wrapper.dart' as fsw;
@@ -112,6 +113,7 @@ class TarefaAbertaResponderBloc {
         gabarito.resposta = event.valor;
       } else if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
         gabarito.respostaPath = event.valor;
+        gabarito.resposta = null;
       }
       // print(gabarito.toMap());
     }

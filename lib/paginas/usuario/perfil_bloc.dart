@@ -45,6 +45,7 @@ class PerfilState {
     celular = usuarioModel.celular;
     fotoUploadID = usuarioModel?.foto?.uploadID;
     fotoUrl = usuarioModel?.foto?.url;
+    localPath = usuarioModel?.foto?.path;
   }
 }
 
@@ -118,7 +119,7 @@ class PerfilBloc {
         await docRef.setData(upLoadModel.toMap(), merge: true);
         _state.fotoUploadID = docRef.documentID;
         //--- Cria doc em UpLoadCollection
-        foto = UploadFk(uploadID: _state.fotoUploadID,url:null);
+        foto = UploadFk(uploadID: _state.fotoUploadID,url:null,path: _state.localPath);
         usuarioUpdate.foto=foto;
       }
 

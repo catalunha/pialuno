@@ -3,12 +3,12 @@ import 'package:pialuno/modelos/avaliacao_model.dart';
 import 'package:pialuno/modelos/base_model.dart';
 import 'package:pialuno/modelos/questao_model.dart';
 import 'package:pialuno/modelos/problema_model.dart';
+import 'package:pialuno/modelos/simulacao_model.dart';
 import 'package:pialuno/modelos/turma_model.dart';
 import 'package:pialuno/modelos/usuario_model.dart';
 
 class TarefaModel extends FirestoreModel {
   static final String collection = "Tarefa";
-  bool ativo;
   UsuarioFk professor;
   TurmaFk turma;
   AvaliacaoFk avaliacao;
@@ -27,7 +27,7 @@ class TarefaModel extends FirestoreModel {
   String questaoNota;
   bool aberta;
   ProblemaFk problema;
-  String simulacao;
+  SimulacaoFk simulacao;
   Map<String, Variavel> variavel;
   Map<String, Gabarito> gabarito;
 
@@ -36,7 +36,6 @@ class TarefaModel extends FirestoreModel {
 
   TarefaModel({
     String id,
-    this.ativo,
     this.professor,
     this.turma,
     this.avaliacao,
@@ -62,7 +61,6 @@ class TarefaModel extends FirestoreModel {
 
   @override
   TarefaModel fromMap(Map<String, dynamic> map) {
-    if (map.containsKey('ativo')) ativo = map['ativo'];
     professor = map.containsKey('professor') && map['professor'] != null
         ? UsuarioFk.fromMap(map['professor'])
         : null;
@@ -109,7 +107,9 @@ class TarefaModel extends FirestoreModel {
     problema = map.containsKey('problema') && map['problema'] != null
         ? ProblemaFk.fromMap(map['problema'])
         : null;
-    if (map.containsKey('simulacao')) simulacao = map['simulacao'];
+  simulacao = map.containsKey('simulacao') && map['simulacao'] != null
+        ? SimulacaoFk.fromMap(map['simulacao'])
+        : null;
 
     if (map["variavel"] is Map) {
       variavel = Map<String, Variavel>();
@@ -131,7 +131,6 @@ class TarefaModel extends FirestoreModel {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     // _updateAll();
-    if (ativo != null) data['ativo'] = this.ativo;
     if (this.professor != null) {
       data['professor'] = this.professor.toMap();
     }
@@ -164,8 +163,9 @@ class TarefaModel extends FirestoreModel {
       data['problema'] = this.problema.toMap();
     }
 
-    if (simulacao != null) data['simulacao'] = this.simulacao;
-
+  if (this.simulacao != null) {
+      data['simulacao'] = this.simulacao.toMap();
+    }
     if (variavel != null && variavel is Map) {
       data["variavel"] = Map<String, dynamic>();
       for (var item in variavel.entries) {
@@ -230,80 +230,80 @@ class TarefaModel extends FirestoreModel {
   }
 }
 
-class Variavel {
-  String nome;
-  int ordem;
-  String tipo;
-  String valor;
+// class Variavel {
+//   String nome;
+//   int ordem;
+//   String tipo;
+//   String valor;
 
-  Variavel({
-    this.nome,
-    this.ordem,
-    this.tipo,
-    this.valor,
-  });
+//   Variavel({
+//     this.nome,
+//     this.ordem,
+//     this.tipo,
+//     this.valor,
+//   });
 
-  Variavel.fromMap(Map<dynamic, dynamic> map) {
-    if (map.containsKey('ordem')) ordem = map['ordem'];
-    if (map.containsKey('nome')) nome = map['nome'];
-    if (map.containsKey('tipo')) tipo = map['tipo'];
-    if (map.containsKey('valor')) valor = map['valor'];
-  }
+//   Variavel.fromMap(Map<dynamic, dynamic> map) {
+//     if (map.containsKey('ordem')) ordem = map['ordem'];
+//     if (map.containsKey('nome')) nome = map['nome'];
+//     if (map.containsKey('tipo')) tipo = map['tipo'];
+//     if (map.containsKey('valor')) valor = map['valor'];
+//   }
 
-  Map<dynamic, dynamic> toMap() {
-    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
-    if (ordem != null) data['ordem'] = this.ordem;
-    if (nome != null) data['nome'] = this.nome;
-    if (tipo != null) data['tipo'] = this.tipo;
-    if (valor != null) data['valor'] = this.valor;
-    return data;
-  }
-}
+//   Map<dynamic, dynamic> toMap() {
+//     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
+//     if (ordem != null) data['ordem'] = this.ordem;
+//     if (nome != null) data['nome'] = this.nome;
+//     if (tipo != null) data['tipo'] = this.tipo;
+//     if (valor != null) data['valor'] = this.valor;
+//     return data;
+//   }
+// }
 
-class Gabarito {
-  String nome;
-  int ordem;
-  String tipo;
-  String valor;
-  String resposta;
-  int nota;
-  String respostaUploadID;
-  String respostaPath;
+// class Gabarito {
+//   String nome;
+//   int ordem;
+//   String tipo;
+//   String valor;
+//   String resposta;
+//   int nota;
+//   String respostaUploadID;
+//   String respostaPath;
 
-  Gabarito({
-    this.nome,
-    this.ordem,
-    this.tipo,
-    this.valor,
-    this.resposta,
-    this.nota,
-    this.respostaPath,
-    this.respostaUploadID,
-  });
+//   Gabarito({
+//     this.nome,
+//     this.ordem,
+//     this.tipo,
+//     this.valor,
+//     this.resposta,
+//     this.nota,
+//     this.respostaPath,
+//     this.respostaUploadID,
+//   });
 
-  Gabarito.fromMap(Map<dynamic, dynamic> map) {
-    if (map.containsKey('nome')) nome = map['nome'];
-    if (map.containsKey('ordem')) ordem = map['ordem'];
-    if (map.containsKey('tipo')) tipo = map['tipo'];
-    if (map.containsKey('valor')) valor = map['valor'];
-    if (map.containsKey('resposta')) resposta = map['resposta'];
-    if (map.containsKey('nota')) nota = map['nota'];
-    if (map.containsKey('respostaPath')) respostaPath = map['respostaPath'];
-    if (map.containsKey('respostaUploadID'))
-      respostaUploadID = map['respostaUploadID'];
-  }
+//   Gabarito.fromMap(Map<dynamic, dynamic> map) {
+//     if (map.containsKey('nome')) nome = map['nome'];
+//     if (map.containsKey('ordem')) ordem = map['ordem'];
+//     if (map.containsKey('tipo')) tipo = map['tipo'];
+//     if (map.containsKey('valor')) valor = map['valor'];
+//     if (map.containsKey('resposta')) resposta = map['resposta'];
+//     if (map.containsKey('nota')) nota = map['nota'];
+//     if (map.containsKey('respostaPath')) respostaPath = map['respostaPath'];
+//     if (map.containsKey('respostaUploadID'))
+//       respostaUploadID = map['respostaUploadID'];
+//   }
 
-  Map<dynamic, dynamic> toMap() {
-    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
-    if (nome != null) data['nome'] = this.nome;
-    if (ordem != null) data['ordem'] = this.ordem;
-    if (tipo != null) data['tipo'] = this.tipo;
-    if (valor != null) data['valor'] = this.valor;
-    if (resposta != null) data['resposta'] = this.resposta;
-    data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
-    if (respostaPath != null) data['respostaPath'] = this.respostaPath;
-    if (respostaUploadID != null)
-      data['respostaUploadID'] = this.respostaUploadID;
-    return data;
-  }
-}
+//   Map<dynamic, dynamic> toMap() {
+//     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
+//     if (nome != null) data['nome'] = this.nome;
+//     if (ordem != null) data['ordem'] = this.ordem;
+//     if (tipo != null) data['tipo'] = this.tipo;
+//     if (valor != null) data['valor'] = this.valor;
+//     if (resposta != null) data['resposta'] = this.resposta;
+//     data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
+//     if (respostaPath != null) data['respostaPath'] = this.respostaPath;
+//     if (respostaUploadID != null)
+//       data['respostaUploadID'] = this.respostaUploadID;
+//     return data;
+//   }
+// }

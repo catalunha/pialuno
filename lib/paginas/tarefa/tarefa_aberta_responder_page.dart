@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
+import 'package:pialuno/modelos/simulacao_model.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_bloc.dart';
 import 'package:pialuno/plataforma/recursos.dart';
@@ -293,6 +294,10 @@ Sit.: $nota'''),
               }
             }
             // return Column(children: listaWidget);
+                          listaWidget.add(Container(
+                  padding: EdgeInsets.only(top: 70),
+                ));
+
             return ListView(
               children: listaWidget,
             );
@@ -458,12 +463,12 @@ class ImagemSelect extends StatelessWidget {
                         bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                    onLongPress: () {
-                      bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
-                    },
+                    // onLongPress: () {
+                    //   bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
+                    // },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
-            _MostrarImagemUnica(
+            _MostrarImagem(
               uploadID: gabaritoValue?.respostaUploadID,
               url: gabaritoValue?.resposta,
               path: gabaritoValue?.respostaPath,
@@ -487,52 +492,127 @@ class ImagemSelect extends StatelessWidget {
   }
 }
 
-class _MostrarImagemUnica extends StatelessWidget {
+class _MostrarImagem extends StatelessWidget {
   final String uploadID;
   final String url;
   final String path;
 
-  const _MostrarImagemUnica({this.uploadID, this.url, this.path});
+  const _MostrarImagem({this.uploadID, this.url, this.path});
 
   @override
   Widget build(BuildContext context) {
-    Widget imagem;
-    if (uploadID != null && url == null) {
-      imagem = Center(
-          child: Text(
-              'Você não enviou a última imagem selecionada. Vá para o menu Upload de Arquivos.'));
-    } else if (url == null && path == null) {
-      imagem = Center(child: Text('Sem imagem selecionada.'));
-    } else if (url != null) {
-      imagem = Container(
-          child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Image.network(url),
-      ));
-    } else {
-      imagem = Container(
-          // color: Colors.yellow,
-          child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Image.asset(path),
-      ));
+    Widget foto = Text('?');
+    Widget msg = Text('');
+
+    if (path == null && url == null) {
+      foto = Text('Você ainda não enviou uma imagem.');
     }
-    return Row(
+    if (path != null && url == null) {
+      try {
+        foto = Container(
+            // color: Colors.yellow,
+            child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Image.asset(path),
+        ));
+      } on Exception {
+        msg = ListTile(
+          title: Text('Não consegui abrir a imagem.'),
+        );
+      } catch (e) {
+        msg = ListTile(
+          title: Text('Não consegui abrir a imagem.'),
+        );
+      }
+      msg = Text(
+          'Esta imagem precisa ser enviada. Salve esta edição de tarefa e depois acesse o menu upload de arquivos para enviar esta imagem.');
+    }
+    if (url != null && uploadID != null) {
+      try {
+        foto = Container(
+            child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Image.network(url),
+        ));
+      } on Exception {
+        print('Exception');
+        msg = ListTile(
+          title: Text('Não consegui abrir a imagem.'),
+        );
+      } catch (e) {
+        print('catch');
+        msg = ListTile(
+          title: Text('Não consegui abrir a imagem.'),
+        );
+      }
+    }
+    return Column(
       children: <Widget>[
-        Spacer(
-          flex: 2,
-        ),
-        Expanded(
-          flex: 2,
-          child: imagem,
-        ),
-        Spacer(
-          flex: 2,
+        msg,
+        Row(
+          children: <Widget>[
+            Spacer(
+              flex: 2,
+            ),
+            Expanded(
+              flex: 2,
+              child: foto,
+            ),
+            Spacer(
+              flex: 2,
+            ),
+          ],
         ),
       ],
     );
   }
 }
+// class _MostrarImagemUnica extends StatelessWidget {
+//   final String uploadID;
+//   final String url;
+//   final String path;
+
+//   const _MostrarImagemUnica({this.uploadID, this.url, this.path});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Widget imagem;
+//     if (uploadID != null && url == null) {
+//       imagem = Center(
+//           child: Text(
+//               'Você não enviou a última imagem selecionada. Vá para o menu Upload de Arquivos.'));
+//     } else if (url == null && path == null) {
+//       imagem = Center(child: Text('Sem imagem selecionada.'));
+//     } else if (url != null) {
+//       imagem = Container(
+//           child: Padding(
+//         padding: const EdgeInsets.all(2.0),
+//         child: Image.network(url),
+//       ));
+//     } else {
+//       imagem = Container(
+//           // color: Colors.yellow,
+//           child: Padding(
+//         padding: const EdgeInsets.all(2.0),
+//         child: Image.asset(path),
+//       ));
+//     }
+//     return Row(
+//       children: <Widget>[
+//         Spacer(
+//           flex: 2,
+//         ),
+//         Expanded(
+//           flex: 2,
+//           child: imagem,
+//         ),
+//         Spacer(
+//           flex: 2,
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class ArquivoSelect extends StatelessWidget {
   // String resposta;
@@ -570,9 +650,9 @@ class ArquivoSelect extends StatelessWidget {
                         bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                    onLongPress: () {
-                      bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
-                    },
+                    // onLongPress: () {
+                    //   bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
+                    // },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _MostraArquivo(
@@ -608,30 +688,85 @@ class _MostraArquivo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget imagem;
-    if (uploadID != null && url == null) {
-      imagem = Center(
-          child: Text(
-              'Você não enviou o último arquivo selecionado. Vá para o menu Upload de Arquivos.'));
-    } else if (url == null && path == null) {
-      imagem = Center(child: Text('Sem arquivo selecionado.'));
-    } else if (url != null) {
-      imagem = ListTile(
-        title: Text('$url'),
+    Widget arquivo = Text('?');
+    Widget msg = Text('');
+
+    if (path == null && url == null) {
+      arquivo = Text('Você ainda não enviou um arquivo.');
+    }
+    if (path != null && url == null) {
+
+      arquivo = ListTile(
+        title: Text('Arquivo local.'),
+        subtitle: Text('$path'),
+      );
+      msg = Text(
+          'Este arquivo precisa ser enviado. Salve esta edição de tarefa e depois acesse o menu upload de arquivos para enviar este arquivo.');
+    }
+    if (url != null && uploadID != null) {
+      try {
+          arquivo = ListTile(
+        title: Text('Arquivo em nuvem.'),
+        subtitle: Text('$url'),
         trailing: Icon(Icons.link),
         onTap: () {
           launch(url);
         },
       );
-    } else {
-      imagem = ListTile(
-        title: Text('$path'),
-        // onTap: () {
-        //   launch(url);
-        // },
-      );
+      } on Exception {
+        print('Exception');
+        msg = ListTile(
+          title: Text('Não consegui abrir o arquivo.'),
+        );
+      } catch (e) {
+        print('catch');
+        msg = ListTile(
+          title: Text('Não consegui abrir o arquivo.'),
+        );
+      }
     }
-
-    return imagem;
+    return Column(
+      children: <Widget>[
+        msg,
+        arquivo,
+      ],
+    );
   }
 }
+
+// class _MostraArquivo extends StatelessWidget {
+//   final String uploadID;
+//   final String url;
+//   final String path;
+
+//   const _MostraArquivo({this.uploadID, this.url, this.path});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Widget imagem;
+//     if (uploadID != null && url == null) {
+//       imagem = Center(
+//           child: Text(
+//               'Você não enviou o último arquivo selecionado. Vá para o menu Upload de Arquivos.'));
+//     } else if (url == null && path == null) {
+//       imagem = Center(child: Text('Sem arquivo selecionado.'));
+//     } else if (url != null) {
+//       imagem = ListTile(
+//         title: Text('$url'),
+//         trailing: Icon(Icons.link),
+//         onTap: () {
+//           launch(url);
+//         },
+//       );
+//     } else {
+//       imagem = ListTile(
+//         title: Text('$path'),
+//         // onTap: () {
+//         //   launch(url);
+//         // },
+//       );
+//     }
+
+//     return imagem;
+//   }
+// }

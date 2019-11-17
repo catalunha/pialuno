@@ -4,6 +4,7 @@ import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
+import 'package:pialuno/modelos/simulacao_model.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_bloc.dart';
 import 'package:queries/collections.dart';

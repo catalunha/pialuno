@@ -64,25 +64,25 @@ class UploadModel extends FirestoreModel {
 class UploadFk {
   String uploadID;
   String url;
-  // String path;
+  String path;
 
   UploadFk({
     this.uploadID,
     this.url,
-    // this.path,
+    this.path,
   });
 
   UploadFk.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('uploadID')) uploadID = map['uploadID'];
     if (map.containsKey('url')) url = map['url'];
-    // if (map.containsKey('path')) path = map['path'];
+    if (map.containsKey('path')) path = map['path'];
   }
 
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     if (uploadID != null) data['uploadID'] = this.uploadID;
     data['url'] = this.url ?? Bootstrap.instance.fieldValue.delete();
-    // data['url'] = this.url;
+    data['path'] = this.path ?? Bootstrap.instance.fieldValue.delete();
     return data;
   }
 }
