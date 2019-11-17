@@ -8,7 +8,7 @@ import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
 import 'package:pialuno/modelos/avaliacao_model.dart';
 import 'package:pialuno/modelos/questao_model.dart';
-import 'package:pialuno/modelos/situacao_model.dart';
+import 'package:pialuno/modelos/problema_model.dart';
 import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/modelos/turma_model.dart';
 import 'package:pialuno/modelos/upload_model.dart';
@@ -267,9 +267,9 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         // tentou: 0,
         tempo: 1,
         aberta: true,
-        situacao: SituacaoFk(
-          id: '0situacao01',
-          nome: 'situacao01',
+        problema: ProblemaFk(
+          id: '0problema01',
+          nome: 'problema01',
           url:
               'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
         ),
@@ -286,18 +286,18 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
             valor: '2',
           )
         },
-        pedese: {
-          'pedese01':
-              Pedese(nome: 'a', ordem: 0, tipo: 'numero', gabarito: '20'),
-          'pedese02':
-              Pedese(nome: 'b', ordem: 1, tipo: 'palavra', gabarito: 'sim'),
-          'pedese03':
-              Pedese(nome: 'c', ordem: 2, tipo: 'texto', gabarito: 'sim'),
-          'pedese04': Pedese(nome: 'd', ordem: 3, tipo: 'url', gabarito: 'sim'),
-          'pedese05':
-              Pedese(nome: 'e', ordem: 4, tipo: 'arquivo', gabarito: 'sim'),
-          'pedese06':
-              Pedese(nome: 'f', ordem: 5, tipo: 'imagem', gabarito: 'sim'),
+        gabarito: {
+          'gabarito01':
+              Gabarito(nome: 'a', ordem: 0, tipo: 'numero', valor: '20'),
+          'gabarito02':
+              Gabarito(nome: 'b', ordem: 1, tipo: 'palavra', valor: 'sim'),
+          'gabarito03':
+              Gabarito(nome: 'c', ordem: 2, tipo: 'texto', valor: 'sim'),
+          'gabarito04': Gabarito(nome: 'd', ordem: 3, tipo: 'url', valor: 'sim'),
+          'gabarito05':
+              Gabarito(nome: 'e', ordem: 4, tipo: 'arquivo', valor: 'sim'),
+          'gabarito06':
+              Gabarito(nome: 'f', ordem: 5, tipo: 'imagem', valor: 'sim'),
         });
 
     // print('=>>>>>>>> ${tarefaModel.aberta}');
@@ -355,9 +355,9 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
       professor: UsuarioFk(id: '0Prof01', nome: 'prof01'),
       turma: TurmaFk(id: '0Turma01', nome: 'turma01'),
       avaliacao: AvaliacaoFk(id: '0Avaliacao01', nome: 'avaliacao01'),
-      situacao: SituacaoFk(
-        id: '0situacao01',
-        nome: 'situacao01',
+      problema: ProblemaFk(
+        id: '0problema01',
+        nome: 'problema01',
         url:
             'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a',
       ),

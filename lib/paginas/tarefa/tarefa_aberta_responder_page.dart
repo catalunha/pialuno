@@ -91,34 +91,37 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
           }
           if (snapshot.data.isDataValid) {
             List<Widget> listaWidget = List<Widget>();
-            Map<String, Pedese> pedeseMap;
+            Map<String, Gabarito> gabaritoMap;
             String nota = '';
             var tarefa = snapshot.data.tarefaModel;
             Widget pdf = ListTile(
-              title: Text('Click aqui para ver a proposta da questão.'),
-              trailing: Icon(Icons.picture_as_pdf),
+              title: Text('Click aqui para ver a proposta da tarefa.'),
+              trailing: Icon(Icons.local_library),
               onTap: () {
-                launch(tarefa.situacao.url);
+                launch(tarefa.problema.url);
               },
             );
-            var dicPedese = Dictionary.fromMap(tarefa.pedese);
-            var pedeseOrderBy = dicPedese
+            var dicPedese = Dictionary.fromMap(tarefa.gabarito);
+            var gabaritoOrderBy = dicPedese
                 .orderBy((kv) => kv.value.ordem)
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-            pedeseMap = pedeseOrderBy.toMap();
+            gabaritoMap = gabaritoOrderBy.toMap();
 
-            for (var pedese in pedeseMap.entries) {
-              nota += '${pedese.value.nome}=${pedese.value.nota ?? "?"} ';
+            for (var gabarito in gabaritoMap.entries) {
+              nota += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
             }
             // listaWidget.add(
             Widget proposta = Card(
               child: ListTile(
-                trailing: Text('${tarefa.questao.numero}'),
+                trailing: Text('Número: ${tarefa.questao.numero}',style: TextStyle(
+                color: Colors.blue,
+                fontSize: 20.0,
+              )),
                 title: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
-Ques.: ${tarefa.situacao.nome}
+Prob.: ${tarefa.problema.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
@@ -163,10 +166,10 @@ Sit.: $nota'''),
 
             // print('tarefa.id: ${tarefa.id}');
             var dicPedese = Dictionary.fromMap(tarefa.variavel);
-            var pedeseOrderBy = dicPedese
+            var gabaritoOrderBy = dicPedese
                 .orderBy((kv) => kv.value.ordem)
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-            variavelMap = pedeseOrderBy.toMap();
+            variavelMap = gabaritoOrderBy.toMap();
             Widget icone;
 
             for (var variavel in variavelMap.entries) {
@@ -231,59 +234,60 @@ Sit.: $nota'''),
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
-            var pedese = snapshot.data.pedese;
+            var gabarito = snapshot.data.gabarito;
 
             List<Widget> listaWidget = List<Widget>();
-            Map<String, Pedese> pedeseMap;
-            var dicPedese = Dictionary.fromMap(pedese);
-            var pedeseOrderBy = dicPedese
+            Map<String, Gabarito> gabaritoMap;
+            var dicPedese = Dictionary.fromMap(gabarito);
+            var gabaritoOrderBy = dicPedese
                 .orderBy((kv) => kv.value.ordem)
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-            pedeseMap = pedeseOrderBy.toMap();
-            for (var pedese in pedeseMap.entries) {
+            gabaritoMap = gabaritoOrderBy.toMap();
+            for (var gabarito in gabaritoMap.entries) {
               listaWidget.add(
                 ListTile(
                   title: Text(
-                    '${pedese.value.nome}',
+                    '${gabarito.value.nome}',
                   ),
-                  selected: pedese.value.nota != null,
+                  selected: gabarito.value.nota != null,
                   trailing:
-                      pedese.value.nota == null ? Text('') : Text('Sit.: ${pedese.value.nota}'),
+                      gabarito.value.nota == null ? Text('') : Icon(Icons.check),
+                      // gabarito.value.nota == null ? Text('') : Text('Sit.: ${gabarito.value.nota}'),
                 ),
               );
 
-              if (pedese.value.tipo == 'numero' ||
-                  pedese.value.tipo == 'palavra' ||
-                  pedese.value.tipo == 'texto' ||
-                  pedese.value.tipo == 'url' ||
-                  pedese.value.tipo == 'urlimagem') {
+              if (gabarito.value.tipo == 'numero' ||
+                  gabarito.value.tipo == 'palavra' ||
+                  gabarito.value.tipo == 'texto' ||
+                  gabarito.value.tipo == 'url' ||
+                  gabarito.value.tipo == 'urlimagem') {
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
                     child: PedeseNumeroTexto(
                       bloc,
-                      pedese.key,
-                      pedese.value,
+                      gabarito.key,
+                      gabarito.value,
                     )));
               }
               if (Recursos.instance.disponivel("file_picking")) {
-                if (pedese.value.tipo == 'imagem') {
+                if (gabarito.value.tipo == 'imagem') {
                   listaWidget.add(Padding(
                       padding: EdgeInsets.all(5.0),
                       child: ImagemSelect(
                         bloc,
-                        pedese.key,
-                        pedese.value,
+                        gabarito.key,
+                        gabarito.value,
                       )));
                 }
               }
               if (Recursos.instance.disponivel("file_picking")) {
-                if (pedese.value.tipo == 'arquivo') {
+                if (gabarito.value.tipo == 'arquivo') {
                   listaWidget.add(Padding(
                       padding: EdgeInsets.all(5.0),
                       child: ArquivoSelect(
                         bloc,
-                        pedese.key,
-                        pedese.value,
+                        gabarito.key,
+                        gabarito.value,
                       )));
                 }
               }
@@ -350,7 +354,7 @@ Sit.: $nota'''),
               ),
             );
             Widget tentativas = Text(
-              '${tarefa.tentou ?? 0} / ${tarefa.tentativa}',
+              '${tarefa.tentou ?? 0} de ${tarefa.tentativa}',
               style: TextStyle(
                   color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
             );
@@ -370,19 +374,19 @@ Sit.: $nota'''),
 
 class PedeseNumeroTexto extends StatefulWidget {
   final TarefaAbertaResponderBloc bloc;
-  final String pedeseKey;
-  final Pedese pedeseValue;
+  final String gabaritoKey;
+  final Gabarito gabaritoValue;
   PedeseNumeroTexto(
     this.bloc,
-    this.pedeseKey,
-    this.pedeseValue,
+    this.gabaritoKey,
+    this.gabaritoValue,
   );
   @override
   PedeseNumeroTextoState createState() {
     return PedeseNumeroTextoState(
       bloc,
-      pedeseKey,
-      pedeseValue,
+      gabaritoKey,
+      gabaritoValue,
     );
   }
 }
@@ -390,9 +394,9 @@ class PedeseNumeroTexto extends StatefulWidget {
 class PedeseNumeroTextoState extends State<PedeseNumeroTexto> {
   final _textFieldController = TextEditingController();
   final TarefaAbertaResponderBloc bloc;
-  final String pedeseKey;
-  final Pedese pedeseValue;
-  PedeseNumeroTextoState(this.bloc, this.pedeseKey, this.pedeseValue);
+  final String gabaritoKey;
+  final Gabarito gabaritoValue;
+  PedeseNumeroTextoState(this.bloc, this.gabaritoKey, this.gabaritoValue);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
@@ -400,7 +404,7 @@ class PedeseNumeroTextoState extends State<PedeseNumeroTexto> {
       builder: (BuildContext context,
           AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (_textFieldController.text.isEmpty) {
-          _textFieldController.text = pedeseValue.resposta;
+          _textFieldController.text = gabaritoValue.resposta;
         }
         return TextField(
           keyboardType: TextInputType.multiline,
@@ -410,7 +414,7 @@ class PedeseNumeroTextoState extends State<PedeseNumeroTexto> {
           ),
           controller: _textFieldController,
           onChanged: (text) {
-            bloc.eventSink(UpdatePedeseEvent(pedeseKey, text));
+            bloc.eventSink(UpdatePedeseEvent(gabaritoKey, text));
           },
         );
       },
@@ -423,12 +427,12 @@ class ImagemSelect extends StatelessWidget {
   // String _localPath;
 
   final TarefaAbertaResponderBloc bloc;
-  final String pedeseKey;
-  final Pedese pedeseValue;
+  final String gabaritoKey;
+  final Gabarito gabaritoValue;
   ImagemSelect(
     this.bloc,
-    this.pedeseKey,
-    this.pedeseValue,
+    this.gabaritoKey,
+    this.gabaritoValue,
   );
 
   @override
@@ -451,18 +455,18 @@ class ImagemSelect extends StatelessWidget {
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(UpdatePedeseEvent(pedeseKey, localPath));
+                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                     onLongPress: () {
-                      bloc.eventSink(UpdatePedeseEvent(pedeseKey, null));
+                      bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
                     },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _MostrarImagemUnica(
-              uploadID: pedeseValue?.respostaUploadID,
-              url: pedeseValue?.resposta,
-              path: pedeseValue?.respostaPath,
+              uploadID: gabaritoValue?.respostaUploadID,
+              url: gabaritoValue?.resposta,
+              path: gabaritoValue?.respostaPath,
             ),
           ],
         );
@@ -535,12 +539,12 @@ class ArquivoSelect extends StatelessWidget {
   // String _localPath;
 
   final TarefaAbertaResponderBloc bloc;
-  final String pedeseKey;
-  final Pedese pedeseValue;
+  final String gabaritoKey;
+  final Gabarito gabaritoValue;
   ArquivoSelect(
     this.bloc,
-    this.pedeseKey,
-    this.pedeseValue,
+    this.gabaritoKey,
+    this.gabaritoValue,
   );
 
   @override
@@ -563,18 +567,18 @@ class ArquivoSelect extends StatelessWidget {
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(UpdatePedeseEvent(pedeseKey, localPath));
+                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                     onLongPress: () {
-                      bloc.eventSink(UpdatePedeseEvent(pedeseKey, null));
+                      bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
                     },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _MostraArquivo(
-              uploadID: pedeseValue?.respostaUploadID,
-              url: pedeseValue?.resposta,
-              path: pedeseValue?.respostaPath,
+              uploadID: gabaritoValue?.respostaUploadID,
+              url: gabaritoValue?.resposta,
+              path: gabaritoValue?.respostaPath,
             ),
           ],
         );

@@ -211,14 +211,25 @@ class _ImagemUnica extends StatelessWidget {
   final String fotoUrl;
   final String localPath;
 
-  const _ImagemUnica({this.fotoUploadID,this.fotoUrl, this.localPath});
+  const _ImagemUnica({this.fotoUploadID, this.fotoUrl, this.localPath});
 
   @override
   Widget build(BuildContext context) {
+    print('localPath: $localPath');
     Widget foto;
+    Widget enviar = Text('');
     if (fotoUploadID != null && fotoUrl == null) {
-      foto = Center(child: Text('Você não enviou a última imagem selecionada. Vá para o menu Upload de Arquivos.'));
-    }else if (fotoUrl == null && localPath == null) {
+      // enviar = Center(child: Text('Você não enviou a última imagem selecionada. Vá para o menu Upload de Arquivos.'));
+      enviar = Container(
+          child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Center(
+          child: Text(
+              'Você não enviou esta última imagem selecionada. Vá para o menu Upload de Arquivos após salvar este perfil.'),
+        ),
+      ));
+    }
+    if (fotoUrl == null && localPath == null) {
       foto = Center(child: Text('Sem imagem selecionada.'));
     } else if (fotoUrl != null) {
       foto = Container(
@@ -230,22 +241,27 @@ class _ImagemUnica extends StatelessWidget {
       foto = Container(
           // color: Colors.yellow,
           child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Image.asset(localPath),
-          ));
+        padding: const EdgeInsets.all(2.0),
+        child: Image.asset(localPath),
+      ));
     }
 
-    return Row(
+    return Column(
       children: <Widget>[
-        Spacer(
-          flex: 3,
-        ),
-        Expanded(
-          flex: 4,
-          child: foto,
-        ),
-        Spacer(
-          flex: 3,
+        enviar,
+        Row(
+          children: <Widget>[
+            Spacer(
+              flex: 3,
+            ),
+            Expanded(
+              flex: 4,
+              child: foto,
+            ),
+            Spacer(
+              flex: 3,
+            ),
+          ],
         ),
       ],
     );

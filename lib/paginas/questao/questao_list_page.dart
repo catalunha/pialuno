@@ -56,7 +56,7 @@ class _QuestaoListPageState extends State<QuestaoListPage> {
 Turma: ${questao.turma.nome}
 Prof.: ${questao.professor.nome}
 Aval.: ${questao.avaliacao.nome}
-Sit.: ${questao.situacao.nome}
+Sit.: ${questao.problema.nome}
 Inicio: ${questao.inicio}
 fim: ${questao.fim}
 Tentativa | Tempo : ${questao.tentativa} | ${questao.tempo}h

@@ -38,7 +38,7 @@ class _TarefaListPageState extends State<TarefaListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Suas Tarefas nesta avaliação'),
+          title: Text('Tarefas'),
         ),
         body: StreamBuilder<TarefaListBlocState>(
             stream: bloc.stateStream,
@@ -54,19 +54,19 @@ class _TarefaListPageState extends State<TarefaListPage> {
 
                 List<Widget> listaWidget = List<Widget>();
                 String notas = '';
-                Map<String, Pedese> pedeseMap = Map<String, Pedese>();
+                Map<String, Gabarito> gabaritoMap = Map<String, Gabarito>();
 
                 for (var tarefa in snapshot.data.tarefaList) {
                   // print('tarefa.id: ${tarefa.id}');
-                  pedeseMap.clear();
-                  var dicPedese = Dictionary.fromMap(tarefa.pedese);
-                  var pedeseOrderBy = dicPedese
+                  gabaritoMap.clear();
+                  var dicPedese = Dictionary.fromMap(tarefa.gabarito);
+                  var gabaritoOrderBy = dicPedese
                       .orderBy((kv) => kv.value.ordem)
                       .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-                  pedeseMap = pedeseOrderBy.toMap();
+                  gabaritoMap = gabaritoOrderBy.toMap();
                   notas = '';
-                  for (var pedese in pedeseMap.entries) {
-                    notas += '${pedese.value.nome}=${pedese.value.nota ?? ""} ';
+                  for (var gabarito in gabaritoMap.entries) {
+                    notas += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
                   }
                   listaWidget.add(
                     Card(
@@ -78,14 +78,12 @@ class _TarefaListPageState extends State<TarefaListPage> {
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
-Ques.: ${tarefa.situacao.nome}
+Prob.: ${tarefa.problema.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
-Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
-Tempo:  ${tarefa.tempo}h
-Sit.: $notas
-                        '''),
+Tempo:  ${tarefa.tempo}h. Tentou ${tarefa.tentou ?? 0} de ${tarefa.tentativa} tentativa(s).
+Sit.: $notas'''),
 //                         subtitle: Text('''
 // Inicio: ${tarefa.inicio}
 // fim: ${tarefa.fim}

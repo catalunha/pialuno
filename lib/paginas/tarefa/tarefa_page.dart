@@ -51,18 +51,18 @@ class _TarefaPageState extends State<TarefaPage> {
               }
               if (snapshot.data.isDataValid) {
                 String notas = '';
-                Map<String, Pedese> pedeseMap = Map<String, Pedese>();
+                Map<String, Gabarito> gabaritoMap = Map<String, Gabarito>();
                 TarefaModel tarefa = snapshot.data.tarefaModel;
 
-                pedeseMap.clear();
-                var dicPedese = Dictionary.fromMap(tarefa.pedese);
-                var pedeseOrderBy = dicPedese
+                gabaritoMap.clear();
+                var dicPedese = Dictionary.fromMap(tarefa.gabarito);
+                var gabaritoOrderBy = dicPedese
                     .orderBy((kv) => kv.value.ordem)
                     .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-                pedeseMap = pedeseOrderBy.toMap();
+                gabaritoMap = gabaritoOrderBy.toMap();
                 notas = '';
-                for (var pedese in pedeseMap.entries) {
-                  notas += '${pedese.value.nome}=${pedese.value.nota} ';
+                for (var gabarito in gabaritoMap.entries) {
+                  notas += '${gabarito.value.nome}=${gabarito.value.nota} ';
                 }
 
 Widget card = Card(
@@ -74,7 +74,7 @@ Widget card = Card(
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
-Ques.: ${tarefa.situacao.nome}
+Ques.: ${tarefa.problema.nome}
 Inicio: ${tarefa.inicio}
 Iniciou: ${tarefa.iniciou}
 Enviou: ${tarefa.enviou}

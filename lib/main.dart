@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   // Intl.defaultLocale = 'pt_br';
 
     return MaterialApp(
-      title: 'PI - ALUNO',
+      title: 'PI - Aluno',
       theme: ThemeData.dark(),
       // initialRoute: "/tarefa/aberta",
       initialRoute: "/",

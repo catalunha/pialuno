@@ -61,23 +61,16 @@ class TarefaAbertaListBloc {
       _state.usuarioAuth = event.usuarioAuth;
     }
     if (event is UpdateTarefaAbertaListEvent) {
-      _state.tarefaList.clear();
-
       final streamDocsRemetente = _firestore
           .collection(TarefaModel.collection)
           .where("aluno.id", isEqualTo: _state.usuarioAuth.id)
-          .where("ativo", isEqualTo: true)
           .where("aberta", isEqualTo: true)
           .where("inicio", isLessThan: DateTime.now())
-          // .where("fim", isGreaterThan: DateTime.now())
-          // .orderBy('fim', descending: true)
           .snapshots();
 /*
                     Vnow
     ^inicio                     ^fim
         ^iniciou             ^iniciou+tempo
-
-
 */
       final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs
           .documents
@@ -100,7 +93,7 @@ class TarefaAbertaListBloc {
           // print('inicio < fim ::> ${tarefa.inicio.isBefore(tarefa.fim)}');
           // print('inicio < now ::> ${tarefa.inicio.isBefore(DateTime.now())}');
           // print('fim < now ::> ${tarefa.fim.isBefore(DateTime.now())}');
-            // print('Analisando  ::> ${tarefa.id}');
+          // print('Analisando  ::> ${tarefa.id}');
           if (!tarefa.isAberta) {
             final docRef = _firestore
                 .collection(TarefaModel.collection)
@@ -111,6 +104,10 @@ class TarefaAbertaListBloc {
             );
           }
         }
+        if (tarefaList.length > 1) {
+          tarefaList.sort((a, b) => a.questao.numero.compareTo(b.questao.numero));
+        }
+        _state.tarefaList.clear();
         _state.tarefaList = tarefaList;
         if (!_stateController.isClosed) _stateController.add(_state);
       });

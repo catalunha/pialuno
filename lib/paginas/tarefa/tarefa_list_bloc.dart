@@ -74,9 +74,10 @@ class TarefaListBloc {
 
       final streamDocsRemetente = _firestore
           .collection(TarefaModel.collection)
-          .where("ativo", isEqualTo: true)
+          // .where("ativo", isEqualTo: true)
           .where("avaliacao.id", isEqualTo: _state.avaliacaoID)
           .where("aluno.id", isEqualTo: _state.usuarioAuth.id)
+          .where("inicio", isLessThan: DateTime.now())
           .snapshots();
 
       final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs

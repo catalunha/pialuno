@@ -1,11 +1,11 @@
-class SituacaoFk {
+class ProblemaFk {
   String id;
   String nome;
   String url;
 
-  SituacaoFk({this.id, this.nome, this.url});
+  ProblemaFk({this.id, this.nome, this.url});
 
-  SituacaoFk.fromMap(Map<dynamic, dynamic> map) {
+  ProblemaFk.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('id')) id = map['id'];
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('url')) url = map['url'];

@@ -33,7 +33,7 @@ class _TurmaListPageState extends State<TurmaListPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
-        title: Text('Suas turmas'),
+        title: Text('Turmas'),
         body: StreamBuilder<TurmaListBlocState>(
             stream: bloc.stateStream,
             builder: (BuildContext context,

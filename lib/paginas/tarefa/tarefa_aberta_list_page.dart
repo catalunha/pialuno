@@ -53,23 +53,23 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
               if (snapshot.data.isDataValid) {
                 List<Widget> listaWidget = List<Widget>();
                 String notas = '';
-                Map<String, Pedese> pedeseMap = Map<String, Pedese>();
+                Map<String, Gabarito> gabaritoMap = Map<String, Gabarito>();
 
                 for (var tarefa in snapshot.data.tarefaList) {
                   // print('tarefa.id: ${tarefa.id}');
-                  pedeseMap.clear();
-                  var dicPedese = Dictionary.fromMap(tarefa.pedese);
-                  var pedeseOrderBy = dicPedese
+                  gabaritoMap.clear();
+                  var dicPedese = Dictionary.fromMap(tarefa.gabarito);
+                  var gabaritoOrderBy = dicPedese
                       .orderBy((kv) => kv.value.ordem)
                       .toDictionary$1((kv) => kv.key, (kv) => kv.value);
-                  pedeseMap = pedeseOrderBy.toMap();
+                  gabaritoMap = gabaritoOrderBy.toMap();
                   notas = '';
-                  for (var pedese in pedeseMap.entries) {
-                    notas += '${pedese.value.nome}=${pedese.value.nota ?? "?"} ';
+                  for (var gabarito in gabaritoMap.entries) {
+                    notas += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
                   }
                   Widget contador;
                   if (tarefa.tempoPResponder == null) {
-                    contador = Text('${tarefa.tempo} H');
+                    contador = Text('${tarefa.tempo} h');
                   } else {
                     contador = Container(
                       width: 100.0,
@@ -90,19 +90,22 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                   listaWidget.add(
                     Card(
                       child: ListTile(
-                        // trailing: Text('${tarefa.questao.numero}'),
+                        // leading: Text('${tarefa.questao.numero}'),
                         trailing: contador,
                         selected: tarefa.iniciou != null,
-                        title: Text('Tarefa número: ${tarefa.questao.numero}'),
+                        title: Text('Tarefa número: ${tarefa.questao.numero}',style: TextStyle(
+                color: Colors.blue,
+                fontSize: 22.0,
+              )),
                         subtitle: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
-Ques.: ${tarefa.situacao.nome}
+Prob.: ${tarefa.problema.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
-Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
+Tentou ${tarefa.tentou ?? 0} em ${tarefa.tentativa} tentativa(s).
 Sit.: $notas
                         '''),
 //                         subtitle: Text('''

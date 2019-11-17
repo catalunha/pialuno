@@ -36,7 +36,7 @@ class _AvaliacaoListPageState extends State<AvaliacaoListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Suas Avaliações nesta turma'),
+          title: Text('Avaliações'),
         ),
         body: StreamBuilder<AvaliacaoListBlocState>(
             stream: bloc.stateStream,

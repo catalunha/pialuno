@@ -13,10 +13,10 @@ class GetTarefaEvent extends TarefaAbertaResponderBlocEvent {
 }
 
 class UpdatePedeseEvent extends TarefaAbertaResponderBlocEvent {
-  final String pedeseKey;
+  final String gabaritoKey;
   final String valor;
 
-  UpdatePedeseEvent(this.pedeseKey, this.valor);
+  UpdatePedeseEvent(this.gabaritoKey, this.valor);
 }
 
 class SaveEvent extends TarefaAbertaResponderBlocEvent {}
@@ -24,9 +24,9 @@ class SaveEvent extends TarefaAbertaResponderBlocEvent {}
 class TarefaAbertaResponderBlocState {
   bool isDataValid = false;
   TarefaModel tarefaModel = TarefaModel();
-  Map<String, Pedese> pedese = Map<String, Pedese>();
+  Map<String, Gabarito> gabarito = Map<String, Gabarito>();
   void updateStateFromTarefaModel() {
-    pedese = tarefaModel.pedese;
+    gabarito = tarefaModel.gabarito;
   }
 }
 
@@ -102,74 +102,76 @@ class TarefaAbertaResponderBloc {
       if (!_stateController.isClosed) _stateController.add(_state);
     }
     if (event is UpdatePedeseEvent) {
-      // print('UpdatePedeseEvent: ${event.pedeseKey} = ${event.valor}');
-      var pedese = _state.pedese[event.pedeseKey];
-      if (pedese.tipo == 'numero' ||
-          pedese.tipo == 'palavra' ||
-          pedese.tipo == 'url' ||
-          pedese.tipo == 'texto') {
-        pedese.resposta = event.valor;
-      } else if (pedese.tipo == 'imagem' || pedese.tipo == 'arquivo') {
-        pedese.respostaPath = event.valor;
+      // print('UpdatePedeseEvent: ${event.gabaritoKey} = ${event.valor}');
+      var gabarito = _state.gabarito[event.gabaritoKey];
+      if (gabarito.tipo == 'numero' ||
+          gabarito.tipo == 'palavra' ||
+          gabarito.tipo == 'texto' ||
+          gabarito.tipo == 'url' ||
+          gabarito.tipo == 'urlimagem') {
+        gabarito.resposta = event.valor;
+      } else if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
+        gabarito.respostaPath = event.valor;
       }
-      // print(pedese.toMap());
+      // print(gabarito.toMap());
     }
     if (event is SaveEvent) {
-      for (var pedese in _state.pedese.entries) {
-        print('salvando: ${pedese.value.nome}');
+      for (var gabarito in _state.gabarito.entries) {
+        print('salvando: ${gabarito.value.nome}');
         //Corrigir textos e numeros.
-        if (pedese.value.tipo == 'palavra' &&
-            pedese.value.resposta != null &&
-            pedese.value.resposta.isNotEmpty) {
-          if (pedese.value.resposta == pedese.value.gabarito) {
-            _state.pedese[pedese.key].nota = 1;
+        if (gabarito.value.tipo == 'palavra' &&
+            gabarito.value.resposta != null &&
+            gabarito.value.resposta.isNotEmpty) {
+          if (gabarito.value.resposta == gabarito.value.valor) {
+            _state.gabarito[gabarito.key].nota = 1;
           } else {
-            _state.pedese[pedese.key].nota = 0;
+            _state.gabarito[gabarito.key].nota = 0;
           }
         }
-        if (pedese.value.tipo == 'numero' &&
-            pedese.value.resposta != null &&
-            pedese.value.resposta.isNotEmpty) {
-          double resposta = double.parse(pedese.value.resposta);
-          double gabarito = double.parse(pedese.value.gabarito);
+        if (gabarito.value.tipo == 'numero' &&
+            gabarito.value.resposta != null &&
+            gabarito.value.resposta.isNotEmpty) {
+          double resposta = double.parse(gabarito.value.resposta);
+          double valor = double.parse(gabarito.value.valor);
           double erroRelativoCalculado =
-              (resposta - gabarito).abs() / gabarito.abs() * 100;
+              (resposta - valor).abs() / valor.abs() * 100;
           double erroRelativoPermitido =
-              double.parse(_state.tarefaModel.erroRelativo);
+              _state.tarefaModel.erroRelativo.toDouble();
 
           if (erroRelativoCalculado <= erroRelativoPermitido) {
-            _state.pedese[pedese.key].nota = 1;
+            _state.gabarito[gabarito.key].nota = 1;
           } else {
-            _state.pedese[pedese.key].nota = 0;
+            _state.gabarito[gabarito.key].nota = 0;
           }
         }
         // Criar uploadID de imagem e arquivo
-        if ((pedese.value.tipo == 'imagem' || pedese.value.tipo == 'arquivo') &&
-            pedese.value.respostaPath != null) {
+        if ((gabarito.value.tipo == 'imagem' ||
+                gabarito.value.tipo == 'arquivo') &&
+            gabarito.value.respostaPath != null) {
           // Deletar uploadID anterior se existir
-          if (pedese.value.respostaUploadID != null) {
+          if (gabarito.value.respostaUploadID != null) {
             final docRef = _firestore
                 .collection(UploadModel.collection)
-                .document(pedese.value.respostaUploadID);
+                .document(gabarito.value.respostaUploadID);
             await docRef.delete();
-            pedese.value.respostaUploadID = null;
+            gabarito.value.respostaUploadID = null;
           }
           //+++ Cria doc em UpLoadCollection
           final upLoadModel = UploadModel(
             usuario: _state.tarefaModel.aluno.id,
-            path: pedese.value.respostaPath,
+            path: gabarito.value.respostaPath,
             upload: false,
             updateCollection: UpdateCollection(
                 collection: TarefaModel.collection,
                 document: _state.tarefaModel.id,
-                field: "pedese.${pedese.key}.respostaUploadID"),
+                field: "gabarito.${gabarito.key}.resposta"),
           );
           final docRef = _firestore
               .collection(UploadModel.collection)
-              .document(pedese.value.respostaUploadID);
+              .document(gabarito.value.respostaUploadID);
           await docRef.setData(upLoadModel.toMap(), merge: true);
-          //Atualizar o pedese atual com o UploadID
-          _state.pedese[pedese.key].respostaUploadID = docRef.documentID;
+          //Atualizar o gabarito atual com o UploadID
+          _state.gabarito[gabarito.key].respostaUploadID = docRef.documentID;
         }
       }
       final docRef = _firestore
@@ -180,7 +182,7 @@ class TarefaAbertaResponderBloc {
           tentou: Bootstrap.instance.fieldValue.increment(1),
           enviou: Bootstrap.instance.fieldValue.serverTimestamp(),
           modificado: Bootstrap.instance.fieldValue.serverTimestamp(),
-          pedese: _state.pedese,
+          gabarito: _state.gabarito,
           aberta: _state.tarefaModel.isAberta);
 
       await docRef.setData(

@@ -2,7 +2,7 @@ import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/avaliacao_model.dart';
 import 'package:pialuno/modelos/base_model.dart';
 import 'package:pialuno/modelos/questao_model.dart';
-import 'package:pialuno/modelos/situacao_model.dart';
+import 'package:pialuno/modelos/problema_model.dart';
 import 'package:pialuno/modelos/turma_model.dart';
 import 'package:pialuno/modelos/usuario_model.dart';
 
@@ -22,14 +22,14 @@ class TarefaModel extends FirestoreModel {
   int tentativa;
   dynamic tentou;
   int tempo;
-  String erroRelativo;
+  int erroRelativo;
   String avaliacaoNota;
   String questaoNota;
   bool aberta;
-  SituacaoFk situacao;
+  ProblemaFk problema;
   String simulacao;
   Map<String, Variavel> variavel;
-  Map<String, Pedese> pedese;
+  Map<String, Gabarito> gabarito;
 
   // dynamic responderAte;
   // dynamic _tempoPResponder;
@@ -54,10 +54,10 @@ class TarefaModel extends FirestoreModel {
     this.avaliacaoNota,
     this.questaoNota,
     this.aberta,
-    this.situacao,
+    this.problema,
     this.simulacao,
     this.variavel,
-    this.pedese,
+    this.gabarito,
   }) : super(id);
 
   @override
@@ -106,8 +106,8 @@ class TarefaModel extends FirestoreModel {
     if (map.containsKey('questaoNota')) questaoNota = map['questaoNota'];
 
     if (map.containsKey('aberta')) aberta = map['aberta'];
-    situacao = map.containsKey('situacao') && map['situacao'] != null
-        ? SituacaoFk.fromMap(map['situacao'])
+    problema = map.containsKey('problema') && map['problema'] != null
+        ? ProblemaFk.fromMap(map['problema'])
         : null;
     if (map.containsKey('simulacao')) simulacao = map['simulacao'];
 
@@ -117,10 +117,10 @@ class TarefaModel extends FirestoreModel {
         variavel[item.key] = Variavel.fromMap(item.value);
       }
     }
-    if (map["pedese"] is Map) {
-      pedese = Map<String, Pedese>();
-      for (var item in map["pedese"].entries) {
-        pedese[item.key] = Pedese.fromMap(item.value);
+    if (map["gabarito"] is Map) {
+      gabarito = Map<String, Gabarito>();
+      for (var item in map["gabarito"].entries) {
+        gabarito[item.key] = Gabarito.fromMap(item.value);
       }
     }
     // _updateAll();
@@ -160,8 +160,8 @@ class TarefaModel extends FirestoreModel {
     if (questaoNota != null) data['questaoNota'] = this.questaoNota;
     if (aberta != null) data['aberta'] = aberta;
 
-    if (this.situacao != null) {
-      data['situacao'] = this.situacao.toMap();
+    if (this.problema != null) {
+      data['problema'] = this.problema.toMap();
     }
 
     if (simulacao != null) data['simulacao'] = this.simulacao;
@@ -172,10 +172,10 @@ class TarefaModel extends FirestoreModel {
         data["variavel"][item.key] = item.value.toMap();
       }
     }
-    if (pedese != null && pedese is Map) {
-      data["pedese"] = Map<String, dynamic>();
-      for (var item in pedese.entries) {
-        data["pedese"][item.key] = item.value.toMap();
+    if (gabarito != null && gabarito is Map) {
+      data["gabarito"] = Map<String, dynamic>();
+      for (var item in gabarito.entries) {
+        data["gabarito"][item.key] = item.value.toMap();
       }
     }
     return data;
@@ -260,38 +260,34 @@ class Variavel {
   }
 }
 
-class Pedese {
+class Gabarito {
   String nome;
   int ordem;
   String tipo;
-  String gabarito;
+  String valor;
   String resposta;
   int nota;
-  String gabaritoUploadID;
   String respostaUploadID;
   String respostaPath;
 
-  Pedese({
+  Gabarito({
     this.nome,
     this.ordem,
     this.tipo,
-    this.gabarito,
+    this.valor,
     this.resposta,
     this.nota,
-    this.gabaritoUploadID,
     this.respostaPath,
     this.respostaUploadID,
   });
 
-  Pedese.fromMap(Map<dynamic, dynamic> map) {
+  Gabarito.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('ordem')) ordem = map['ordem'];
     if (map.containsKey('tipo')) tipo = map['tipo'];
-    if (map.containsKey('gabarito')) gabarito = map['gabarito'];
+    if (map.containsKey('valor')) valor = map['valor'];
     if (map.containsKey('resposta')) resposta = map['resposta'];
     if (map.containsKey('nota')) nota = map['nota'];
-    if (map.containsKey('gabaritoUploadID'))
-      gabaritoUploadID = map['gabaritoUploadID'];
     if (map.containsKey('respostaPath')) respostaPath = map['respostaPath'];
     if (map.containsKey('respostaUploadID'))
       respostaUploadID = map['respostaUploadID'];
@@ -302,11 +298,9 @@ class Pedese {
     if (nome != null) data['nome'] = this.nome;
     if (ordem != null) data['ordem'] = this.ordem;
     if (tipo != null) data['tipo'] = this.tipo;
-    if (gabarito != null) data['gabarito'] = this.gabarito;
+    if (valor != null) data['valor'] = this.valor;
     if (resposta != null) data['resposta'] = this.resposta;
     data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
-    if (gabaritoUploadID != null)
-      data['gabaritoUploadID'] = this.gabaritoUploadID;
     if (respostaPath != null) data['respostaPath'] = this.respostaPath;
     if (respostaUploadID != null)
       data['respostaUploadID'] = this.respostaUploadID;
