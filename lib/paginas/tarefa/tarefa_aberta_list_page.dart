@@ -66,7 +66,8 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                   gabaritoMap = gabaritoOrderBy.toMap();
                   notas = '';
                   for (var gabarito in gabaritoMap.entries) {
-                    notas += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
+                    notas +=
+                        '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
                   }
                   Widget contador;
                   if (tarefa.tempoPResponder == null) {
@@ -74,7 +75,7 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                   } else {
                     contador = Container(
                       width: 100.0,
-                      // padding: EdgeInsets.only(top: 3.0, right: 4.0),
+                      padding: EdgeInsets.only(top: 3.0, right: 4.0),
                       child: CountDownTimer(
                         secondsRemaining: tarefa.tempoPResponder.inSeconds,
                         whenTimeExpires: () {
@@ -82,49 +83,48 @@ class _TarefaAbertaListPageState extends State<TarefaAbertaListPage> {
                           print('terminou clock');
                         },
                         countDownTimerStyle: TextStyle(
-                            color: Color(0XFFf5a623),
-                            fontSize: 17.0,
-                            height: 2),
+                          color: Colors.red,
+                          fontSize: 24.0,
+                          // height: 2,
+                        ),
                       ),
                     );
                   }
                   listaWidget.add(
                     Card(
-                      child: ListTile(
-                        // leading: Text('${tarefa.questao.numero}'),
-                        trailing: contador,
-                        selected: tarefa.iniciou != null,
-                        title: Text('Tarefa número: ${tarefa.questao.numero}',style: TextStyle(
-                color: Colors.blue,
-                fontSize: 22.0,
-              )),
-                        subtitle: Text('''
+                      child: Column(
+                        children: <Widget>[
+                          ListTile(
+                            title: Text(
+                              'Tarefa número: ${tarefa.questao.numero}',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 22.0,
+                              ),
+                            ),
+                            trailing: contador,
+                          ),
+                          ListTile(
+                            selected: tarefa.iniciou != null,
+                            subtitle: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Prob.: ${tarefa.problema.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
-Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
-Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
-Tentou ${tarefa.tentou ?? 0} em ${tarefa.tentativa} tentativa(s).
+Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}. Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
+Usou ${tarefa.tentou ?? 0} de ${tarefa.tentativa} tentativas.
 Sit.: $notas
-                        '''),
-//                         subtitle: Text('''
-// id: ${tarefa.id}
-// Inicio: ${tarefa.inicio}
-// Iniciou: ${tarefa.iniciou}
-// Enviou: ${tarefa.enviou}
-// fim: ${tarefa.fim}
-// Aberta: ${tarefa.aberta}
-// Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
-//                         '''),
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            "/tarefa/responder",
-                            arguments: tarefa.id,
-                          );
-                        },
+                            '''),
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                "/tarefa/responder",
+                                arguments: tarefa.id,
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   );

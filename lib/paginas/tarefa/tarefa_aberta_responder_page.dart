@@ -114,10 +114,11 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             // listaWidget.add(
             Widget proposta = Card(
               child: ListTile(
-                trailing: Text('Número: ${tarefa.questao.numero}',style: TextStyle(
-                color: Colors.blue,
-                fontSize: 20.0,
-              )),
+                trailing: Text('Tarefa: ${tarefa.questao.numero}',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 20.0,
+                    )),
                 title: Text('''
 Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
@@ -134,7 +135,7 @@ Sit.: $nota'''),
               ),
             );
 
-            return Column(children: <Widget>[
+            return ListView(children: <Widget>[
               proposta,
               pdf,
             ]);
@@ -181,33 +182,83 @@ Sit.: $nota'''),
               } else if (variavel.value.tipo == 'texto') {
                 icone = Icon(Icons.text_fields);
               } else if (variavel.value.tipo == 'url') {
-                icone = IconButton(
-                  tooltip: 'Um link ao um site ou arquivo',
-                  icon: Icon(Icons.link),
-                  onPressed: () {
-                    launch(variavel.value.valor);
-                  },
-                );
+                icone = Icon(Icons.link);
               } else if (variavel.value.tipo == 'urlimagem') {
-                icone = IconButton(
-                  tooltip: 'Link para uma imagem',
-                  icon: Icon(Icons.image),
-                  onPressed: () {
-                    launch(variavel.value.valor);
-                  },
-                );
+                icone = Icon(Icons.image);
               }
 
-              listaWidget.add(
-                Card(
-                  child: ListTile(
-                    title: Text('${variavel.value.nome}'),
-                    subtitle: Text('${variavel?.value?.valor}'),
-                    trailing: icone,
+              // listaWidget.add(
+              //   Card(
+              //     child: ListTile(
+              //       title: Text('${variavel.value.nome}'),
+              //       subtitle: Text('${variavel?.value?.valor}'),
+              //       trailing: icone,
+              //     ),
+              //   ),
+              // );
+
+              if (variavel.value.tipo == 'urlimagem') {
+                String linkValorModificado;
+                if (variavel?.value?.valor != null &&
+                    variavel.value.valor.contains('drive.google.com/open')) {
+                  linkValorModificado =
+                      variavel.value.valor.replaceFirst('open', 'uc');
+                } else {
+                  linkValorModificado = variavel.value.valor;
+                }
+                listaWidget.add(
+                  Card(
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          title: Text('${variavel.value.nome}'),
+                          // subtitle: Text('${variavel?.value?.valor}'),
+                          trailing: icone,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 2,
+                              child: _MostraImagemUnica(
+                                urlModificada: linkValorModificado,
+                                urlOriginal: variavel.value.valor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
+                );
+              } else if (variavel.value.tipo == 'url') {
+                listaWidget.add(
+                  Card(
+                    child: ListTile(
+                      title: Text('${variavel.value.nome}'),
+                      subtitle: Text('${variavel?.value?.valor}'),
+                      trailing: icone,
+                      onTap: () {
+                        launch(variavel.value.valor);
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                listaWidget.add(
+                  Card(
+                    child: ListTile(
+                      title: Text('${variavel.value.nome}'),
+                      subtitle: Text('${variavel?.value?.valor}'),
+                      trailing: icone,
+                    ),
+                  ),
+                );
+              }
             }
+            listaWidget.add(Container(
+              padding: EdgeInsets.only(top: 70),
+            ));
+
             return Column(children: <Widget>[
               _descricaoAba('Na proposta considere os seguintes valores:'),
               _bodyAba(listaWidget)
@@ -244,16 +295,39 @@ Sit.: $nota'''),
                 .orderBy((kv) => kv.value.ordem)
                 .toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
+            Widget icone;
+
             for (var gabarito in gabaritoMap.entries) {
+              Color cor;
+              if (gabarito.value.nota != null && gabarito.value.nota == 1) {
+                cor = Colors.green;
+              }
+              if (gabarito.value.tipo == 'numero') {
+                icone = Icon(Icons.looks_one, color: cor);
+              } else if (gabarito.value.tipo == 'palavra') {
+                icone = Icon(Icons.text_format, color: cor);
+              } else if (gabarito.value.tipo == 'texto') {
+                icone = Icon(Icons.text_fields, color: cor);
+              } else if (gabarito.value.tipo == 'url') {
+                icone = Icon(Icons.link, color: cor);
+              } else if (gabarito.value.tipo == 'urlimagem') {
+                icone = Icon(Icons.image, color: cor);
+              } else if (gabarito.value.tipo == 'arquivo') {
+                icone = Icon(Icons.description, color: cor);
+              } else if (gabarito.value.tipo == 'imagem') {
+                icone = Icon(Icons.photo_album, color: cor);
+              }
+
               listaWidget.add(
                 ListTile(
                   title: Text(
                     '${gabarito.value.nome}',
                   ),
-                  selected: gabarito.value.nota != null,
-                  trailing:
-                      gabarito.value.nota == null ? Text('') : Icon(Icons.check),
-                      // gabarito.value.nota == null ? Text('') : Text('Sit.: ${gabarito.value.nota}'),
+                  trailing: icone,
+                  // selected: gabarito.value.nota != null,
+                  // trailing: gabarito.value.nota == null
+                  //     ? Text('')
+                  //     : Icon(Icons.check),
                 ),
               );
 
@@ -293,10 +367,9 @@ Sit.: $nota'''),
                 }
               }
             }
-            // return Column(children: listaWidget);
-                          listaWidget.add(Container(
-                  padding: EdgeInsets.only(top: 70),
-                ));
+            listaWidget.add(Container(
+              padding: EdgeInsets.only(top: 70),
+            ));
 
             return ListView(
               children: listaWidget,
@@ -460,7 +533,8 @@ class ImagemSelect extends StatelessWidget {
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
+                        bloc.eventSink(
+                            UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                     // onLongPress: () {
@@ -468,7 +542,7 @@ class ImagemSelect extends StatelessWidget {
                     // },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
-            _MostrarImagem(
+            _UploadImagem(
               uploadID: gabaritoValue?.respostaUploadID,
               url: gabaritoValue?.resposta,
               path: gabaritoValue?.respostaPath,
@@ -492,12 +566,12 @@ class ImagemSelect extends StatelessWidget {
   }
 }
 
-class _MostrarImagem extends StatelessWidget {
+class _UploadImagem extends StatelessWidget {
   final String uploadID;
   final String url;
   final String path;
 
-  const _MostrarImagem({this.uploadID, this.url, this.path});
+  const _UploadImagem({this.uploadID, this.url, this.path});
 
   @override
   Widget build(BuildContext context) {
@@ -555,7 +629,7 @@ class _MostrarImagem extends StatelessWidget {
               flex: 2,
             ),
             Expanded(
-              flex: 2,
+              flex: 10,
               child: foto,
             ),
             Spacer(
@@ -567,12 +641,75 @@ class _MostrarImagem extends StatelessWidget {
     );
   }
 }
-// class _MostrarImagemUnica extends StatelessWidget {
+
+class _MostraImagemUnica extends StatelessWidget {
+  final String urlModificada;
+  final String urlOriginal;
+
+  const _MostraImagemUnica({this.urlModificada, this.urlOriginal});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget url;
+    Widget link;
+
+    link = Center(child: Text('Sem link para imagem.'));
+    if (urlModificada == null) {
+      url = Center(child: Text('Sem imagem nesta resposta.'));
+    } else {
+      if (urlOriginal != null) {
+        link = ListTile(
+          title: Text('Se não visualizar a imagem click aqui para ir ao link.'),
+          trailing: Icon(Icons.launch),
+          onTap: () {
+            launch(urlOriginal);
+          },
+        );
+      }
+
+      try {
+        url = Container(
+          child: Image.network(urlModificada),
+        );
+      } on Exception {
+        url = ListTile(
+          title: Text('Não consegui abrir este link como imagem. Use o link.'),
+        );
+      } catch (e) {
+        url = ListTile(
+          title: Text('Não consegui abrir este link como imagem. Use o link.'),
+        );
+      }
+    }
+
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Spacer(
+              flex: 1,
+            ),
+            Expanded(
+              flex: 16,
+              child: url,
+            ),
+            Spacer(
+              flex: 1,
+            ),
+          ],
+        ),
+        link,
+      ],
+    );
+  }
+}
+
+// class _UploadImagemUnica extends StatelessWidget {
 //   final String uploadID;
 //   final String url;
 //   final String path;
 
-//   const _MostrarImagemUnica({this.uploadID, this.url, this.path});
+//   const _UploadImagemUnica({this.uploadID, this.url, this.path});
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -647,7 +784,8 @@ class ArquivoSelect extends StatelessWidget {
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
+                        bloc.eventSink(
+                            UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                     // onLongPress: () {
@@ -655,7 +793,7 @@ class ArquivoSelect extends StatelessWidget {
                     // },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
-            _MostraArquivo(
+            _UploadArquivo(
               uploadID: gabaritoValue?.respostaUploadID,
               url: gabaritoValue?.resposta,
               path: gabaritoValue?.respostaPath,
@@ -679,12 +817,12 @@ class ArquivoSelect extends StatelessWidget {
   }
 }
 
-class _MostraArquivo extends StatelessWidget {
+class _UploadArquivo extends StatelessWidget {
   final String uploadID;
   final String url;
   final String path;
 
-  const _MostraArquivo({this.uploadID, this.url, this.path});
+  const _UploadArquivo({this.uploadID, this.url, this.path});
 
   @override
   Widget build(BuildContext context) {
@@ -695,7 +833,6 @@ class _MostraArquivo extends StatelessWidget {
       arquivo = Text('Você ainda não enviou um arquivo.');
     }
     if (path != null && url == null) {
-
       arquivo = ListTile(
         title: Text('Arquivo local.'),
         subtitle: Text('$path'),
@@ -705,14 +842,14 @@ class _MostraArquivo extends StatelessWidget {
     }
     if (url != null && uploadID != null) {
       try {
-          arquivo = ListTile(
-        title: Text('Arquivo em nuvem.'),
-        subtitle: Text('$url'),
-        trailing: Icon(Icons.link),
-        onTap: () {
-          launch(url);
-        },
-      );
+        arquivo = ListTile(
+          title: Text('Arquivo em nuvem.'),
+          subtitle: Text('$url'),
+          trailing: Icon(Icons.launch),
+          onTap: () {
+            launch(url);
+          },
+        );
       } on Exception {
         print('Exception');
         msg = ListTile(
@@ -734,12 +871,12 @@ class _MostraArquivo extends StatelessWidget {
   }
 }
 
-// class _MostraArquivo extends StatelessWidget {
+// class _UploadArquivo extends StatelessWidget {
 //   final String uploadID;
 //   final String url;
 //   final String path;
 
-//   const _MostraArquivo({this.uploadID, this.url, this.path});
+//   const _UploadArquivo({this.uploadID, this.url, this.path});
 
 //   @override
 //   Widget build(BuildContext context) {
