@@ -537,9 +537,9 @@ class ImagemSelect extends StatelessWidget {
                             UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                    // onLongPress: () {
-                    //   bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
-                    // },
+                    onLongPress: () {
+                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                    },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _UploadImagem(
@@ -788,9 +788,9 @@ class ArquivoSelect extends StatelessWidget {
                             UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                    // onLongPress: () {
-                    //   bloc.eventSink(UpdatePedeseEvent(gabaritoKey, null));
-                    // },
+                    onLongPress: () {
+                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                    },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _UploadArquivo(

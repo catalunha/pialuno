@@ -57,8 +57,7 @@ class SimulacaoModel extends FirestoreModel {
       algoritmoDoAdmin = map['algoritmoDoAdmin'];
     if (map.containsKey('algoritmoDoProfessor'))
       algoritmoDoProfessor = map['algoritmoDoProfessor'];
-    if (map.containsKey('ordemAdicionada'))
-      ordem = map['ordemAdicionada'];
+    if (map.containsKey('ordemAdicionada')) ordem = map['ordemAdicionada'];
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('descricao')) descricao = map['descricao'];
     if (map.containsKey('url')) url = map['url'];
@@ -186,15 +185,14 @@ class Gabarito {
     if (ordem != null) data['ordem'] = this.ordem;
     if (tipo != null) data['tipo'] = this.tipo;
     if (valor != null) data['valor'] = this.valor;
-    if (resposta != null) data['resposta'] = this.resposta;
-    data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
-    if (respostaPath != null) data['respostaPath'] = this.respostaPath;
-    if (respostaUploadID != null)
-      data['respostaUploadID'] = this.respostaUploadID;
+    data['resposta'] = this.resposta;
+    // data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
+    data['nota'] = this.nota;
+    data['respostaPath'] = this.respostaPath;
+    data['respostaUploadID'] = this.respostaUploadID;
     return data;
   }
 }
-
 
 class SimulacaoFk {
   String id;

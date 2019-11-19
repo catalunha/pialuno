@@ -37,4 +37,5 @@ O armazenamento de chaves JKS usa um formato proprietário. É recomendada a mig
 
 https://developers.google.com/android/guides/client-auth
 
-keytool -exportcert -list -v -alias pibrintec -keystore ./pibrintec.keystore
+keytool  -list -v -alias pibrintec -keystore ./pibrintec.keystore
+

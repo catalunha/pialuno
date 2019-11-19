@@ -3,7 +3,6 @@ import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/componentes/default_scaffold.dart';
 import 'package:pialuno/paginas/login/bemvindo_bloc.dart';
 
-
 class BemVindoPage extends StatefulWidget {
   final AuthBloc authBloc;
 
@@ -44,7 +43,13 @@ class _BemVindoPageState extends State<BemVindoPage> {
       ),
       body: Center(
         child: Text(
-            "Seja bem vindo(a)\nAo Aplicativo PI, versão para aluno.\nAqui você responde de forma simples\nsuas tarefas de escola, curso ou faculdade."),
+          "Seja bem vindo(a)\nAo Aplicativo PI, versão para aluno.\nAqui você responde de forma simples\nsuas tarefas de escola, curso ou faculdade.",
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 22.0,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

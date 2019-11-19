@@ -20,6 +20,14 @@ class UpdatePedeseEvent extends TarefaAbertaResponderBlocEvent {
   UpdatePedeseEvent(this.gabaritoKey, this.valor);
 }
 
+class UpdateApagarAnexoImagemArquivoEvent
+    extends TarefaAbertaResponderBlocEvent {
+  final String gabaritoKey;
+  final String valor;
+
+  UpdateApagarAnexoImagemArquivoEvent(this.gabaritoKey, this.valor);
+}
+
 class SaveEvent extends TarefaAbertaResponderBlocEvent {}
 
 class TarefaAbertaResponderBlocState {
@@ -110,16 +118,30 @@ class TarefaAbertaResponderBloc {
           gabarito.tipo == 'texto' ||
           gabarito.tipo == 'url' ||
           gabarito.tipo == 'urlimagem') {
-        gabarito.resposta = event.valor;
+        _state.gabarito[event.gabaritoKey].resposta = event.valor;
       } else if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
-        gabarito.respostaPath = event.valor;
-        gabarito.resposta = null;
+        _state.gabarito[event.gabaritoKey].respostaPath = event.valor;
+        _state.gabarito[event.gabaritoKey].resposta = null;
       }
       // print(gabarito.toMap());
     }
+    if (event is UpdateApagarAnexoImagemArquivoEvent) {
+      print('apagar');
+      var gabarito = _state.gabarito[event.gabaritoKey];
+      if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
+        _state.gabarito[event.gabaritoKey].respostaUploadID = null;
+        _state.gabarito[event.gabaritoKey].respostaPath = null;
+        _state.gabarito[event.gabaritoKey].resposta = null;
+      }
+      print(_state.gabarito[event.gabaritoKey]);
+    }
+
     if (event is SaveEvent) {
       for (var gabarito in _state.gabarito.entries) {
         print('salvando: ${gabarito.value.nome}');
+        print('salvando: ${gabarito.value.resposta}');
+        print('salvando: ${gabarito.value.respostaPath}');
+        print('salvando: ${gabarito.value.respostaUploadID}');
         //Corrigir textos e numeros.
         if (gabarito.value.tipo == 'palavra' &&
             gabarito.value.resposta != null &&
@@ -150,7 +172,7 @@ class TarefaAbertaResponderBloc {
         if ((gabarito.value.tipo == 'imagem' ||
                 gabarito.value.tipo == 'arquivo') &&
             gabarito.value.respostaPath != null) {
-          // Deletar uploadID anterior se existir
+          //+++ Deletar uploadID anterior se existir
           if (gabarito.value.respostaUploadID != null) {
             final docRef = _firestore
                 .collection(UploadModel.collection)
@@ -158,6 +180,7 @@ class TarefaAbertaResponderBloc {
             await docRef.delete();
             gabarito.value.respostaUploadID = null;
           }
+          //--- Deletar uploadID anterior se existir
           //+++ Cria doc em UpLoadCollection
           final upLoadModel = UploadModel(
             usuario: _state.tarefaModel.aluno.id,
@@ -172,8 +195,16 @@ class TarefaAbertaResponderBloc {
               .collection(UploadModel.collection)
               .document(gabarito.value.respostaUploadID);
           await docRef.setData(upLoadModel.toMap(), merge: true);
+          //--- Cria doc em UpLoadCollection
           //Atualizar o gabarito atual com o UploadID
           _state.gabarito[gabarito.key].respostaUploadID = docRef.documentID;
+        }
+        if (gabarito.value.resposta == null &&
+            gabarito.value.respostaPath == null &&
+            gabarito.value.respostaUploadID == null) {
+          _state.gabarito[gabarito.key].resposta = null;
+          _state.gabarito[gabarito.key].respostaPath = null;
+          _state.gabarito[gabarito.key].respostaUploadID = null;
         }
       }
       final docRef = _firestore

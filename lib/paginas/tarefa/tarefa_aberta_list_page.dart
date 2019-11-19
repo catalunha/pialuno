@@ -152,7 +152,7 @@ Sit.: $notas
               'Ufa!!!.\nNão tem nenhuma tarefa aberta pra eu resolver agora.\nMas preciso me preparar.',
               // style: Theme.of(context).textTheme.headline,
               style: TextStyle(
-                color: Colors.green,
+                color: Colors.blue,
                 fontSize: 32.0,
               ),
               textAlign: TextAlign.center,
