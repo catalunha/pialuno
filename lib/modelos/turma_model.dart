@@ -9,6 +9,7 @@ class TurmaModel extends FirestoreModel {
   String componente;
   String nome;
   String descricao;
+  String programa;
   UsuarioFk professor;
   dynamic questaoNumeroAdicionado;
   dynamic questaoNumeroExcluido;
@@ -21,6 +22,7 @@ class TurmaModel extends FirestoreModel {
     this.componente,
     this.nome,
     this.descricao,
+    this.programa,
     this.professor,
     this.questaoNumeroAdicionado,
     this.questaoNumeroExcluido,
@@ -34,6 +36,7 @@ class TurmaModel extends FirestoreModel {
     if (map.containsKey('componente')) componente = map['componente'];
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('descricao')) descricao = map['descricao'];
+    if (map.containsKey('programa')) programa = map['programa'];
     professor = map.containsKey('professor') && map['professor'] != null
         ? UsuarioFk.fromMap(map['professor'])
         : null;
@@ -54,6 +57,7 @@ class TurmaModel extends FirestoreModel {
     if (componente != null) data['componente'] = this.componente;
     if (nome != null) data['nome'] = this.nome;
     if (descricao != null) data['descricao'] = this.descricao;
+    if (programa != null) data['programa'] = this.programa;
     if (this.professor != null) {
       data['professor'] = this.professor.toMap();
     }
