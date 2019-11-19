@@ -1,10 +1,13 @@
 
 http://www.androiddocs.com/tools/publishing/app-signing.html#release-mode
 
-keytool -genkey -v -keystore pibrintec.keystore -alias pibrintec -keyalg RSA -keysize 2048 -validity 10000
 
+Esta chave e senha atende apenas ao pialuno
+keytool -genkey -v -keystore pibrintec.keystore -alias pibrintec -keyalg RSA -keysize 2048 -validity 10000
 senha: pibrintecappkey
 alias: pibrintec
+
+
 
 ~~~
 catalunha@nb:~/projetos-flutter/pialuno$ keytool -genkey -v -keystore pibrintec.keystore -aliaslg RSA -keysize 2048 -validity 10000
