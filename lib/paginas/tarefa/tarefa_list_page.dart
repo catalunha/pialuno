@@ -75,13 +75,13 @@ class _TarefaListPageState extends State<TarefaListPage> {
                         // trailing: Text('${tarefa.questao.numero}'),
                         trailing: Text('${tarefa.questao.numero}'),
                         // selected: tarefa.iniciou != null,
+// Turma: ${tarefa.turma.nome}
+// Prof.: ${tarefa.professor.nome}
+// Aval.: ${tarefa.avaliacao.nome}
                         title: Text('''
-Turma: ${tarefa.turma.nome}
-Prof.: ${tarefa.professor.nome}
-Aval.: ${tarefa.avaliacao.nome}
 Prob.: ${tarefa.problema.nome}
 Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
-Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}. Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
+Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}. Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}.
 Tempo:  ${tarefa.tempo}h. Usou ${tarefa.tentou ?? 0} das ${tarefa.tentativa} tentativas.
 Sit.: $notas'''),
 //                         subtitle: Text('''

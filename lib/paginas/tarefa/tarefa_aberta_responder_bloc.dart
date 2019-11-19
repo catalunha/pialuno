@@ -35,7 +35,11 @@ class TarefaAbertaResponderBlocState {
   TarefaModel tarefaModel = TarefaModel();
   Map<String, Gabarito> gabarito = Map<String, Gabarito>();
   void updateStateFromTarefaModel() {
-    gabarito = tarefaModel.gabarito;
+    for (var item in tarefaModel.gabarito.entries) {
+          gabarito[item.key] = item.value;
+
+    }
+    // gabarito = tarefaModel.gabarito;
   }
 }
 
@@ -89,9 +93,6 @@ class TarefaAbertaResponderBloc {
       _state.tarefaModel =
           TarefaModel(id: docSnap.documentID).fromMap(docSnap.data);
 
-      // final snapTarefa = streamDocsSnap
-      //     .map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data));
-      // snapTarefa.listen((TarefaModel tarefa) async {
       _state.tarefaModel.modificado = DateTime.now();
       _state.tarefaModel.updateAll();
       if (_state.tarefaModel.iniciou == null) {
@@ -111,7 +112,10 @@ class TarefaAbertaResponderBloc {
       if (!_stateController.isClosed) _stateController.add(_state);
     }
     if (event is UpdatePedeseEvent) {
-      // print('UpdatePedeseEvent: ${event.gabaritoKey} = ${event.valor}');
+      print('UpdatePedeseEvent: ${event.gabaritoKey} = ${event.valor}');
+      print('a' + _state.gabarito[event.gabaritoKey].resposta ?? null);
+      print('b' + _state.tarefaModel.gabarito[event.gabaritoKey].resposta ??
+          null);
       var gabarito = _state.gabarito[event.gabaritoKey];
       if (gabarito.tipo == 'numero' ||
           gabarito.tipo == 'palavra' ||
@@ -119,11 +123,18 @@ class TarefaAbertaResponderBloc {
           gabarito.tipo == 'url' ||
           gabarito.tipo == 'urlimagem') {
         _state.gabarito[event.gabaritoKey].resposta = event.valor;
-      } else if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
+      }
+      if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
         _state.gabarito[event.gabaritoKey].respostaPath = event.valor;
         _state.gabarito[event.gabaritoKey].resposta = null;
       }
-      // print(gabarito.toMap());
+      // print('arquivo ou numero');
+      // print(_state.gabarito[event.gabaritoKey].respostaPath ?? null);
+      // print(
+      //     _state.tarefaModel.gabarito[event.gabaritoKey].respostaPath ?? null);
+      print('c' + _state.gabarito[event.gabaritoKey].resposta ?? null);
+      print('d' + _state.tarefaModel.gabarito[event.gabaritoKey].resposta ??
+          null);
     }
     if (event is UpdateApagarAnexoImagemArquivoEvent) {
       print('apagar');
@@ -138,11 +149,7 @@ class TarefaAbertaResponderBloc {
 
     if (event is SaveEvent) {
       for (var gabarito in _state.gabarito.entries) {
-        print('salvando: ${gabarito.value.nome}');
-        print('salvando: ${gabarito.value.resposta}');
-        print('salvando: ${gabarito.value.respostaPath}');
-        print('salvando: ${gabarito.value.respostaUploadID}');
-        //Corrigir textos e numeros.
+        //+++ Corrigir textos.
         if (gabarito.value.tipo == 'palavra' &&
             gabarito.value.resposta != null &&
             gabarito.value.resposta.isNotEmpty) {
@@ -152,6 +159,8 @@ class TarefaAbertaResponderBloc {
             _state.gabarito[gabarito.key].nota = 0;
           }
         }
+        //--- Corrigir textos.
+        //+++ Corrigir numeros.
         if (gabarito.value.tipo == 'numero' &&
             gabarito.value.resposta != null &&
             gabarito.value.resposta.isNotEmpty) {
@@ -168,10 +177,19 @@ class TarefaAbertaResponderBloc {
             _state.gabarito[gabarito.key].nota = 0;
           }
         }
+        //+++ Corrigir numeros.
+        if (gabarito.value.tipo == 'imagem' ||
+            gabarito.value.tipo == 'arquivo') {
+          print('arquivo ou numero');
+          print(gabarito.value.respostaPath);
+          print(_state.tarefaModel.gabarito[gabarito.key].respostaPath);
+        }
         // Criar uploadID de imagem e arquivo
         if ((gabarito.value.tipo == 'imagem' ||
                 gabarito.value.tipo == 'arquivo') &&
-            gabarito.value.respostaPath != null) {
+            gabarito.value.respostaPath != null &&
+            gabarito.value.respostaPath !=
+                _state.tarefaModel.gabarito[gabarito.key].respostaPath) {
           //+++ Deletar uploadID anterior se existir
           if (gabarito.value.respostaUploadID != null) {
             final docRef = _firestore

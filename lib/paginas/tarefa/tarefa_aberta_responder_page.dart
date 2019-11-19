@@ -56,13 +56,29 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
           ),
         ),
         body: _body(context),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.cloud_upload),
-          onPressed: () {
-            bloc.eventSink(SaveEvent());
-            // Navigator.pop(context);
+        floatingActionButton: StreamBuilder<TarefaAbertaResponderBlocState>(
+          stream: bloc.stateStream,
+          builder: (BuildContext context,
+              AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+            if (snapshot.hasError) {
+              return Text("ERROR");
+            }
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.data.isDataValid) {
+              return FloatingActionButton(
+                child: Icon(Icons.cloud_upload),
+                onPressed: () {
+                  bloc.eventSink(SaveEvent());
+                  // Navigator.pop(context);
 
-            // Navigator.pushNamed(context, '/painel/crud', arguments: null);
+                  // Navigator.pushNamed(context, '/painel/crud', arguments: null);
+                },
+              );
+            }else{
+              return null;
+            }
           },
         ),
       ),
@@ -538,7 +554,8 @@ class ImagemSelect extends StatelessWidget {
                       });
                     },
                     onLongPress: () {
-                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                          gabaritoKey, null));
                     },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
@@ -789,7 +806,8 @@ class ArquivoSelect extends StatelessWidget {
                       });
                     },
                     onLongPress: () {
-                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                          gabaritoKey, null));
                     },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
