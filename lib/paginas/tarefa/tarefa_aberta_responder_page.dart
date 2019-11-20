@@ -3,14 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
 import 'package:pialuno/modelos/simulacao_model.dart';
-import 'package:pialuno/modelos/tarefa_model.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_bloc.dart';
 import 'package:pialuno/plataforma/recursos.dart';
 import 'package:queries/collections.dart';
-import 'package:pialuno/naosuportato/naosuportado.dart'
-    show FilePicker, FileType;
-import 'package:pialuno/naosuportato/url_launcher.dart'
-    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:pialuno/naosuportato/naosuportado.dart' show FilePicker, FileType;
+import 'package:pialuno/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
 
 class TarefaAbertaResponderPage extends StatefulWidget {
   final String tarefaID;
@@ -18,8 +15,7 @@ class TarefaAbertaResponderPage extends StatefulWidget {
   const TarefaAbertaResponderPage(this.tarefaID);
 
   @override
-  _TarefaAbertaResponderPageState createState() =>
-      _TarefaAbertaResponderPageState();
+  _TarefaAbertaResponderPageState createState() => _TarefaAbertaResponderPageState();
 }
 
 class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
@@ -27,8 +23,8 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   bool hasTimerStopped = false;
 
   final List<Tab> myTabs = <Tab>[
-    Tab(text: "Proposta"),
-    Tab(text: "Seus valores"),
+    Tab(text: "Problema"),
+    Tab(text: "Valores"),
     Tab(text: "Resposta"),
   ];
   @override
@@ -57,30 +53,19 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
         ),
         body: _body(context),
         floatingActionButton: StreamBuilder<TarefaAbertaResponderBlocState>(
-          stream: bloc.stateStream,
-          builder: (BuildContext context,
-              AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
-            if (snapshot.hasError) {
-              return Text("ERROR");
-            }
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.data.isDataValid) {
+            stream: bloc.stateStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return Container();
               return FloatingActionButton(
+                onPressed: snapshot.data.isDataValid
+                    ? () {
+                        bloc.eventSink(SaveEvent());
+                      }
+                    : null,
                 child: Icon(Icons.cloud_upload),
-                onPressed: () {
-                  bloc.eventSink(SaveEvent());
-                  // Navigator.pop(context);
-
-                  // Navigator.pushNamed(context, '/painel/crud', arguments: null);
-                },
+                backgroundColor: snapshot.data.isDataValid ? Colors.blue : Colors.grey,
               );
-            }else{
-              return null;
-            }
-          },
-        ),
+            }),
       ),
     );
   }
@@ -98,8 +83,7 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   _proposta() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -119,9 +103,8 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               },
             );
             var dicPedese = Dictionary.fromMap(tarefa.gabarito);
-            var gabaritoOrderBy = dicPedese
-                .orderBy((kv) => kv.value.ordem)
-                .toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var gabaritoOrderBy =
+                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
 
             for (var gabarito in gabaritoMap.entries) {
@@ -169,8 +152,7 @@ Sit.: $nota'''),
   _variaveis() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -184,9 +166,8 @@ Sit.: $nota'''),
 
             // print('tarefa.id: ${tarefa.id}');
             var dicPedese = Dictionary.fromMap(tarefa.variavel);
-            var gabaritoOrderBy = dicPedese
-                .orderBy((kv) => kv.value.ordem)
-                .toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var gabaritoOrderBy =
+                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             variavelMap = gabaritoOrderBy.toMap();
             Widget icone;
 
@@ -215,10 +196,8 @@ Sit.: $nota'''),
 
               if (variavel.value.tipo == 'urlimagem') {
                 String linkValorModificado;
-                if (variavel?.value?.valor != null &&
-                    variavel.value.valor.contains('drive.google.com/open')) {
-                  linkValorModificado =
-                      variavel.value.valor.replaceFirst('open', 'uc');
+                if (variavel?.value?.valor != null && variavel.value.valor.contains('drive.google.com/open')) {
+                  linkValorModificado = variavel.value.valor.replaceFirst('open', 'uc');
                 } else {
                   linkValorModificado = variavel.value.valor;
                 }
@@ -276,7 +255,7 @@ Sit.: $nota'''),
             ));
 
             return Column(children: <Widget>[
-              _descricaoAba('Na proposta considere os seguintes valores:'),
+              _descricaoAba('No problema considere os seguintes valores:'),
               _bodyAba(listaWidget)
             ]);
           } else {
@@ -293,8 +272,7 @@ Sit.: $nota'''),
   _resposta() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -302,14 +280,13 @@ Sit.: $nota'''),
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
-            var gabarito = snapshot.data.gabarito;
+            var gabarito = snapshot.data.resposta;
 
             List<Widget> listaWidget = List<Widget>();
             Map<String, Gabarito> gabaritoMap;
             var dicPedese = Dictionary.fromMap(gabarito);
-            var gabaritoOrderBy = dicPedese
-                .orderBy((kv) => kv.value.ordem)
-                .toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var gabaritoOrderBy =
+                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
             Widget icone;
 
@@ -319,19 +296,40 @@ Sit.: $nota'''),
                 cor = Colors.green;
               }
               if (gabarito.value.tipo == 'numero') {
-                icone = Icon(Icons.looks_one, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.looks_one, color: cor),
+                  tooltip: "Um número. Use ponto para decimal.",
+                );
               } else if (gabarito.value.tipo == 'palavra') {
-                icone = Icon(Icons.text_format, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.text_format, color: cor),
+                  tooltip: "Uma palavra ou frase fechada.",
+                );
               } else if (gabarito.value.tipo == 'texto') {
-                icone = Icon(Icons.text_fields, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.text_fields, color: cor),
+                  tooltip: "Um texto aberto com uma ou várias linhas.",
+                );
               } else if (gabarito.value.tipo == 'url') {
-                icone = Icon(Icons.link, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.link, color: cor),
+                  tooltip: "Um link a um arquivo compartilhado ou site.",
+                );
               } else if (gabarito.value.tipo == 'urlimagem') {
-                icone = Icon(Icons.image, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.image, color: cor),
+                  tooltip: "Um link a uma imagem.",
+                );
               } else if (gabarito.value.tipo == 'arquivo') {
-                icone = Icon(Icons.description, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.description, color: cor),
+                  tooltip: "Upload de um arquivo.",
+                );
               } else if (gabarito.value.tipo == 'imagem') {
-                icone = Icon(Icons.photo_album, color: cor);
+                icone = IconButton(
+                  icon: Icon(Icons.photo_album, color: cor),
+                  tooltip: "Upload de uma imagem.",
+                );
               }
 
               listaWidget.add(
@@ -423,8 +421,7 @@ Sit.: $nota'''),
   _title() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -443,14 +440,12 @@ Sit.: $nota'''),
                   Navigator.pop(context);
                   print('terminou clock');
                 },
-                countDownTimerStyle: TextStyle(
-                    color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
+                countDownTimerStyle: TextStyle(color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
               ),
             );
             Widget tentativas = Text(
               '${tarefa.tentou ?? 0} de ${tarefa.tentativa}',
-              style: TextStyle(
-                  color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
+              style: TextStyle(color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
             );
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -495,8 +490,7 @@ class PedeseNumeroTextoState extends State<PedeseNumeroTexto> {
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (_textFieldController.text.isEmpty) {
           _textFieldController.text = gabaritoValue.resposta;
         }
@@ -533,8 +527,7 @@ class ImagemSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (snapshot.hasError) {
           return Container(
             child: Center(child: Text('Erro.')),
@@ -544,23 +537,20 @@ class ImagemSelect extends StatelessWidget {
           children: <Widget>[
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
-                  leading: IconButton(
-                    icon: Icon(Icons.delete),
-                     onPressed: () {
-                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
-                          gabaritoKey, null));
-                    },
-                  ),
-                    title: Text('Selecione uma imagem conforme solicitado.'),
+                    leading: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                      },
+                    ),
+                    title: Text('ou, selecione uma imagem conforme solicitado.'),
                     trailing: Icon(Icons.file_download),
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(
-                            UpdatePedeseEvent(gabaritoKey, localPath));
+                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                   
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _UploadImagem(
@@ -789,8 +779,7 @@ class ArquivoSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (snapshot.hasError) {
           return Container(
             child: Center(child: Text('Erro.')),
@@ -800,20 +789,18 @@ class ArquivoSelect extends StatelessWidget {
           children: <Widget>[
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
-                  leading: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
-                          gabaritoKey, null));
-                    },
-                  ),
-                    title: Text('Ou, selecione um arquivo conforme solicitado.'),
+                    leading: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                      },
+                    ),
+                    title: Text('ou, selecione um arquivo conforme solicitado.'),
                     trailing: Icon(Icons.file_download),
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(
-                            UpdatePedeseEvent(gabaritoKey, localPath));
+                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                     // onLongPress: () {
