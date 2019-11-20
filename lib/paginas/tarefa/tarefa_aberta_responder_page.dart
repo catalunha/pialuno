@@ -544,6 +544,13 @@ class ImagemSelect extends StatelessWidget {
           children: <Widget>[
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
+                  leading: IconButton(
+                    icon: Icon(Icons.delete),
+                     onPressed: () {
+                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                          gabaritoKey, null));
+                    },
+                  ),
                     title: Text('Selecione uma imagem conforme solicitado.'),
                     trailing: Icon(Icons.file_download),
                     onTap: () async {
@@ -553,10 +560,7 @@ class ImagemSelect extends StatelessWidget {
                             UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                    onLongPress: () {
-                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
-                          gabaritoKey, null));
-                    },
+                   
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _UploadImagem(
@@ -796,7 +800,14 @@ class ArquivoSelect extends StatelessWidget {
           children: <Widget>[
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
-                    title: Text('Selecione um arquivo conforme solicitado.'),
+                  leading: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                          gabaritoKey, null));
+                    },
+                  ),
+                    title: Text('Ou, selecione um arquivo conforme solicitado.'),
                     trailing: Icon(Icons.file_download),
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
@@ -805,10 +816,10 @@ class ArquivoSelect extends StatelessWidget {
                             UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
-                    onLongPress: () {
-                      bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
-                          gabaritoKey, null));
-                    },
+                    // onLongPress: () {
+                    //   bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                    //       gabaritoKey, null));
+                    // },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
             _UploadArquivo(

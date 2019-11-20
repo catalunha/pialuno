@@ -34,10 +34,30 @@ class TarefaAbertaResponderBlocState {
   bool isDataValid = false;
   TarefaModel tarefaModel = TarefaModel();
   Map<String, Gabarito> gabarito = Map<String, Gabarito>();
-  void updateStateFromTarefaModel() {
-    for (var item in tarefaModel.gabarito.entries) {
-          gabarito[item.key] = item.value;
+  void updateState() {
+    print('updateState');
+        for (var item in this.tarefaModel.gabarito.entries) {
+      // gabarito[item.key] = item.value;
+      // print(
+      //     '*** updateState.gabarito: ${this.gabarito[item.key].resposta ?? null}');
+      print(
+          '*** updateState.tarefa: ${this.tarefaModel.gabarito[item.key].resposta ?? null}');
 
+    }
+    this.gabarito.clear();
+    this.gabarito.addAll(this.tarefaModel.gabarito);
+    for (var item in this.gabarito.entries) {
+      // gabarito[item.key] = item.value;
+      print(
+          '+++ updateState.gabarito ${item.key}: ${this.gabarito[item.key].resposta ?? null}');
+      print(
+          '+++ updateState.tarefa ${item.key}: ${this.tarefaModel.gabarito[item.key].resposta ?? null}');
+      // this.gabarito[item.key].resposta = '1';
+      this.tarefaModel.gabarito[item.key].resposta = '9';
+      print(
+          '--- updateState.gabarito ${item.key}: ${this.gabarito[item.key].resposta ?? null}');
+      print(
+          '---updateState.tarefa ${item.key}: ${this.tarefaModel.gabarito[item.key].resposta ?? null}');
     }
     // gabarito = tarefaModel.gabarito;
   }
@@ -85,6 +105,7 @@ class TarefaAbertaResponderBloc {
 
   _mapEventToState(TarefaAbertaResponderBlocEvent event) async {
     if (event is GetTarefaEvent) {
+      _state.tarefaModel=null;
       final docRef = _firestore
           .collection(TarefaModel.collection)
           .document(event.tarefaID);
@@ -108,13 +129,16 @@ class TarefaAbertaResponderBloc {
       } else {
         // print('Tarefa JA iniciada...');
       }
-      _state.updateStateFromTarefaModel();
+      _state.updateState();
       if (!_stateController.isClosed) _stateController.add(_state);
     }
     if (event is UpdatePedeseEvent) {
       print('UpdatePedeseEvent: ${event.gabaritoKey} = ${event.valor}');
-      print('a' + _state.gabarito[event.gabaritoKey].resposta ?? null);
-      print('b' + _state.tarefaModel.gabarito[event.gabaritoKey].resposta ??
+      print('+++ UpdatePedeseEvent.gabarito: ' +
+              _state.gabarito[event.gabaritoKey].resposta ??
+          null);
+      print('+++ UpdatePedeseEvent.tarefa: ' +
+              _state.tarefaModel.gabarito[event.gabaritoKey].resposta ??
           null);
       var gabarito = _state.gabarito[event.gabaritoKey];
       if (gabarito.tipo == 'numero' ||
@@ -132,8 +156,11 @@ class TarefaAbertaResponderBloc {
       // print(_state.gabarito[event.gabaritoKey].respostaPath ?? null);
       // print(
       //     _state.tarefaModel.gabarito[event.gabaritoKey].respostaPath ?? null);
-      print('c' + _state.gabarito[event.gabaritoKey].resposta ?? null);
-      print('d' + _state.tarefaModel.gabarito[event.gabaritoKey].resposta ??
+      print('--- UpdatePedeseEvent.gabarito: ' +
+              _state.gabarito[event.gabaritoKey].resposta ??
+          null);
+      print('--- UpdatePedeseEvent.tarefa: ' +
+              _state.tarefaModel.gabarito[event.gabaritoKey].resposta ??
           null);
     }
     if (event is UpdateApagarAnexoImagemArquivoEvent) {
