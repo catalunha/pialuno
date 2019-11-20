@@ -1,4 +1,7 @@
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_native_web/flutter_native_web.dart';
 import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
@@ -8,6 +11,7 @@ import 'package:pialuno/plataforma/recursos.dart';
 import 'package:queries/collections.dart';
 import 'package:pialuno/naosuportato/naosuportado.dart' show FilePicker, FileType;
 import 'package:pialuno/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class TarefaAbertaResponderPage extends StatefulWidget {
   final String tarefaID;
@@ -21,14 +25,19 @@ class TarefaAbertaResponderPage extends StatefulWidget {
 class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   TarefaAbertaResponderBloc bloc;
   bool hasTimerStopped = false;
-
+  // WebController webController;
+  // FlutterNativeWeb flutterWebView;
+// String urlProblema;
   final List<Tab> myTabs = <Tab>[
     Tab(text: "Problema"),
     Tab(text: "Valores"),
     Tab(text: "Resposta"),
+    Tab(text: "Tarefa"),
   ];
   @override
   void initState() {
+    // this.webview();
+
     super.initState();
     bloc = TarefaAbertaResponderBloc(Bootstrap.instance.firestore);
     bloc.eventSink(GetTarefaEvent(widget.tarefaID));
@@ -73,14 +82,15 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   TabBarView _body(context) {
     return TabBarView(
       children: [
-        _proposta(),
+        _problema(),
         _variaveis(),
         _resposta(),
+        _tarefa(),
       ],
     );
   }
 
-  _proposta() {
+  _tarefa() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
         builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
@@ -102,6 +112,12 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
                 launch(tarefa.problema.url);
               },
             );
+            // String urlProblema = snapshot.data.tarefaModel.problema.url;
+            // Widget gdocs = Container(
+            //         child: flutterWebView,
+            //         width: 500.0,
+            //         height: 1000.0,
+            //       );
             var dicPedese = Dictionary.fromMap(tarefa.gabarito);
             var gabaritoOrderBy =
                 dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
@@ -134,10 +150,117 @@ Sit.: $nota'''),
               ),
             );
 
-            return ListView(children: <Widget>[
-              proposta,
-              pdf,
-            ]);
+            // return ListView(children: <Widget>[
+            //   proposta,
+            //   pdf,
+            //   gdocs,
+            // ]);
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                proposta,
+                // pdf,
+                // Expanded(
+                //     child: WebView(
+                //   initialUrl: urlProblema,
+                //   javascriptMode: JavascriptMode.disabled,
+                // ),)
+              ],
+            );
+          } else {
+            return Center(
+                child: Text('Tarefa fechou por limite de tentativas ou tempo.',
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: Colors.blue,
+                    )));
+          }
+        });
+  }
+
+  _problema() {
+    return StreamBuilder<TarefaAbertaResponderBlocState>(
+        stream: bloc.stateStream,
+        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+          if (snapshot.hasError) {
+            return Text("ERROR");
+          }
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data.isDataValid) {
+            // List<Widget> listaWidget = List<Widget>();
+            // Map<String, Gabarito> gabaritoMap;
+            // String nota = '';
+            var tarefa = snapshot.data.tarefaModel;
+            Widget pdf = ListTile(
+              title: Text('Se não visualizar a proposta abaixo, clique aqui.'),
+              trailing: Icon(Icons.local_library),
+              onTap: () {
+                launch(tarefa.problema.url);
+              },
+            );
+            String urlProblema = snapshot.data.tarefaModel.problema.url;
+            // Widget gdocs = Container(
+            //         child: flutterWebView,
+            //         width: 500.0,
+            //         height: 1000.0,
+            //       );
+            // var dicPedese = Dictionary.fromMap(tarefa.gabarito);
+            // var gabaritoOrderBy =
+            //     dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            // gabaritoMap = gabaritoOrderBy.toMap();
+
+            // for (var gabarito in gabaritoMap.entries) {
+            //   nota += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
+            // }
+            // listaWidget.add(
+//             Widget proposta = Card(
+//               child: ListTile(
+//                 trailing: Text('Tarefa: ${tarefa.questao.numero}',
+//                     style: TextStyle(
+//                       color: Colors.blue,
+//                       fontSize: 20.0,
+//                     )),
+//                 title: Text('''
+// Turma: ${tarefa.turma.nome}
+// Prof.: ${tarefa.professor.nome}
+// Aval.: ${tarefa.avaliacao.nome}
+// Prob.: ${tarefa.problema.nome}
+// Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
+// Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
+// Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
+// Sit.: $nota'''),
+// // id: ${tarefa.id}
+// // Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
+// // Aberta: ${tarefa.aberta}
+// // Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
+//               ),
+//             );
+
+//             // return ListView(children: <Widget>[
+//             //   proposta,
+//             //   pdf,
+//             //   gdocs,
+//             // ]);
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                pdf,
+                Expanded(
+                  child: WebView(
+                    initialUrl: urlProblema,
+                    // initialUrl: 'https://drive.google.com/file/d/1go4qo40kNf0pUl7JliDnyG2A_fQxGLU0/edit',
+                    javascriptMode: JavascriptMode.disabled,
+                  ),
+                )
+              ],
+            );
           } else {
             return Center(
                 child: Text('Tarefa fechou por limite de tentativas ou tempo.',
@@ -399,6 +522,29 @@ Sit.: $nota'''),
         });
   }
 
+// webview(){
+//       this.flutterWebView = new FlutterNativeWeb(
+//       onWebCreated: onWebCreated,
+//       gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+//                         Factory<OneSequenceGestureRecognizer>(
+//                           () => TapGestureRecognizer(),
+//                         ),
+//                       ].toSet(),
+//     );
+//     return;
+//   }
+
+//   void onWebCreated(webController) {
+//     this.webController = webController;
+//     this.webController.loadUrl(urlProblema);
+//     // this.webController.loadUrl("https://docs.google.com/document/d/16yTCmubD-IHu7VDhjFY4SGxWp9XYAjtW-I_2StafsD0/edit#heading=h.4nme0svt2xhv");
+//     this.webController.onPageStarted.listen((url) =>
+//         print("Loading $url")
+//     );
+//     this.webController.onPageFinished.listen((url) =>
+//         print("Finished loading $url")
+//     );
+//   }
   Expanded _bodyAba(List<Widget> listaWidget) {
     return Expanded(
         flex: 10,

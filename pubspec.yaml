@@ -64,7 +64,10 @@ dependencies:
   fixnum: ^0.10.9
   universal_io: ^0.8.4
   intl: ^0.16.0
-  
+  # flutter_native_web: ^1.0.3
+  webview_flutter: ">=0.3.3"
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
