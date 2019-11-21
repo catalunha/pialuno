@@ -172,7 +172,7 @@ class FotoUsuario extends StatelessWidget {
           children: <Widget>[
             if (Recursos.instance.disponivel("file_picking"))
               ButtonBar(children: <Widget>[
-                Text('Atualizar foto de usuario'),
+                Text('Atualizar foto. Destaque exclussivamente sua cabeça, evitando paisagem ao fundo e acessórios na face. Favorece reconhecimento facial.'),
                 IconButton(
                   icon: Icon(Icons.file_download),
                   onPressed: () async {
