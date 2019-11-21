@@ -138,7 +138,10 @@ class AtualizarNomeNoProjetoState extends State<AtualizarCracha> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("Atualizar nome curto para crachá"),
+              Text(
+                "Atualizar nome curto para crachá",
+                style: TextStyle(fontSize: 15, color: Colors.blue),
+              ),
               TextField(
                 controller: _controller,
                 onChanged: (cracha) {
@@ -169,16 +172,22 @@ class FotoUsuario extends StatelessWidget {
           );
         }
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (Recursos.instance.disponivel("file_picking"))
-              ButtonBar(children: <Widget>[
+              Wrap(children: <Widget>[
                 Text(
-                    'Atualizar foto. Destaque exclussivamente sua cabeça, evitando paisagem ao fundo e acessórios na face. Favorece reconhecimento facial.'),
-                IconButton(
-                  icon: Icon(Icons.file_download),
-                  onPressed: () async {
-                    await _selecionarNovoArquivo().then((arq) {
-                      bloc.eventSink(UpdateFotoEvent(arq));
+                  'Atualizar foto. Destaque exclussivamente sua cabeça, evitando paisagem ao fundo e acessórios na face. Favorece reconhecimento facial.',
+                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                ),
+                ListTile(
+                  title: Text(
+                    'Selecione no dispositivo',
+                  ),
+                  trailing: Icon(Icons.file_download),
+                  onTap: () async {
+                    await _selecionarNovoArquivo().then((localPath) {
+                      bloc.eventSink(UpdateFotoEvent(localPath));
                     });
                   },
                 ),

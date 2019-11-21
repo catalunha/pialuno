@@ -119,8 +119,9 @@ class PerfilBloc {
         await docRef.setData(upLoadModel.toMap(), merge: true);
         _state.fotoUploadID = docRef.documentID;
         //--- Cria doc em UpLoadCollection
-        foto = UploadFk(uploadID: _state.fotoUploadID,url:null,path: _state.localPath);
-        usuarioUpdate.foto=foto;
+        foto = UploadFk(
+            uploadID: _state.fotoUploadID, url: null, path: _state.localPath);
+        usuarioUpdate.foto = foto;
       }
 
       final docRef2 = _firestore
@@ -136,8 +137,10 @@ class PerfilBloc {
       _state.celular = event.celular;
     }
     if (event is UpdateFotoEvent) {
-      _state.localPath = event.localPath;
-      _state.fotoUrl = null;
+      if (event.localPath != null) {
+        _state.localPath = event.localPath;
+        _state.fotoUrl = null;
+      }
     }
 
     if (!_stateController.isClosed) _stateController.add(_state);
