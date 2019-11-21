@@ -177,14 +177,13 @@ class FotoUsuario extends StatelessWidget {
                   icon: Icon(Icons.file_download),
                   onPressed: () async {
                     await _selecionarNovoArquivo().then((arq) {
-                      localPath = arq;
+                      bloc.eventSink(UpdateFotoEvent(arq));
                     });
-                    bloc.eventSink(UpdateFotoEvent(localPath));
                   },
                 ),
               ]),
             _ImagemPerfilUpload(
-              uploadID:snapshot.data?.fotoUploadID,
+                uploadID: snapshot.data?.fotoUploadID,
                 url: snapshot.data?.fotoUrl,
                 path: snapshot.data?.localPath),
           ],
@@ -215,6 +214,9 @@ class _ImagemPerfilUpload extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('uploadID: $uploadID');
+    // print('url: $url');
+    // print('path: $path');
     Widget foto = Text('?');
     Widget msg = Text('');
 

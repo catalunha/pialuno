@@ -40,7 +40,7 @@ class PerfilState {
   String fotoUrl;
   String localPath;
 
-  void updateStateFromUsuarioModel() {
+  void updateState() {
     cracha = usuarioModel.cracha;
     celular = usuarioModel.celular;
     fotoUploadID = usuarioModel?.foto?.uploadID;
@@ -82,7 +82,7 @@ class PerfilBloc {
     if (event is GetUsuarioAuthEvent) {
       _authBloc.perfil.listen((usuario) {
         _state.usuarioModel = usuario;
-        _state.updateStateFromUsuarioModel();
+        _state.updateState();
         if (!_stateController.isClosed) _stateController.add(_state);
       });
     }

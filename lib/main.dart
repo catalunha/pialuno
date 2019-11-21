@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/avaliacao/avaliacao_list_page.dart';
 import 'package:pialuno/paginas/desenvolvimento/desenvolvimento_page.dart';
