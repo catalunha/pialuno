@@ -172,7 +172,8 @@ class FotoUsuario extends StatelessWidget {
           children: <Widget>[
             if (Recursos.instance.disponivel("file_picking"))
               ButtonBar(children: <Widget>[
-                Text('Atualizar foto. Destaque exclussivamente sua cabeça, evitando paisagem ao fundo e acessórios na face. Favorece reconhecimento facial.'),
+                Text(
+                    'Atualizar foto. Destaque exclussivamente sua cabeça, evitando paisagem ao fundo e acessórios na face. Favorece reconhecimento facial.'),
                 IconButton(
                   icon: Icon(Icons.file_download),
                   onPressed: () async {
@@ -261,6 +262,15 @@ class _ImagemPerfilUpload extends StatelessWidget {
           title: Text('Não consegui abrir a imagem.'),
         );
       }
+    }
+    if (path != null && url == null && path.indexOf(' ') > 0) {
+      msg = ListTile(
+        title: Text('EXISTE ESPAÇO NO CAMINHO DO ARQUIVO: $path'),
+      );
+      foto = ListTile(
+        title: Text(
+            'FAVOR SELECIONAR IMAGEM DA CÂMERA OU OUTRO CAMINHO SEM ESPAÇO. Se necessário mova a foto para uma pasta com caminho sem espaços.'),
+      );
     }
     return Column(
       children: <Widget>[
