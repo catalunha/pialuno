@@ -86,7 +86,7 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 12,
+                          vertical: 5,
                         ),
                         child: TextFormField(
                           onSaved: (email) {
@@ -99,7 +99,7 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 12,
+                          vertical: 5,
                         ),
                         child: TextFormField(
                           onSaved: (password) {
@@ -114,7 +114,7 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: 12,
+                          vertical: 5,
                         ),
                       ),
                       Container(
@@ -133,12 +133,12 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: 12,
+                          vertical: 5,
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 12,
+                          vertical: 5,
                         ),
                         child: ListTile(
                           title: Text(
@@ -159,10 +159,10 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              // Container(
-              //   alignment: Alignment.center,
-              //   child: Image.asset('assets/images/logos/Splash_1024x1024.png'),
-              // ),
+              Container(
+                alignment: Alignment.center,
+                child: Image.asset('assets/imagem/logo.png'),
+              ),
             ],
           ),
         ),
