@@ -213,7 +213,7 @@ class _DefaultEndDrawerState extends State<DefaultEndDrawer> {
     if (Recursos.instance.plataforma == 'android') {
       rotas["/perfil"] = Rota("Perfil", Icons.settings);
       rotas["/versao"] = Rota("Versão & Suporte", Icons.device_unknown);
-      // rotas["/modooffline"] = Rota("Habilitar modo offline", Icons.save);
+      rotas["/modooffline"] = Rota("Habilitar modo offline", Icons.save);
     } else if (Recursos.instance.plataforma == 'web') {
       rotas["/perfil"] = Rota("Perfil", Icons.settings);
       rotas["/versao"] = Rota("Versão & Suporte", Icons.device_unknown);
@@ -246,7 +246,7 @@ class _DefaultEndDrawerState extends State<DefaultEndDrawer> {
                           title: Text("Habilitar modo offline"),
                           onTap: () async {
                             final cacheService =
-                                CacheService(Bootstrap.instance.firestore);
+                                CacheService(Bootstrap.instance.firestore,authBloc);
                             await cacheService.load();
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 content: Text("Modo offline completo.")));
