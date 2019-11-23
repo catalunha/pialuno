@@ -140,7 +140,8 @@ Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Prob.: ${tarefa.problema.nome}
-Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
+Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)}
+Fecha: ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Sit.: $nota'''),
@@ -621,6 +622,7 @@ class ImagemSelect extends StatelessWidget {
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
                     leading: IconButton(
+                      tooltip: 'Apagar imagem anexada',
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
@@ -877,6 +879,7 @@ class ArquivoSelect extends StatelessWidget {
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
                     leading: IconButton(
+                      tooltip: 'Apagar arquivo anexado',
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(

@@ -34,8 +34,6 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
       rotas["/tarefa/aberta"] = Rota("Tarefas", Icons.assignment);
       rotas["/turma/list"] =
           Rota("Turmas", Icons.book);
-      rotas["/upload"] = Rota("Upload de arquivos", Icons.file_upload);
-      // rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     }
   }
 
