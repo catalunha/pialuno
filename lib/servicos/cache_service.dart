@@ -14,7 +14,6 @@ class CacheService {
       await _firestore
           .collection(TarefaModel.collection)
           .where("aluno.id", isEqualTo: usuarioAuth.id)
-          // .where("aberta", isEqualTo: true)
           .where("fim", isGreaterThan: DateTime.now())
           .getDocuments();
     });
