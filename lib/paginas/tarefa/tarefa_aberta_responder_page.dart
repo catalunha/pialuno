@@ -10,7 +10,6 @@ import 'package:pialuno/naosuportato/naosuportado.dart'
     show FilePicker, FileType;
 import 'package:pialuno/naosuportato/url_launcher.dart'
     if (dart.library.io) 'package:url_launcher/url_launcher.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pialuno/naosuportato/webview_flutter.dart'
     if (dart.library.io) 'package:webview_flutter/webview_flutter.dart';
 
