@@ -1,7 +1,6 @@
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/gestures.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-// import 'package:flutter_native_web/flutter_native_web.dart';
 import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/componentes/clock.dart';
@@ -101,7 +100,6 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
-            List<Widget> listaWidget = List<Widget>();
             Map<String, Gabarito> gabaritoMap;
             String nota = '';
             var tarefa = snapshot.data.tarefaModel;
@@ -112,12 +110,6 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
                 launch(tarefa.problema.url);
               },
             );
-            // String urlProblema = snapshot.data.tarefaModel.problema.url;
-            // Widget gdocs = Container(
-            //         child: flutterWebView,
-            //         width: 500.0,
-            //         height: 1000.0,
-            //       );
             var dicPedese = Dictionary.fromMap(tarefa.gabarito);
             var gabaritoOrderBy =
                 dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
@@ -126,7 +118,6 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             for (var gabarito in gabaritoMap.entries) {
               nota += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
             }
-            // listaWidget.add(
             Widget proposta = Card(
               child: ListTile(
                 trailing: Text('Tarefa: ${tarefa.questao.numero}',
@@ -143,31 +134,14 @@ Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Sit.: $nota'''),
-// id: ${tarefa.id}
-// Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
-// Aberta: ${tarefa.aberta}
-// Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
               ),
             );
-
-            // return ListView(children: <Widget>[
-            //   proposta,
-            //   pdf,
-            //   gdocs,
-            // ]);
-
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 proposta,
-                // pdf,
-                // Expanded(
-                //     child: WebView(
-                //   initialUrl: urlProblema,
-                //   javascriptMode: JavascriptMode.disabled,
-                // ),)
               ],
             );
           } else {
@@ -192,9 +166,6 @@ Sit.: $nota'''),
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
-            // List<Widget> listaWidget = List<Widget>();
-            // Map<String, Gabarito> gabaritoMap;
-            // String nota = '';
             var tarefa = snapshot.data.tarefaModel;
             Widget pdf = ListTile(
               title: Text('Se não visualizar a proposta abaixo, clique aqui.'),
@@ -204,48 +175,6 @@ Sit.: $nota'''),
               },
             );
             String urlProblema = snapshot.data.tarefaModel.problema.url;
-            // Widget gdocs = Container(
-            //         child: flutterWebView,
-            //         width: 500.0,
-            //         height: 1000.0,
-            //       );
-            // var dicPedese = Dictionary.fromMap(tarefa.gabarito);
-            // var gabaritoOrderBy =
-            //     dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
-            // gabaritoMap = gabaritoOrderBy.toMap();
-
-            // for (var gabarito in gabaritoMap.entries) {
-            //   nota += '${gabarito.value.nome}=${gabarito.value.nota ?? "?"} ';
-            // }
-            // listaWidget.add(
-//             Widget proposta = Card(
-//               child: ListTile(
-//                 trailing: Text('Tarefa: ${tarefa.questao.numero}',
-//                     style: TextStyle(
-//                       color: Colors.blue,
-//                       fontSize: 20.0,
-//                     )),
-//                 title: Text('''
-// Turma: ${tarefa.turma.nome}
-// Prof.: ${tarefa.professor.nome}
-// Aval.: ${tarefa.avaliacao.nome}
-// Prob.: ${tarefa.problema.nome}
-// Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
-// Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
-// Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
-// Sit.: $nota'''),
-// // id: ${tarefa.id}
-// // Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
-// // Aberta: ${tarefa.aberta}
-// // Tempo:  ${tarefa.tempo} / ${tarefa.tempoPResponder}
-//               ),
-//             );
-
-//             // return ListView(children: <Widget>[
-//             //   proposta,
-//             //   pdf,
-//             //   gdocs,
-//             // ]);
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +184,6 @@ Sit.: $nota'''),
                 Expanded(
                   child: WebView(
                     initialUrl: urlProblema,
-                    // initialUrl: 'https://drive.google.com/file/d/1go4qo40kNf0pUl7JliDnyG2A_fQxGLU0/edit',
                     javascriptMode: JavascriptMode.disabled,
                   ),
                 )
@@ -286,8 +214,6 @@ Sit.: $nota'''),
             List<Widget> listaWidget = List<Widget>();
             Map<String, Variavel> variavelMap;
             var tarefa = snapshot.data.tarefaModel;
-
-            // print('tarefa.id: ${tarefa.id}');
             var dicPedese = Dictionary.fromMap(tarefa.variavel);
             var gabaritoOrderBy =
                 dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
@@ -306,17 +232,6 @@ Sit.: $nota'''),
               } else if (variavel.value.tipo == 'urlimagem') {
                 icone = Icon(Icons.image);
               }
-
-              // listaWidget.add(
-              //   Card(
-              //     child: ListTile(
-              //       title: Text('${variavel.value.nome}'),
-              //       subtitle: Text('${variavel?.value?.valor}'),
-              //       trailing: icone,
-              //     ),
-              //   ),
-              // );
-
               if (variavel.value.tipo == 'urlimagem') {
                 String linkValorModificado;
                 if (variavel?.value?.valor != null && variavel.value.valor.contains('drive.google.com/open')) {
@@ -330,7 +245,6 @@ Sit.: $nota'''),
                       children: <Widget>[
                         ListTile(
                           title: Text('${variavel.value.nome}'),
-                          // subtitle: Text('${variavel?.value?.valor}'),
                           trailing: icone,
                         ),
                         Row(
@@ -421,37 +335,37 @@ Sit.: $nota'''),
               if (gabarito.value.tipo == 'numero') {
                 icone = IconButton(
                   icon: Icon(Icons.looks_one, color: cor),
-                  tooltip: "Um número. Use ponto para decimal.",
+                  tooltip: "Um número. Use ponto para decimal.", onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'palavra') {
                 icone = IconButton(
                   icon: Icon(Icons.text_format, color: cor),
-                  tooltip: "Uma palavra ou frase fechada.",
+                  tooltip: "Uma palavra ou frase fechada.", onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'texto') {
                 icone = IconButton(
                   icon: Icon(Icons.text_fields, color: cor),
-                  tooltip: "Um texto aberto com uma ou várias linhas.",
+                  tooltip: "Um texto aberto com uma ou várias linhas.", onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'url') {
                 icone = IconButton(
                   icon: Icon(Icons.link, color: cor),
-                  tooltip: "Um link a um arquivo compartilhado ou site.",
+                  tooltip: "Um link a um arquivo compartilhado ou site.", onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'urlimagem') {
                 icone = IconButton(
                   icon: Icon(Icons.image, color: cor),
-                  tooltip: "Um link a uma imagem.",
+                  tooltip: "Um link a uma imagem.", onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'arquivo') {
                 icone = IconButton(
                   icon: Icon(Icons.description, color: cor),
-                  tooltip: "Upload de um arquivo.",
+                  tooltip: "Upload de um arquivo.", onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'imagem') {
                 icone = IconButton(
                   icon: Icon(Icons.photo_album, color: cor),
-                  tooltip: "Upload de uma imagem.",
+                  tooltip: "Upload de uma imagem.", onPressed: () {},
                 );
               }
 
@@ -699,8 +613,7 @@ class ImagemSelect extends StatelessWidget {
                     },
                   )
                 : Text('Recurso não suporte nesta plataforma.'),
-            _UploadImagem(
-              uploadID: gabaritoValue?.respostaUploadID,
+            _ImagemFileUpload(
               url: gabaritoValue?.resposta,
               path: gabaritoValue?.respostaPath,
             ),
@@ -723,29 +636,35 @@ class ImagemSelect extends StatelessWidget {
   }
 }
 
-class _UploadImagem extends StatelessWidget {
-  final String uploadID;
+class _ImagemFileUpload extends StatelessWidget {
+  // final String uploadID;
   final String url;
   final String path;
 
-  const _UploadImagem({this.uploadID, this.url, this.path});
+  const _ImagemFileUpload({this.url, this.path});
+
+  Future<File> _getLocalFile(String filename) async {
+    File f = new File(filename);
+    return f;
+  }
 
   @override
   Widget build(BuildContext context) {
+    // print('url: $url');
+    // print('path: $path');
     Widget foto = Text('?');
     Widget msg = Text('');
 
     if (path == null && url == null) {
-      foto = Text('Você ainda não enviou uma imagem.');
+      foto = Text('Você ainda não enviou uma foto de perfil.');
     }
     if (path != null && url == null) {
       try {
-        foto = Container(
-            // color: Colors.yellow,
-            child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset(path),
-        ));
+        foto = FutureBuilder(
+            future: _getLocalFile(path),
+            builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+              return snapshot.data != null ? new Image.file(snapshot.data) : new Container();
+            });
       } on Exception {
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
@@ -756,9 +675,9 @@ class _UploadImagem extends StatelessWidget {
         );
       }
       msg = Text(
-          'Esta imagem precisa ser enviada. Salve esta edição de tarefa e depois acesse o menu upload de arquivos para enviar esta imagem.');
+          'Esta foto precisa ser enviada. Salve esta edição de perfil e depois acesse o menu upload de arquivos para enviar esta imagem.');
     }
-    if (url != null && uploadID != null) {
+    if (url != null) {
       try {
         foto = Container(
             child: Padding(
@@ -777,6 +696,7 @@ class _UploadImagem extends StatelessWidget {
         );
       }
     }
+
     return Column(
       children: <Widget>[
         msg,
@@ -786,7 +706,7 @@ class _UploadImagem extends StatelessWidget {
               flex: 2,
             ),
             Expanded(
-              flex: 10,
+              flex: 8,
               child: foto,
             ),
             Spacer(

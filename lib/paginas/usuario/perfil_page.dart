@@ -3,8 +3,8 @@ import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/paginas/usuario/perfil_bloc.dart';
 import 'package:pialuno/plataforma/recursos.dart';
-import 'package:pialuno/naosuportato/naosuportado.dart'
-    show FilePicker, FileType;
+import 'package:pialuno/naosuportato/naosuportado.dart' show FilePicker, FileType;
+import 'dart:io';
 
 class PerfilPage extends StatefulWidget {
   final AuthBloc authBloc;
@@ -20,8 +20,7 @@ class PerfilPage extends StatefulWidget {
 class ConfiguracaoState extends State<PerfilPage> {
   final PerfilBloc bloc;
 
-  ConfiguracaoState(AuthBloc authBloc)
-      : bloc = PerfilBloc(Bootstrap.instance.firestore, authBloc);
+  ConfiguracaoState(AuthBloc authBloc) : bloc = PerfilBloc(Bootstrap.instance.firestore, authBloc);
 
   @override
   void initState() {
@@ -187,15 +186,17 @@ class FotoUsuario extends StatelessWidget {
                   trailing: Icon(Icons.file_download),
                   onTap: () async {
                     await _selecionarNovoArquivo().then((localPath) {
-                      bloc.eventSink(UpdateFotoEvent(localPath));
+                      bloc.eventSink(
+                        UpdateFotoEvent(localPath),
+                      );
                     });
                   },
                 ),
               ]),
-            _ImagemPerfilUpload(
-                uploadID: snapshot.data?.fotoUploadID,
-                url: snapshot.data?.fotoUrl,
-                path: snapshot.data?.localPath),
+            _ImagemFileUpload(
+              url: snapshot.data?.fotoUrl,
+              path: snapshot.data?.localPath,
+            ),
           ],
         );
       },
@@ -215,16 +216,20 @@ class FotoUsuario extends StatelessWidget {
   }
 }
 
-class _ImagemPerfilUpload extends StatelessWidget {
-  final String uploadID;
+class _ImagemFileUpload extends StatelessWidget {
+  // final String uploadID;
   final String url;
   final String path;
 
-  const _ImagemPerfilUpload({this.uploadID, this.url, this.path});
+  const _ImagemFileUpload({this.url, this.path});
+
+  Future<File> _getLocalFile(String filename) async {
+    File f = new File(filename);
+    return f;
+  }
 
   @override
   Widget build(BuildContext context) {
-    // print('uploadID: $uploadID');
     // print('url: $url');
     // print('path: $path');
     Widget foto = Text('?');
@@ -235,12 +240,11 @@ class _ImagemPerfilUpload extends StatelessWidget {
     }
     if (path != null && url == null) {
       try {
-        foto = Container(
-            // color: Colors.yellow,
-            child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset(path),
-        ));
+        foto = FutureBuilder(
+            future: _getLocalFile(path),
+            builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+              return snapshot.data != null ? new Image.file(snapshot.data) : new Container();
+            });
       } on Exception {
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
@@ -253,7 +257,7 @@ class _ImagemPerfilUpload extends StatelessWidget {
       msg = Text(
           'Esta foto precisa ser enviada. Salve esta edição de perfil e depois acesse o menu upload de arquivos para enviar esta imagem.');
     }
-    if (url != null && uploadID != null) {
+    if (url != null) {
       try {
         foto = Container(
             child: Padding(
@@ -272,29 +276,21 @@ class _ImagemPerfilUpload extends StatelessWidget {
         );
       }
     }
-    if (path != null && url == null && path.indexOf(' ') > 0) {
-      msg = ListTile(
-        title: Text('EXISTE ESPAÇO NO CAMINHO DO ARQUIVO: $path'),
-      );
-      foto = ListTile(
-        title: Text(
-            'FAVOR SELECIONAR IMAGEM DA CÂMERA OU OUTRO CAMINHO SEM ESPAÇO. Se necessário mova a foto para uma pasta com caminho sem espaços.'),
-      );
-    }
+
     return Column(
       children: <Widget>[
         msg,
         Row(
           children: <Widget>[
             Spacer(
-              flex: 1,
+              flex: 2,
             ),
             Expanded(
               flex: 8,
               child: foto,
             ),
             Spacer(
-              flex: 1,
+              flex: 2,
             ),
           ],
         ),
