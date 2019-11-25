@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pialuno/bootstrap.dart';
@@ -302,18 +304,18 @@ Sit.: $nota'''),
                     ),
                   ),
                 );
-              // } else if (variavel.value.tipo == 'urlimagem') {
-              //   listaWidget.add(
-              //     Card(
-              //       child: 
-              //     Expanded(
-              //       child: WebView(
-              //         initialUrl: variavel.value.valor,
-              //         javascriptMode: JavascriptMode.disabled,
-              //       ),
-              //     ),
-              //     ),
-              //   );
+                // } else if (variavel.value.tipo == 'urlimagem') {
+                //   listaWidget.add(
+                //     Card(
+                //       child:
+                //     Expanded(
+                //       child: WebView(
+                //         initialUrl: variavel.value.valor,
+                //         javascriptMode: JavascriptMode.disabled,
+                //       ),
+                //     ),
+                //     ),
+                //   );
               } else if (variavel.value.tipo == 'url') {
                 listaWidget.add(
                   Card(
@@ -659,9 +661,8 @@ class ImagemSelect extends StatelessWidget {
                       });
                     },
                   )
-                : Text('Recurso não suporte nesta plataforma.'),
-            _UploadImagem(
-              uploadID: gabaritoValue?.respostaUploadID,
+                : Text(''),
+            _ImagemFileUpload(
               url: gabaritoValue?.resposta,
               path: gabaritoValue?.respostaPath,
             ),
@@ -684,29 +685,37 @@ class ImagemSelect extends StatelessWidget {
   }
 }
 
-class _UploadImagem extends StatelessWidget {
-  final String uploadID;
+class _ImagemFileUpload extends StatelessWidget {
+  // final String uploadID;
   final String url;
   final String path;
 
-  const _UploadImagem({this.uploadID, this.url, this.path});
+  const _ImagemFileUpload({this.url, this.path});
+
+  Future<File> _getLocalFile(String filename) async {
+    File f = new File(filename);
+    return f;
+  }
 
   @override
   Widget build(BuildContext context) {
+    // print('url: $url');
+    // print('path: $path');
     Widget foto = Text('?');
     Widget msg = Text('');
 
     if (path == null && url == null) {
-      foto = Text('Você ainda não enviou uma imagem.');
+      foto = Text('Você ainda não enviou uma foto de perfil.');
     }
     if (path != null && url == null) {
       try {
-        foto = Container(
-            // color: Colors.yellow,
-            child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset(path),
-        ));
+        foto = FutureBuilder(
+            future: _getLocalFile(path),
+            builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+              return snapshot.data != null
+                  ? new Image.file(snapshot.data)
+                  : new Container();
+            });
       } on Exception {
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
@@ -717,9 +726,9 @@ class _UploadImagem extends StatelessWidget {
         );
       }
       msg = Text(
-          'Esta imagem precisa ser enviada. Salve esta edição de tarefa e depois acesse o menu upload de arquivos para enviar esta imagem.');
+          'Esta foto precisa ser enviada. Salve esta edição de perfil e depois acesse o menu upload de arquivos para enviar esta imagem.');
     }
-    if (url != null && uploadID != null) {
+    if (url != null) {
       try {
         foto = Container(
             child: Padding(
@@ -738,6 +747,7 @@ class _UploadImagem extends StatelessWidget {
         );
       }
     }
+
     return Column(
       children: <Widget>[
         msg,
@@ -747,7 +757,7 @@ class _UploadImagem extends StatelessWidget {
               flex: 2,
             ),
             Expanded(
-              flex: 10,
+              flex: 8,
               child: foto,
             ),
             Spacer(

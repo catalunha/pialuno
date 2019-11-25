@@ -99,7 +99,10 @@ class AtualizarNumeroCelularState extends State<AtualizarCelular> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("Atualizar número do celular"),
+              Text(
+                "Atualizar número do celular",
+                style: TextStyle(fontSize: 15, color: Colors.blue),
+              ),
               TextField(
                 controller: _controller,
                 onChanged: (celular) {
@@ -195,9 +198,9 @@ class FotoUsuario extends StatelessWidget {
                   },
                 ),
               ]),
-            _ImagemFileUpload(
-                url: snapshot.data?.fotoUrl,
-                path: snapshot.data?.localPath),
+            if (Recursos.instance.disponivel("file_picking"))
+              _ImagemFileUpload(
+                  url: snapshot.data?.fotoUrl, path: snapshot.data?.localPath),
             //  ArquivoImagemItem('nome',localPath: snapshot.data?.localPath,url: snapshot.data?.fotoUrl,onDeleted: null,),
           ],
         );
@@ -217,7 +220,6 @@ class FotoUsuario extends StatelessWidget {
     return null;
   }
 }
-
 
 class _ImagemFileUpload extends StatelessWidget {
   // final String uploadID;
@@ -246,7 +248,9 @@ class _ImagemFileUpload extends StatelessWidget {
         foto = FutureBuilder(
             future: _getLocalFile(path),
             builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-              return snapshot.data != null ? new Image.file(snapshot.data) : new Container();
+              return snapshot.data != null
+                  ? new Image.file(snapshot.data)
+                  : new Container();
             });
       } on Exception {
         msg = ListTile(
