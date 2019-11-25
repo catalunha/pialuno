@@ -1,3 +1,4 @@
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
@@ -185,11 +186,14 @@ class FotoUsuario extends StatelessWidget {
                   ),
                   trailing: Icon(Icons.file_download),
                   onTap: () async {
+                    print('>>>>>> 11');
                     await _selecionarNovoArquivo().then((localPath) {
                       bloc.eventSink(
                         UpdateFotoEvent(localPath),
                       );
+
                     });
+                    print('>>>>>> 14');
                   },
                 ),
               ]),
@@ -197,6 +201,7 @@ class FotoUsuario extends StatelessWidget {
               url: snapshot.data?.fotoUrl,
               path: snapshot.data?.localPath,
             ),
+
           ],
         );
       },
@@ -205,19 +210,26 @@ class FotoUsuario extends StatelessWidget {
 
   Future<String> _selecionarNovoArquivo() async {
     try {
-      var arquivoPath = await FilePicker.getFilePath(type: FileType.ANY);
+      print('>>>>>> 21');
+
+      var arquivoPath = await FilePicker.getFilePath(type: FileType.IMAGE);
+      print('>>>>>> 22');
       if (arquivoPath != null) {
+        print('>>>>>> 23');
         return arquivoPath;
       }
     } catch (e) {
+      print('>>>>>> 24');
       print("Unsupported operation" + e.toString());
     }
+    print('>>>>>> 25');
     return null;
   }
 }
 
 class _ImagemFileUpload extends StatelessWidget {
   // final String uploadID;
+
   final String url;
   final String path;
 
@@ -232,6 +244,7 @@ class _ImagemFileUpload extends StatelessWidget {
   Widget build(BuildContext context) {
     // print('url: $url');
     // print('path: $path');
+
     Widget foto = Text('?');
     Widget msg = Text('');
 
@@ -245,6 +258,7 @@ class _ImagemFileUpload extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
               return snapshot.data != null ? new Image.file(snapshot.data) : new Container();
             });
+
       } on Exception {
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),

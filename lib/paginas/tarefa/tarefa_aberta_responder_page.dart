@@ -8,9 +8,12 @@ import 'package:pialuno/modelos/simulacao_model.dart';
 import 'package:pialuno/paginas/tarefa/tarefa_aberta_responder_bloc.dart';
 import 'package:pialuno/plataforma/recursos.dart';
 import 'package:queries/collections.dart';
-import 'package:pialuno/naosuportato/naosuportado.dart' show FilePicker, FileType;
-import 'package:pialuno/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:pialuno/naosuportato/naosuportado.dart'
+    show FilePicker, FileType;
+import 'package:pialuno/naosuportato/url_launcher.dart'
+    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:pialuno/naosuportato/webview_flutter.dart'
+    if (dart.library.io) 'package:webview_flutter/webview_flutter.dart';
 
 class TarefaAbertaResponderPage extends StatefulWidget {
   final String tarefaID;
@@ -18,15 +21,14 @@ class TarefaAbertaResponderPage extends StatefulWidget {
   const TarefaAbertaResponderPage(this.tarefaID);
 
   @override
-  _TarefaAbertaResponderPageState createState() => _TarefaAbertaResponderPageState();
+  _TarefaAbertaResponderPageState createState() =>
+      _TarefaAbertaResponderPageState();
 }
 
 class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   TarefaAbertaResponderBloc bloc;
   bool hasTimerStopped = false;
-  // WebController webController;
-  // FlutterNativeWeb flutterWebView;
-// String urlProblema;
+
   final List<Tab> myTabs = <Tab>[
     Tab(text: "Problema"),
     Tab(text: "Valores"),
@@ -35,8 +37,6 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   ];
   @override
   void initState() {
-    // this.webview();
-
     super.initState();
     bloc = TarefaAbertaResponderBloc(Bootstrap.instance.firestore);
     bloc.eventSink(GetTarefaEvent(widget.tarefaID));
@@ -71,7 +71,8 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
                       }
                     : null,
                 child: Icon(Icons.cloud_upload),
-                backgroundColor: snapshot.data.isDataValid ? Colors.blue : Colors.grey,
+                backgroundColor:
+                    snapshot.data.isDataValid ? Colors.blue : Colors.grey,
               );
             }),
       ),
@@ -92,7 +93,8 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
   _tarefa() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -111,8 +113,9 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
               },
             );
             var dicPedese = Dictionary.fromMap(tarefa.gabarito);
-            var gabaritoOrderBy =
-                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var gabaritoOrderBy = dicPedese
+                .orderBy((kv) => kv.value.ordem)
+                .toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
 
             for (var gabarito in gabaritoMap.entries) {
@@ -130,7 +133,8 @@ Turma: ${tarefa.turma.nome}
 Prof.: ${tarefa.professor.nome}
 Aval.: ${tarefa.avaliacao.nome}
 Prob.: ${tarefa.problema.nome}
-Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
+Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)}
+Fecha: ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Sit.: $nota'''),
@@ -158,7 +162,8 @@ Sit.: $nota'''),
   _problema() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -168,7 +173,8 @@ Sit.: $nota'''),
           if (snapshot.data.isDataValid) {
             var tarefa = snapshot.data.tarefaModel;
             Widget pdf = ListTile(
-              title: Text('Se não visualizar a proposta abaixo, clique aqui.'),
+              title: Text(
+                  'Se não visualizar o problema logo abaixo, ou estive usando o Chrome, clique aqui.'),
               trailing: Icon(Icons.local_library),
               onTap: () {
                 launch(tarefa.problema.url);
@@ -181,13 +187,14 @@ Sit.: $nota'''),
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 pdf,
-                Expanded(
-                  child: WebView(
-                    initialUrl: urlProblema,
-                    javascriptMode: JavascriptMode.disabled,
-                  ),
-                )
-              ],
+                if (Recursos.instance.plataforma == 'android')
+                  Expanded(
+                    child: WebView(
+                      initialUrl: urlProblema,
+                      javascriptMode: JavascriptMode.disabled,
+                    ),
+                  )
+             ],
             );
           } else {
             return Center(
@@ -203,7 +210,8 @@ Sit.: $nota'''),
   _variaveis() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -215,8 +223,9 @@ Sit.: $nota'''),
             Map<String, Variavel> variavelMap;
             var tarefa = snapshot.data.tarefaModel;
             var dicPedese = Dictionary.fromMap(tarefa.variavel);
-            var gabaritoOrderBy =
-                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var gabaritoOrderBy = dicPedese
+                .orderBy((kv) => kv.value.ordem)
+                .toDictionary$1((kv) => kv.key, (kv) => kv.value);
             variavelMap = gabaritoOrderBy.toMap();
             Widget icone;
 
@@ -234,8 +243,10 @@ Sit.: $nota'''),
               }
               if (variavel.value.tipo == 'urlimagem') {
                 String linkValorModificado;
-                if (variavel?.value?.valor != null && variavel.value.valor.contains('drive.google.com/open')) {
-                  linkValorModificado = variavel.value.valor.replaceFirst('open', 'uc');
+                if (variavel?.value?.valor != null &&
+                    variavel.value.valor.contains('drive.google.com/open')) {
+                  linkValorModificado =
+                      variavel.value.valor.replaceFirst('open', 'uc');
                 } else {
                   linkValorModificado = variavel.value.valor;
                 }
@@ -262,6 +273,18 @@ Sit.: $nota'''),
                     ),
                   ),
                 );
+              // } else if (variavel.value.tipo == 'urlimagem') {
+              //   listaWidget.add(
+              //     Card(
+              //       child: 
+              //     Expanded(
+              //       child: WebView(
+              //         initialUrl: variavel.value.valor,
+              //         javascriptMode: JavascriptMode.disabled,
+              //       ),
+              //     ),
+              //     ),
+              //   );
               } else if (variavel.value.tipo == 'url') {
                 listaWidget.add(
                   Card(
@@ -309,7 +332,8 @@ Sit.: $nota'''),
   _resposta() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -322,8 +346,9 @@ Sit.: $nota'''),
             List<Widget> listaWidget = List<Widget>();
             Map<String, Gabarito> gabaritoMap;
             var dicPedese = Dictionary.fromMap(gabarito);
-            var gabaritoOrderBy =
-                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var gabaritoOrderBy = dicPedese
+                .orderBy((kv) => kv.value.ordem)
+                .toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
             Widget icone;
 
@@ -336,6 +361,7 @@ Sit.: $nota'''),
                 icone = IconButton(
                   icon: Icon(Icons.looks_one, color: cor),
                   tooltip: "Um número. Use ponto para decimal.", onPressed: () {},
+
                 );
               } else if (gabarito.value.tipo == 'palavra') {
                 icone = IconButton(
@@ -351,21 +377,25 @@ Sit.: $nota'''),
                 icone = IconButton(
                   icon: Icon(Icons.link, color: cor),
                   tooltip: "Um link a um arquivo compartilhado ou site.", onPressed: () {},
+
                 );
               } else if (gabarito.value.tipo == 'urlimagem') {
                 icone = IconButton(
                   icon: Icon(Icons.image, color: cor),
                   tooltip: "Um link a uma imagem.", onPressed: () {},
+
                 );
               } else if (gabarito.value.tipo == 'arquivo') {
                 icone = IconButton(
                   icon: Icon(Icons.description, color: cor),
                   tooltip: "Upload de um arquivo.", onPressed: () {},
+
                 );
               } else if (gabarito.value.tipo == 'imagem') {
                 icone = IconButton(
                   icon: Icon(Icons.photo_album, color: cor),
                   tooltip: "Upload de uma imagem.", onPressed: () {},
+
                 );
               }
 
@@ -389,7 +419,7 @@ Sit.: $nota'''),
                   gabarito.value.tipo == 'urlimagem') {
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
-                    child: PedeseNumeroTexto(
+                    child: RespostaNumeroTexto(
                       bloc,
                       gabarito.key,
                       gabarito.value,
@@ -436,29 +466,6 @@ Sit.: $nota'''),
         });
   }
 
-// webview(){
-//       this.flutterWebView = new FlutterNativeWeb(
-//       onWebCreated: onWebCreated,
-//       gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-//                         Factory<OneSequenceGestureRecognizer>(
-//                           () => TapGestureRecognizer(),
-//                         ),
-//                       ].toSet(),
-//     );
-//     return;
-//   }
-
-//   void onWebCreated(webController) {
-//     this.webController = webController;
-//     this.webController.loadUrl(urlProblema);
-//     // this.webController.loadUrl("https://docs.google.com/document/d/16yTCmubD-IHu7VDhjFY4SGxWp9XYAjtW-I_2StafsD0/edit#heading=h.4nme0svt2xhv");
-//     this.webController.onPageStarted.listen((url) =>
-//         print("Loading $url")
-//     );
-//     this.webController.onPageFinished.listen((url) =>
-//         print("Finished loading $url")
-//     );
-//   }
   Expanded _bodyAba(List<Widget> listaWidget) {
     return Expanded(
         flex: 10,
@@ -481,7 +488,8 @@ Sit.: $nota'''),
   _title() {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("ERROR");
           }
@@ -500,12 +508,14 @@ Sit.: $nota'''),
                   Navigator.pop(context);
                   print('terminou clock');
                 },
-                countDownTimerStyle: TextStyle(color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
+                countDownTimerStyle: TextStyle(
+                    color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
               ),
             );
             Widget tentativas = Text(
               '${tarefa.tentou ?? 0} de ${tarefa.tentativa}',
-              style: TextStyle(color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
+              style: TextStyle(
+                  color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
             );
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -521,18 +531,18 @@ Sit.: $nota'''),
   }
 }
 
-class PedeseNumeroTexto extends StatefulWidget {
+class RespostaNumeroTexto extends StatefulWidget {
   final TarefaAbertaResponderBloc bloc;
   final String gabaritoKey;
   final Gabarito gabaritoValue;
-  PedeseNumeroTexto(
+  RespostaNumeroTexto(
     this.bloc,
     this.gabaritoKey,
     this.gabaritoValue,
   );
   @override
-  PedeseNumeroTextoState createState() {
-    return PedeseNumeroTextoState(
+  RespostaNumeroTextoState createState() {
+    return RespostaNumeroTextoState(
       bloc,
       gabaritoKey,
       gabaritoValue,
@@ -540,17 +550,18 @@ class PedeseNumeroTexto extends StatefulWidget {
   }
 }
 
-class PedeseNumeroTextoState extends State<PedeseNumeroTexto> {
+class RespostaNumeroTextoState extends State<RespostaNumeroTexto> {
   final _textFieldController = TextEditingController();
   final TarefaAbertaResponderBloc bloc;
   final String gabaritoKey;
   final Gabarito gabaritoValue;
-  PedeseNumeroTextoState(this.bloc, this.gabaritoKey, this.gabaritoValue);
+  RespostaNumeroTextoState(this.bloc, this.gabaritoKey, this.gabaritoValue);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (_textFieldController.text.isEmpty) {
           _textFieldController.text = gabaritoValue.resposta;
         }
@@ -587,7 +598,8 @@ class ImagemSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (snapshot.hasError) {
           return Container(
             child: Center(child: Text('Erro.')),
@@ -598,17 +610,21 @@ class ImagemSelect extends StatelessWidget {
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
                     leading: IconButton(
+                      tooltip: 'Apagar imagem anexada',
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                        bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                            gabaritoKey, null));
                       },
                     ),
-                    title: Text('ou, selecione uma imagem conforme solicitado.'),
+                    title:
+                        Text('ou, selecione uma imagem conforme solicitado.'),
                     trailing: Icon(Icons.file_download),
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
+                        bloc.eventSink(
+                            UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                   )
@@ -845,7 +861,8 @@ class ArquivoSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
         if (snapshot.hasError) {
           return Container(
             child: Center(child: Text('Erro.')),
@@ -856,17 +873,21 @@ class ArquivoSelect extends StatelessWidget {
             Recursos.instance.disponivel("file_picking")
                 ? ListTile(
                     leading: IconButton(
+                      tooltip: 'Apagar arquivo anexado',
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(gabaritoKey, null));
+                        bloc.eventSink(UpdateApagarAnexoImagemArquivoEvent(
+                            gabaritoKey, null));
                       },
                     ),
-                    title: Text('ou, selecione um arquivo conforme solicitado.'),
+                    title:
+                        Text('ou, selecione um arquivo conforme solicitado.'),
                     trailing: Icon(Icons.file_download),
                     onTap: () async {
                       await _selecionarNovoArquivo().then((localPath) {
                         // _localPath = arq;
-                        bloc.eventSink(UpdatePedeseEvent(gabaritoKey, localPath));
+                        bloc.eventSink(
+                            UpdatePedeseEvent(gabaritoKey, localPath));
                       });
                     },
                     // onLongPress: () {

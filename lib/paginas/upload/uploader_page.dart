@@ -91,6 +91,7 @@ class _UploaderPageState extends State<UploaderPage> {
             trailing: dispositivo != null
                 ? Icon(Icons.cloud_off)
                 : IconButton(
+                  tooltip: 'Enviar arquivo deste dispositivo para núvem',
                     icon: uploading.uploading
                         ? Icon(Icons.cloud_upload)
                         : Icon(Icons.send),
