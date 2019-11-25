@@ -187,13 +187,9 @@ class FotoUsuario extends StatelessWidget {
                   ),
                   trailing: Icon(Icons.file_download),
                   onTap: () async {
-                    print('>>>>>> 11');
                     await _selecionarNovoArquivo().then((localPath) {
-                      print('>>>>>> 12');
-                    bloc.eventSink(UpdateFotoEvent(localPath));
-                      print('>>>>>> 13');
+                      bloc.eventSink(UpdateFotoEvent(localPath));
                     });
-                    print('>>>>>> 14');
                   },
                 ),
               ]),
@@ -201,7 +197,7 @@ class FotoUsuario extends StatelessWidget {
                 uploadID: snapshot.data?.fotoUploadID,
                 url: snapshot.data?.fotoUrl,
                 path: snapshot.data?.localPath),
-              //  ArquivoImagemItem('nome',localPath: snapshot.data?.localPath,url: snapshot.data?.fotoUrl,onDeleted: null,),
+            //  ArquivoImagemItem('nome',localPath: snapshot.data?.localPath,url: snapshot.data?.fotoUrl,onDeleted: null,),
           ],
         );
       },
@@ -210,25 +206,16 @@ class FotoUsuario extends StatelessWidget {
 
   Future<String> _selecionarNovoArquivo() async {
     try {
-      print('>>>>>> 21');
-
       var arquivoPath = await FilePicker.getFilePath(type: FileType.IMAGE);
-      print('>>>>>> 22');
       if (arquivoPath != null) {
-        print('>>>>>> 23');
         return arquivoPath;
       }
     } catch (e) {
-      print('>>>>>> 24');
       print("Unsupported operation" + e.toString());
     }
-    print('>>>>>> 25');
     return null;
   }
 }
-
-
-
 
 // class ArquivoImagemItem extends StatelessWidget {
 //   final String nome;
@@ -296,8 +283,6 @@ class FotoUsuario extends StatelessWidget {
 //   }
 // }
 
-
-
 class _ImagemPerfilUpload extends StatelessWidget {
   final String uploadID;
   final String url;
@@ -307,8 +292,6 @@ class _ImagemPerfilUpload extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('>>>>>> 31');
-
     print('uploadID: $uploadID');
     print('url: $url');
     print('path: $path');
@@ -320,12 +303,12 @@ class _ImagemPerfilUpload extends StatelessWidget {
     }
     if (path != null && url == null) {
       try {
-      foto = Container(
-          // color: Colors.yellow,
-          child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Image.asset(path),
-      ));
+        foto = Container(
+            // color: Colors.yellow,
+            child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Image.asset(path),
+        ));
       } on Exception {
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
