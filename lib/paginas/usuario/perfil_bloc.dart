@@ -137,10 +137,10 @@ class PerfilBloc {
       _state.celular = event.celular;
     }
     if (event is UpdateFotoEvent) {
-      // if (event.localPath != null) {
+      if (event.localPath != null) {
         _state.localPath = event.localPath;
         _state.fotoUrl = null;
-      // }
+      }
     }
 
     if (!_stateController.isClosed) _stateController.add(_state);

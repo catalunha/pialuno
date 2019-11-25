@@ -1,4 +1,6 @@
 // import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/bootstrap.dart';
@@ -193,8 +195,7 @@ class FotoUsuario extends StatelessWidget {
                   },
                 ),
               ]),
-            _ImagemPerfilUpload(
-                uploadID: snapshot.data?.fotoUploadID,
+            _ImagemFileUpload(
                 url: snapshot.data?.fotoUrl,
                 path: snapshot.data?.localPath),
             //  ArquivoImagemItem('nome',localPath: snapshot.data?.localPath,url: snapshot.data?.fotoUrl,onDeleted: null,),
@@ -217,84 +218,23 @@ class FotoUsuario extends StatelessWidget {
   }
 }
 
-// class ArquivoImagemItem extends StatelessWidget {
-//   final String nome;
-//   final String localPath;
-//   final String url;
-//   final Function() onDeleted;
 
-//   const ArquivoImagemItem(
-//     this.nome, {
-//     Key key,
-//     this.onDeleted,
-//     this.localPath,
-//     this.url,
-//   })  : assert(localPath != null || url != null),
-//         super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     print('url: $url');
-//     print('localPath: $localPath');
-//     return Card(
-//       child: Container(
-//         constraints: BoxConstraints.expand(
-//           height: 150.0,
-//         ),
-//         padding: EdgeInsets.only(left: 16.0, bottom: 8.0, right: 16.0),
-//         decoration: BoxDecoration(
-//           image: DecorationImage(
-//             image: url != null ? NetworkImage(url) : AssetImage(localPath),
-//             fit: BoxFit.cover,
-//           ),
-//         ),
-//         child: Stack(
-//           children: <Widget>[
-//             Positioned(
-//               left: 0.0,
-//               bottom: 0.0,
-//               child: Text(nome,
-//                   style: TextStyle(
-//                     color: Colors.yellow,
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 12.0,
-//                   )),
-//             ),
-//             Positioned(
-//                 right: 0.0,
-//                 bottom: 0.0,
-//                 child: ClipRRect(
-//                   borderRadius: BorderRadius.circular(40.0),
-//                   child: Container(
-//                     color: Colors.white,
-//                     child: IconButton(
-//                       icon: Icon(
-//                         Icons.delete,
-//                         color: Colors.black,
-//                       ),
-//                       onPressed: onDeleted,
-//                     ),
-//                   ),
-//                 )),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class _ImagemPerfilUpload extends StatelessWidget {
-  final String uploadID;
+class _ImagemFileUpload extends StatelessWidget {
+  // final String uploadID;
   final String url;
   final String path;
 
-  const _ImagemPerfilUpload({this.uploadID, this.url, this.path});
+  const _ImagemFileUpload({this.url, this.path});
+
+  Future<File> _getLocalFile(String filename) async {
+    File f = new File(filename);
+    return f;
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('uploadID: $uploadID');
-    print('url: $url');
-    print('path: $path');
+    // print('url: $url');
+    // print('path: $path');
     Widget foto = Text('?');
     Widget msg = Text('');
 
@@ -303,12 +243,11 @@ class _ImagemPerfilUpload extends StatelessWidget {
     }
     if (path != null && url == null) {
       try {
-        foto = Container(
-            // color: Colors.yellow,
-            child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset(path),
-        ));
+        foto = FutureBuilder(
+            future: _getLocalFile(path),
+            builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+              return snapshot.data != null ? new Image.file(snapshot.data) : new Container();
+            });
       } on Exception {
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
@@ -321,7 +260,7 @@ class _ImagemPerfilUpload extends StatelessWidget {
       msg = Text(
           'Esta foto precisa ser enviada. Salve esta edição de perfil e depois acesse o menu upload de arquivos para enviar esta imagem.');
     }
-    if (url != null && uploadID != null) {
+    if (url != null) {
       try {
         foto = Container(
             child: Padding(
@@ -340,29 +279,21 @@ class _ImagemPerfilUpload extends StatelessWidget {
         );
       }
     }
-    if (path != null && url == null && path.indexOf(' ') > 0) {
-      msg = ListTile(
-        title: Text('EXISTE ESPAÇO NO CAMINHO DO ARQUIVO: $path'),
-      );
-      foto = ListTile(
-        title: Text(
-            'FAVOR SELECIONAR IMAGEM DA CÂMERA OU OUTRO CAMINHO SEM ESPAÇO. Se necessário mova a foto para uma pasta com caminho sem espaços.'),
-      );
-    }
+
     return Column(
       children: <Widget>[
         msg,
         Row(
           children: <Widget>[
             Spacer(
-              flex: 1,
+              flex: 2,
             ),
             Expanded(
               flex: 8,
               child: foto,
             ),
             Spacer(
-              flex: 1,
+              flex: 2,
             ),
           ],
         ),
