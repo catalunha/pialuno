@@ -74,9 +74,12 @@ class TarefaAbertaResponderBloc {
 
   _validateData() {
     _state.isDataValid = true;
-    if (_state.tarefaModel.aberta != null && !_state.tarefaModel.aberta) {
+    if (_state.tarefaModel != null &&
+        _state.tarefaModel.aberta != null &&
+        !_state.tarefaModel.aberta) {
       _state.isDataValid = false;
     }
+
     if (_state.tarefaModel?.tempoPResponder?.inSeconds == null) {
       _state.isDataValid = false;
     }
@@ -95,7 +98,9 @@ class TarefaAbertaResponderBloc {
           .map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data));
 
       snapListRemetente.listen((TarefaModel tarefa) async {
+
         _state.tarefaModel = tarefa;
+
         _state.tarefaModel.modificado = DateTime.now();
         _state.tarefaModel.updateAll();
         if (_state.tarefaModel.iniciou == null) {
@@ -110,6 +115,7 @@ class TarefaAbertaResponderBloc {
         }
         _state.updateState();
         if (!_stateController.isClosed) _stateController.add(_state);
+        _validateData();
       });
 
       // final docRef = _firestore.collection(TarefaModel.collection).document(event.tarefaID);

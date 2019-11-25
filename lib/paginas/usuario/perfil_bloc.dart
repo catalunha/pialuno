@@ -94,7 +94,7 @@ class PerfilBloc {
         cracha: _state.cracha,
         celular: _state.celular,
       );
-      if (_state.localPath != null) {
+      if (_state.localPath != _state.usuarioModel.foto.path) {
         // Deletar uploadID anterior se existir
         if (_state.fotoUploadID != null) {
           final docRef = _firestore
@@ -137,10 +137,10 @@ class PerfilBloc {
       _state.celular = event.celular;
     }
     if (event is UpdateFotoEvent) {
-      if (event.localPath != null) {
+      // if (event.localPath != null) {
         _state.localPath = event.localPath;
         _state.fotoUrl = null;
-      }
+      // }
     }
 
     if (!_stateController.isClosed) _stateController.add(_state);

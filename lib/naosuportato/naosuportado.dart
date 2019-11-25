@@ -23,3 +23,5 @@ export 'package:pialuno/naosuportato/path_provider.dart'
     if (dart.library.io) 'package:path_provider/path_provider.dart';
 export 'package:pialuno/naosuportato/permission_handler.dart'
     if (dart.library.io) 'package:permission_handler/permission_handler.dart';
+export 'package:pialuno/naosuportato/webview_flutter.dart'
+    if (dart.library.io) 'package:webview_flutter/webview_flutter.dart';

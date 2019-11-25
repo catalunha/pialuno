@@ -199,7 +199,8 @@ Sit.: $nota'''),
             // String nota = '';
             var tarefa = snapshot.data.tarefaModel;
             Widget pdf = ListTile(
-              title: Text('Se não visualizar o problema logo abaixo, ou estive usando o Chrome, clique aqui.'),
+              title: Text(
+                  'Se não visualizar o problema logo abaixo, ou estive usando o Chrome, clique aqui.'),
               trailing: Icon(Icons.local_library),
               onTap: () {
                 launch(tarefa.problema.url);
@@ -301,6 +302,18 @@ Sit.: $nota'''),
                     ),
                   ),
                 );
+              // } else if (variavel.value.tipo == 'urlimagem') {
+              //   listaWidget.add(
+              //     Card(
+              //       child: 
+              //     Expanded(
+              //       child: WebView(
+              //         initialUrl: variavel.value.valor,
+              //         javascriptMode: JavascriptMode.disabled,
+              //       ),
+              //     ),
+              //     ),
+              //   );
               } else if (variavel.value.tipo == 'url') {
                 listaWidget.add(
                   Card(
@@ -377,36 +390,43 @@ Sit.: $nota'''),
                 icone = IconButton(
                   icon: Icon(Icons.looks_one, color: cor),
                   tooltip: "Um número. Use ponto para decimal.",
+                  onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'palavra') {
                 icone = IconButton(
                   icon: Icon(Icons.text_format, color: cor),
                   tooltip: "Uma palavra ou frase fechada.",
+                  onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'texto') {
                 icone = IconButton(
                   icon: Icon(Icons.text_fields, color: cor),
                   tooltip: "Um texto aberto com uma ou várias linhas.",
+                  onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'url') {
                 icone = IconButton(
                   icon: Icon(Icons.link, color: cor),
                   tooltip: "Um link a um arquivo compartilhado ou site.",
+                  onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'urlimagem') {
                 icone = IconButton(
                   icon: Icon(Icons.image, color: cor),
                   tooltip: "Um link a uma imagem.",
+                  onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'arquivo') {
                 icone = IconButton(
                   icon: Icon(Icons.description, color: cor),
                   tooltip: "Upload de um arquivo.",
+                  onPressed: () {},
                 );
               } else if (gabarito.value.tipo == 'imagem') {
                 icone = IconButton(
                   icon: Icon(Icons.photo_album, color: cor),
                   tooltip: "Upload de uma imagem.",
+                  onPressed: () {},
                 );
               }
 

@@ -16,8 +16,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!-- *** brintec acrescentou -->
-
+    <!-- *** brintec acrescentou -->         
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="PI-Aluno"
