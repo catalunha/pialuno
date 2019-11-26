@@ -2,7 +2,7 @@
 # Versões enviadas PI-Aluno
 
 
-## Enviada em 25-11-2019
+## Enviada em 26-11-2019
 versionCode 5
 versionName '1.0.5'
 Detalhes:
