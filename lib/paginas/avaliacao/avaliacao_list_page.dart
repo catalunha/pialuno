@@ -58,8 +58,9 @@ class _AvaliacaoListPageState extends State<AvaliacaoListPage> {
                         title: Text('''
 Turma: ${avaliacao.turma.nome}
 Prof.: ${avaliacao.professor.nome}
-Avaliacao: ${avaliacao.nome}
-                        '''),
+Avaliacao: ${avaliacao.nome}'''),
+                        subtitle: Text('id: ${avaliacao.id}'),
+
 // Nota da avaliação: ${avaliacao.nota}
 // Aberta: ${DateFormat('dd-MM HH:mm').format(avaliacao.inicio)} até ${DateFormat('dd-MM HH:mm').format(avaliacao.fim)}
 // Inicio: ${DateFormat('dd-MM HH:mm').format(avaliacao.inicio)}

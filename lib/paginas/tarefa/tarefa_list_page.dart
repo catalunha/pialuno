@@ -84,6 +84,7 @@ Aberta: ${DateFormat('dd-MM HH:mm').format(tarefa.inicio)} até ${DateFormat('dd
 Iniciou: ${tarefa.iniciou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}. Enviou: ${tarefa.enviou==null ? "" :DateFormat('dd-MM HH:mm').format(tarefa.enviou)}.
 Tempo:  ${tarefa.tempo}h. Usou ${tarefa.tentou ?? 0} das ${tarefa.tentativa} tentativas.
 Sit.: $notas'''),
+                        subtitle: Text('id: ${tarefa.id}'),
 //                         subtitle: Text('''
 // Inicio: ${tarefa.inicio}
 // fim: ${tarefa.fim}

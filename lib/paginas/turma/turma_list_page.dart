@@ -58,6 +58,7 @@ Inst.: ${turma.instituicao}
 Comp.: ${turma.componente}
 Turma: ${turma.nome}
 Prof.: ${turma.professor.nome}'''),
+subtitle: Text('id: ${turma.id}'),
                         trailing: IconButton(
                           tooltip: "Link para o programa da turma",
                           icon: Icon(Icons.local_library),

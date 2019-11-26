@@ -146,6 +146,7 @@ Fecha: ${DateFormat('dd-MM HH:mm').format(tarefa.fim)}
 Iniciou: ${tarefa.iniciou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.iniciou)}
 Enviou: ${tarefa.enviou == null ? "" : DateFormat('dd-MM HH:mm').format(tarefa.enviou)}
 Sit.: $nota'''),
+subtitle: Text('id: ${tarefa.id}'),
 // id: ${tarefa.id}
 // Tentativas: ${tarefa.tentou ?? 0} / ${tarefa.tentativa}
 // Aberta: ${tarefa.aberta}
