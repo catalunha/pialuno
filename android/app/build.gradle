@@ -49,8 +49,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 5
-        versionName '1.0.5'
+        versionCode 6
+        versionName '1.0.6'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     //key
@@ -66,8 +66,8 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-            // signingConfig signingConfigs.release
+            // signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
 
         }
     }
