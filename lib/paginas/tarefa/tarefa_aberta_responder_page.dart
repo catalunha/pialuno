@@ -465,14 +465,25 @@ Sit.: $nota'''),
                 ),
               );
 
-              if (gabarito.value.tipo == 'numero' ||
-                  gabarito.value.tipo == 'palavra' ||
+              if (gabarito.value.tipo == 'numero') {
+                listaWidget.add(
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: RespostaNumero(
+                      bloc,
+                      gabarito.key,
+                      gabarito.value,
+                    ),
+                  ),
+                );
+              }
+              if (gabarito.value.tipo == 'palavra' ||
                   gabarito.value.tipo == 'texto' ||
                   gabarito.value.tipo == 'url' ||
                   gabarito.value.tipo == 'urlimagem') {
                 listaWidget.add(Padding(
                     padding: EdgeInsets.all(5.0),
-                    child: RespostaNumeroTexto(
+                    child: RespostaTexto(
                       bloc,
                       gabarito.key,
                       gabarito.value,
@@ -581,18 +592,18 @@ Sit.: $nota'''),
   }
 }
 
-class RespostaNumeroTexto extends StatefulWidget {
+class RespostaNumero extends StatefulWidget {
   final TarefaAbertaResponderBloc bloc;
   final String gabaritoKey;
   final Gabarito gabaritoValue;
-  RespostaNumeroTexto(
+  RespostaNumero(
     this.bloc,
     this.gabaritoKey,
     this.gabaritoValue,
   );
   @override
-  RespostaNumeroTextoState createState() {
-    return RespostaNumeroTextoState(
+  RespostaNumeroState createState() {
+    return RespostaNumeroState(
       bloc,
       gabaritoKey,
       gabaritoValue,
@@ -600,12 +611,71 @@ class RespostaNumeroTexto extends StatefulWidget {
   }
 }
 
-class RespostaNumeroTextoState extends State<RespostaNumeroTexto> {
+class RespostaNumeroState extends State<RespostaNumero> {
   final _textFieldController = TextEditingController();
   final TarefaAbertaResponderBloc bloc;
   final String gabaritoKey;
   final Gabarito gabaritoValue;
-  RespostaNumeroTextoState(this.bloc, this.gabaritoKey, this.gabaritoValue);
+  RespostaNumeroState(this.bloc, this.gabaritoKey, this.gabaritoValue);
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<TarefaAbertaResponderBlocState>(
+      stream: bloc.stateStream,
+      builder: (BuildContext context, AsyncSnapshot<TarefaAbertaResponderBlocState> snapshot) {
+        print('gabaritoValue.resposta: ${this.gabaritoValue.resposta}');
+        if (_textFieldController.text.isEmpty) {
+          _textFieldController.text = this.gabaritoValue.resposta;
+        }
+        return Row(
+          children: <Widget>[
+            Expanded(
+                flex: 6,
+                child: TextField(
+                  keyboardType: TextInputType.numberWithOptions(decimal: true, signed: true),
+                  // keyboardType: TextInputType.multiline,
+                  // maxLines: null,
+                  // decoration: InputDecoration(
+                  //   border: OutlineInputBorder(),
+                  // ),
+                  controller: _textFieldController,
+                  onChanged: (text) {
+                    print('gabaritoValue.resposta text: ${text}');
+                    bloc.eventSink(UpdatePedeseEvent(gabaritoKey, text));
+                  },
+                )),
+            Expanded(flex: 4, child: Text(' ${this.gabaritoValue.resposta}')),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class RespostaTexto extends StatefulWidget {
+  final TarefaAbertaResponderBloc bloc;
+  final String gabaritoKey;
+  final Gabarito gabaritoValue;
+  RespostaTexto(
+    this.bloc,
+    this.gabaritoKey,
+    this.gabaritoValue,
+  );
+  @override
+  RespostaTextoState createState() {
+    return RespostaTextoState(
+      bloc,
+      gabaritoKey,
+      gabaritoValue,
+    );
+  }
+}
+
+class RespostaTextoState extends State<RespostaTexto> {
+  final _textFieldController = TextEditingController();
+  final TarefaAbertaResponderBloc bloc;
+  final String gabaritoKey;
+  final Gabarito gabaritoValue;
+  RespostaTextoState(this.bloc, this.gabaritoKey, this.gabaritoValue);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<TarefaAbertaResponderBlocState>(

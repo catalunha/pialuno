@@ -20,8 +20,7 @@ class UpdatePedeseEvent extends TarefaAbertaResponderBlocEvent {
   UpdatePedeseEvent(this.gabaritoKey, this.valor);
 }
 
-class UpdateApagarAnexoImagemArquivoEvent
-    extends TarefaAbertaResponderBlocEvent {
+class UpdateApagarAnexoImagemArquivoEvent extends TarefaAbertaResponderBlocEvent {
   final String gabaritoKey;
   final String valor;
 
@@ -48,16 +47,13 @@ class TarefaAbertaResponderBloc {
 
   /// Eventos
   final _eventController = BehaviorSubject<TarefaAbertaResponderBlocEvent>();
-  Stream<TarefaAbertaResponderBlocEvent> get eventStream =>
-      _eventController.stream;
+  Stream<TarefaAbertaResponderBlocEvent> get eventStream => _eventController.stream;
   Function get eventSink => _eventController.sink.add;
 
   /// Estados
-  final TarefaAbertaResponderBlocState _state =
-      TarefaAbertaResponderBlocState();
+  final TarefaAbertaResponderBlocState _state = TarefaAbertaResponderBlocState();
   final _stateController = BehaviorSubject<TarefaAbertaResponderBlocState>();
-  Stream<TarefaAbertaResponderBlocState> get stateStream =>
-      _stateController.stream;
+  Stream<TarefaAbertaResponderBlocState> get stateStream => _stateController.stream;
   Function get stateSink => _stateController.sink.add;
 
   /// Bloc
@@ -74,9 +70,7 @@ class TarefaAbertaResponderBloc {
 
   _validateData() {
     _state.isDataValid = true;
-    if (_state.tarefaModel != null &&
-        _state.tarefaModel.aberta != null &&
-        !_state.tarefaModel.aberta) {
+    if (_state.tarefaModel != null && _state.tarefaModel.aberta != null && !_state.tarefaModel.aberta) {
       _state.isDataValid = false;
     }
 
@@ -89,25 +83,18 @@ class TarefaAbertaResponderBloc {
     if (event is GetTarefaEvent) {
       _state.tarefaModel = null;
 
-      final streamDocsRemetente = _firestore
-          .collection(TarefaModel.collection)
-          .document(event.tarefaID)
-          .snapshots();
+      final streamDocsRemetente = _firestore.collection(TarefaModel.collection).document(event.tarefaID).snapshots();
 
-      final snapListRemetente = streamDocsRemetente
-          .map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data));
+      final snapListRemetente = streamDocsRemetente.map((doc) => TarefaModel(id: doc.documentID).fromMap(doc.data));
 
       snapListRemetente.listen((TarefaModel tarefa) async {
-
         _state.tarefaModel = tarefa;
 
         _state.tarefaModel.modificado = DateTime.now();
         _state.tarefaModel.updateAll();
         if (_state.tarefaModel.iniciou == null) {
           _state.tarefaModel.iniciou = DateTime.now();
-          final docRef = _firestore
-              .collection(TarefaModel.collection)
-              .document(_state.tarefaModel.id);
+          final docRef = _firestore.collection(TarefaModel.collection).document(_state.tarefaModel.id);
           await docRef.setData(
             _state.tarefaModel.toMap(),
             merge: true,
@@ -117,30 +104,43 @@ class TarefaAbertaResponderBloc {
         if (!_stateController.isClosed) _stateController.add(_state);
         _validateData();
       });
-
-      // final docRef = _firestore.collection(TarefaModel.collection).document(event.tarefaID);
-      // var docSnap = await docRef.get();
-
-      // _state.tarefaModel = TarefaModel(id: docSnap.documentID).fromMap(docSnap.data);
-
-      // _state.tarefaModel.modificado = DateTime.now();
-      // _state.tarefaModel.updateAll();
-      // if (_state.tarefaModel.iniciou == null) {
-      //   _state.tarefaModel.iniciou = DateTime.now();
-      //   final docRef = _firestore.collection(TarefaModel.collection).document(_state.tarefaModel.id);
-      //   await docRef.setData(
-      //     _state.tarefaModel.toMap(),
-      //     merge: true,
-      //   );
-      // } else {
-      // }
-      // _state.updateState();
-      // if (!_stateController.isClosed) _stateController.add(_state);
     }
     if (event is UpdatePedeseEvent) {
       var gabarito = _state.resposta[event.gabaritoKey];
-      if (gabarito.tipo == 'numero' ||
-          gabarito.tipo == 'palavra' ||
+      if (gabarito.tipo == 'numero') {
+        if (event.valor.isEmpty) {
+          _state.resposta[event.gabaritoKey].resposta = event.valor;
+        } else {
+          String valor = event.valor.replaceAll(',', '.');
+          if (valor.contains('/')) {
+            try {
+              var fracao = valor.split('/');
+              valor = '${double.parse(fracao[0]) / double.parse(fracao[1])}';
+            } catch (e) {
+              valor = '';
+            }
+          }
+          if (valor.contains('.')) {
+            try {
+              print('valor: $valor');
+              _state.resposta[event.gabaritoKey].resposta = valor;
+              double.parse(valor);
+            } catch (e) {
+              _state.resposta[event.gabaritoKey].resposta = '';
+            }
+          } else {
+            try {
+              _state.resposta[event.gabaritoKey].resposta = valor;
+              int.parse(valor);
+            } catch (e) {
+              _state.resposta[event.gabaritoKey].resposta = '';
+            }
+          }
+        }
+        if (!_stateController.isClosed) _stateController.add(_state);
+
+      }
+      if (gabarito.tipo == 'palavra' ||
           gabarito.tipo == 'texto' ||
           gabarito.tipo == 'url' ||
           gabarito.tipo == 'urlimagem') {
@@ -165,9 +165,7 @@ class TarefaAbertaResponderBloc {
     if (event is SaveEvent) {
       for (var gabarito in _state.resposta.entries) {
         //+++ Corrigir textos.
-        if (gabarito.value.tipo == 'palavra' &&
-            gabarito.value.resposta != null &&
-            gabarito.value.resposta.isNotEmpty) {
+        if (gabarito.value.tipo == 'palavra' && gabarito.value.resposta != null && gabarito.value.resposta.isNotEmpty) {
           if (gabarito.value.resposta == gabarito.value.valor) {
             _state.resposta[gabarito.key].nota = 1;
           } else {
@@ -176,15 +174,11 @@ class TarefaAbertaResponderBloc {
         }
         //--- Corrigir textos.
         //+++ Corrigir numeros.
-        if (gabarito.value.tipo == 'numero' &&
-            gabarito.value.resposta != null &&
-            gabarito.value.resposta.isNotEmpty) {
+        if (gabarito.value.tipo == 'numero' && gabarito.value.resposta != null && gabarito.value.resposta.isNotEmpty) {
           double resposta = double.parse(gabarito.value.resposta);
           double valor = double.parse(gabarito.value.valor);
-          double erroRelativoCalculado =
-              (resposta - valor).abs() / valor.abs() * 100;
-          double erroRelativoPermitido =
-              _state.tarefaModel.erroRelativo.toDouble();
+          double erroRelativoCalculado = (resposta - valor).abs() / valor.abs() * 100;
+          double erroRelativoPermitido = _state.tarefaModel.erroRelativo.toDouble();
 
           if (erroRelativoCalculado <= erroRelativoPermitido) {
             _state.resposta[gabarito.key].nota = 1;
@@ -199,16 +193,12 @@ class TarefaAbertaResponderBloc {
         //   print(_state.tarefaModel.gabarito[gabarito.key].respostaPath);
         // }
         // Criar uploadID de imagem e arquivo
-        if ((gabarito.value.tipo == 'imagem' ||
-                gabarito.value.tipo == 'arquivo') &&
-            gabarito.value.respostaPath != null &&
-            gabarito.value.respostaPath !=
-                _state.tarefaModel.gabarito[gabarito.key].respostaPath) {
+        if ((gabarito.value.tipo == 'imagem' || gabarito.value.tipo == 'arquivo') &&
+            gabarito.value?.respostaPath != null &&
+            gabarito.value?.respostaPath != _state.tarefaModel.gabarito[gabarito.key]?.respostaPath) {
           //+++ Deletar uploadID anterior se existir
-          if (gabarito.value.respostaUploadID != null) {
-            final docRef = _firestore
-                .collection(UploadModel.collection)
-                .document(gabarito.value.respostaUploadID);
+          if (gabarito.value?.respostaUploadID != null) {
+            final docRef = _firestore.collection(UploadModel.collection).document(gabarito.value.respostaUploadID);
             await docRef.delete();
             gabarito.value.respostaUploadID = null;
           }
@@ -223,9 +213,7 @@ class TarefaAbertaResponderBloc {
                 document: _state.tarefaModel.id,
                 field: "gabarito.${gabarito.key}.resposta"),
           );
-          final docRef = _firestore
-              .collection(UploadModel.collection)
-              .document(gabarito.value.respostaUploadID);
+          final docRef = _firestore.collection(UploadModel.collection).document(gabarito.value.respostaUploadID);
           await docRef.setData(upLoadModel.toMap(), merge: true);
           //--- Cria doc em UpLoadCollection
           //Atualizar o gabarito atual com o UploadID
@@ -239,9 +227,7 @@ class TarefaAbertaResponderBloc {
           _state.resposta[gabarito.key].respostaUploadID = null;
         }
       }
-      final docRef = _firestore
-          .collection(TarefaModel.collection)
-          .document(_state.tarefaModel.id);
+      final docRef = _firestore.collection(TarefaModel.collection).document(_state.tarefaModel.id);
       TarefaModel tarefaUpdate = TarefaModel(
           iniciou: _state.tarefaModel.iniciou,
           tentou: Bootstrap.instance.fieldValue.increment(1),
@@ -254,9 +240,8 @@ class TarefaAbertaResponderBloc {
         tarefaUpdate.toMap(),
         merge: true,
       );
-      _state.tarefaModel.tentou = _state.tarefaModel.tentou != null
-          ? _state.tarefaModel.tentou = _state.tarefaModel.tentou + 1
-          : 1;
+      _state.tarefaModel.tentou =
+          _state.tarefaModel.tentou != null ? _state.tarefaModel.tentou = _state.tarefaModel.tentou + 1 : 1;
       _state.tarefaModel.modificado = DateTime.now();
       _state.tarefaModel.enviou = DateTime.now();
       _state.tarefaModel.gabarito = _state.resposta;
@@ -266,7 +251,6 @@ class TarefaAbertaResponderBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print(
-        'event.runtimeType em TarefaAbertaResponderBloc  = ${event.runtimeType}');
+    print('event.runtimeType em TarefaAbertaResponderBloc  = ${event.runtimeType}');
   }
 }
