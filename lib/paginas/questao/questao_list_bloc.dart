@@ -1,5 +1,4 @@
 import 'package:pialuno/modelos/questao_model.dart';
-import 'package:pialuno/modelos/usuario_model.dart';
 import 'package:firestore_wrapper/firestore_wrapper.dart' as fsw;
 import 'package:rxdart/rxdart.dart';
 

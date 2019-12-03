@@ -97,23 +97,10 @@ class _TarefaAbertaResponderPageState extends State<TarefaAbertaResponderPage> {
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.data.isDataValid) {
-            List<Widget> listaWidget = List<Widget>();
             Map<String, Gabarito> gabaritoMap;
             String nota = '';
             var tarefa = snapshot.data.tarefaModel;
-            Widget pdf = ListTile(
-              title: Text('Click aqui para ver a proposta da tarefa.'),
-              trailing: Icon(Icons.local_library),
-              onTap: () {
-                launch(tarefa.problema.url);
-              },
-            );
-            // String urlProblema = snapshot.data.tarefaModel.problema.url;
-            // Widget gdocs = Container(
-            //         child: flutterWebView,
-            //         width: 500.0,
-            //         height: 1000.0,
-            //       );
+                   
             var dicPedese = Dictionary.fromMap(tarefa.gabarito);
             var gabaritoOrderBy =
                 dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
@@ -639,7 +626,7 @@ class RespostaNumeroState extends State<RespostaNumero> {
                   // ),
                   controller: _textFieldController,
                   onChanged: (text) {
-                    print('gabaritoValue.resposta text: ${text}');
+                    print('gabaritoValue.resposta text: $text');
                     bloc.eventSink(UpdatePedeseEvent(gabaritoKey, text));
                   },
                 )),

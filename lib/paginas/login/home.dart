@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pialuno/auth_bloc.dart';
 import 'package:pialuno/componentes/login_required.dart';
 import 'package:pialuno/paginas/login/bemvindo_page.dart';
-import 'package:pialuno/paginas/tarefa/tarefa_aberta_list_page.dart';
 
 
 class HomePage extends StatefulWidget {

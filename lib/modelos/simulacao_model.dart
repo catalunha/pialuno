@@ -1,4 +1,3 @@
-import 'package:pialuno/bootstrap.dart';
 import 'package:pialuno/modelos/base_model.dart';
 import 'package:pialuno/modelos/problema_model.dart';
 import 'package:pialuno/modelos/usuario_model.dart';
