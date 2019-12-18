@@ -12,7 +12,7 @@ class Versao extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Recursos.instance.plataforma == 'android' ? Text("Versão Android: 1.0.6 (6)") : Text("Versão Chrome: 1.0.6 (6) Build 201912032021"),
+            title: Recursos.instance.plataforma == 'android' ? Text("Versão Android: 1.0.7 (7)") : Text("Versão Chrome: 1.0.7 (7) Build 20191218"),
           ),
           ListTile(
             title: Text("Suporte via WhatsApp pelo número +55 63 984495507"),

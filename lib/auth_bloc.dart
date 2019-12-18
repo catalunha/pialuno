@@ -3,6 +3,7 @@ import 'package:pialuno/modelos/usuario_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firestore_wrapper/firestore_wrapper.dart' as fsw;
 import 'package:firebaseauth_wrapper/firebaseauth_wrapper.dart' as fba;
+import 'package:validators/validators.dart';
 
 enum AuthStatus {
   Uninitialized,
@@ -148,17 +149,19 @@ class AuthBloc {
       _handleLoginAuthBlocEvent();
     } else if (event is LogoutAuthBlocEvent) {
       _authApi.logout();
-    }else if (event is ResetPassword) {
-      // _authApi.sendPasswordResetEmail(_state.email);
+    } else if (event is ResetPassword) {
+      if (_state.email != null && isEmail(_state.email)) {
+        _authApi.sendPasswordResetEmail(_state.email);
+      }
     }
   }
 
   void _handleLoginAuthBlocEvent() {
     _statusController.sink.add(AuthStatus.Authenticating);
-    _authApi.loginWithEmailAndPassword(_state.email, _state.password).then((r){
-      if(r){
+    _authApi.loginWithEmailAndPassword(_state.email, _state.password).then((r) {
+      if (r) {
         _statusController.sink.add(AuthStatus.Authenticated);
-      }else{
+      } else {
         _statusController.sink.add(AuthStatus.Unauthenticated);
       }
     });

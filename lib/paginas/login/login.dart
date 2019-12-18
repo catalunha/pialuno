@@ -6,7 +6,6 @@ import 'package:pialuno/naosuportato/permission_handler.dart'
     if (dart.library.io) 'package:permission_handler/permission_handler.dart';
 
 class LoginPage extends StatefulWidget {
-
   final AuthBloc authBloc;
 
   LoginPage(this.authBloc);
@@ -79,9 +78,9 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         child: Center(
                           child: Text(
-                          'PI - Aluno',
-                          style: TextStyle(fontSize: 30, color: Colors.blue),
-                        ),
+                            'PI - Aluno',
+                            style: TextStyle(fontSize: 30, color: Colors.blue),
+                          ),
                         ),
                       ),
                       Container(
@@ -123,7 +122,8 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         child: RaisedButton(
                           color: Colors.blue,
-                          child: Text("Acessar",style:
+                          child: Text("Acessar",
+                              style:
                                   TextStyle(fontSize: 20, color: Colors.black)),
                           onPressed: () {
                             _formKey.currentState.save();
@@ -144,12 +144,12 @@ class LoginPageState extends State<LoginPage> {
                           title: Text(
                               'Eita. Esqueci a senha!\nInforme seu email e click...',
                               style: TextStyle(color: Colors.blue[600])),
-                              
                           trailing: IconButton(
                             tooltip:
                                 'Um pedido de nova senha será enviado a seu email.',
                             icon: Icon(Icons.vpn_key, color: Colors.blue[600]),
                             onPressed: () {
+                              _formKey.currentState.save();
                               authBloc.dispatch(ResetPassword());
                             },
                           ),

@@ -42,7 +42,7 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.9+5"
+    version: "0.13.0+1"
   collection:
     dependency: transitive
     description:
@@ -127,7 +127,7 @@ packages:
     description:
       path: firebaseauth_wrapper
       ref: HEAD
-      resolved-ref: e416d407070eeaed902069f3e21f7d184091b65b
+      resolved-ref: d49f8019b19a97e917f9bc833c43d5f4a5482390
       url: "https://github.com/paulorobertocruz/firebaseauth_wrapper.git"
     source: git
     version: "0.0.1"
@@ -136,7 +136,7 @@ packages:
     description:
       path: firebaseauth_wrapper_flutter
       ref: HEAD
-      resolved-ref: e416d407070eeaed902069f3e21f7d184091b65b
+      resolved-ref: d49f8019b19a97e917f9bc833c43d5f4a5482390
       url: "https://github.com/paulorobertocruz/firebaseauth_wrapper.git"
     source: git
     version: "0.0.1"
@@ -145,7 +145,7 @@ packages:
     description:
       path: firebaseauth_wrapper_web
       ref: HEAD
-      resolved-ref: e416d407070eeaed902069f3e21f7d184091b65b
+      resolved-ref: d49f8019b19a97e917f9bc833c43d5f4a5482390
       url: "https://github.com/paulorobertocruz/firebaseauth_wrapper.git"
     source: git
     version: "0.0.0"
@@ -154,7 +154,7 @@ packages:
     description:
       path: "packages/firestore_wrapper"
       ref: HEAD
-      resolved-ref: "324a7f9113e5caf35dc8df3a44ade9c9bf4e7a53"
+      resolved-ref: a57995b99199eb5a3dde58f88848b76b970c20d3
       url: "https://github.com/paulorobertocruz/firestore_wrapper.git"
     source: git
     version: "0.0.3"
@@ -163,7 +163,7 @@ packages:
     description:
       path: "packages/firestore_wrapper_flutter"
       ref: HEAD
-      resolved-ref: "324a7f9113e5caf35dc8df3a44ade9c9bf4e7a53"
+      resolved-ref: a57995b99199eb5a3dde58f88848b76b970c20d3
       url: "https://github.com/paulorobertocruz/firestore_wrapper.git"
     source: git
     version: "0.0.3"
@@ -172,7 +172,7 @@ packages:
     description:
       path: "packages/firestore_wrapper_web"
       ref: HEAD
-      resolved-ref: "324a7f9113e5caf35dc8df3a44ade9c9bf4e7a53"
+      resolved-ref: a57995b99199eb5a3dde58f88848b76b970c20d3
       url: "https://github.com/paulorobertocruz/firestore_wrapper.git"
     source: git
     version: "0.0.0"
@@ -501,4 +501,4 @@ packages:
     version: "0.1.1"
 sdks:
   dart: ">=2.4.0 <3.0.0"
-  flutter: ">=1.5.0 <2.0.0"
+  flutter: ">=1.10.0 <2.0.0"
